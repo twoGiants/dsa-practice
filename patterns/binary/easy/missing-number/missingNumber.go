@@ -1,17 +1,17 @@
 package binary
 
 func MissingNumber(nums []int) int {
-	existing := make(map[int]int)
-
-	for i, num := range nums {
-		existing[num] = i
+	result := len(nums)
+	for i := 0; i < len(nums); i++ {
+		result += i - nums[i]
 	}
+	return result
+}
 
-	for i := 0; i <= len(nums); i++ {
-		if _, found := existing[i]; !found {
-			return i
-		}
+func MissingNumberXor(nums []int) int {
+	xor := len(nums)
+	for i := 0; i < len(nums); i++ {
+		xor ^= i ^ nums[i]
 	}
-
-	return -1
+	return xor
 }
