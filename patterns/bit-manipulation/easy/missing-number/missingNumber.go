@@ -1,4 +1,4 @@
-package binary
+package bit
 
 func MissingNumber(nums []int) int {
 	result := len(nums)

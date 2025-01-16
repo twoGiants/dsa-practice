@@ -10,8 +10,9 @@
 - [Two Sum](/patterns/arrays/easy/two-sum/two-sum.md)
 - [Find All Numbers Disappeared in an Array](/patterns/arrays/easy/find-all-numbers-dissappeared/find-all-numbers-disappeared.md)
 
-### Binary
+### Bit Manipulation
 
 #### Easy
 
-- [Missing Number](/patterns/arrays/easy/missing-number/missing-number.md)
+- [Missing Number](/patterns/bit-manipulation/easy/missing-number/missing-number.md)
+- [Single Number](/patterns/bit-manipulation/easy/single-number/single-number.md)
