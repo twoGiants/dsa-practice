@@ -1,17 +1,34 @@
 package retention
 
-func MissingNumber(nums []int) int {
-	result := len(nums)
-	for i := 0; i < len(nums); i++ {
-		result += i - nums[i]
+import "math"
+
+func FindDisappearedNumbers(nums []int) []int {
+	for _, n := range nums {
+		i := int(math.Abs(float64(n))) - 1
+		nums[i] = -1 * int(math.Abs(float64(nums[i])))
+	}
+
+	result := []int{}
+	for i, n := range nums {
+		if n > 0 {
+			result = append(result, i+1)
+		}
 	}
 	return result
 }
 
+func MissingNumber(nums []int) int {
+	sum := len(nums)
+	for i, n := range nums {
+		sum += i - n
+	}
+	return sum
+}
+
 func MissingNumberXor(nums []int) int {
 	xor := len(nums)
-	for i := 0; i < len(nums); i++ {
-		xor ^= i ^ nums[i]
+	for i, n := range nums {
+		xor ^= i ^ n
 	}
 	return xor
 }
@@ -32,13 +49,11 @@ func TwoSum(nums []int, target int) []int {
 
 func HasDuplicate(nums []int) bool {
 	seen := make(map[int]bool)
-
-	for _, num := range nums {
-		if seen[num] {
+	for _, n := range nums {
+		if seen[n] {
 			return true
 		}
-		seen[num] = true
+		seen[n] = true
 	}
-
 	return false
 }

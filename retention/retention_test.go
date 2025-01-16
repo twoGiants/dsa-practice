@@ -6,12 +6,30 @@ import (
 	"testing"
 )
 
+func Test_arrayOfEight_disappearedAreFiveAndSix(t *testing.T) {
+	input := []int{4, 3, 2, 7, 8, 2, 3, 1}
+	result := retention.FindDisappearedNumbers(input)
+	expected := []int{5, 6}
+	if !slices.Equal(result, expected) {
+		t.Fatalf("for input %v expected %v, but got %v", input, expected, result)
+	}
+}
+
+func Test_arrayOfTwo_disappearedIsTwo(t *testing.T) {
+	input := []int{1, 1}
+	result := retention.FindDisappearedNumbers(input)
+	expected := []int{2}
+	if !slices.Equal(result, expected) {
+		t.Fatalf("for input %v expected %v, but got %v", input, expected, result)
+	}
+}
+
 func Test_arrayOfTree_returnsMissingZero(t *testing.T) {
 	input := []int{1, 2, 3}
 	result := retention.MissingNumber(input)
 	expected := 0
 	if result != expected {
-		t.Fatalf("expected %d, but got %d", expected, result)
+		t.Fatalf("for input %v expected %d, but got %d", input, expected, result)
 	}
 }
 
@@ -20,7 +38,7 @@ func Test_arrayOfTwo_returnsMissingOne(t *testing.T) {
 	result := retention.MissingNumber(input)
 	expected := 1
 	if result != expected {
-		t.Fatalf("expected %d, but got %d", expected, result)
+		t.Fatalf("for input %v expected %d, but got %d", input, expected, result)
 	}
 }
 
@@ -29,7 +47,7 @@ func TestXor_arrayOfTree_returnsMissingZero(t *testing.T) {
 	result := retention.MissingNumberXor(input)
 	expected := 0
 	if result != expected {
-		t.Fatalf("expected %d, but got %d", expected, result)
+		t.Fatalf("for input %v expected %d, but got %d", input, expected, result)
 	}
 }
 
@@ -38,7 +56,7 @@ func TestXor_arrayOfTwo_returnsMissingOne(t *testing.T) {
 	result := retention.MissingNumberXor(input)
 	expected := 1
 	if result != expected {
-		t.Fatalf("expected %d, but got %d", expected, result)
+		t.Fatalf("for input %v expected %d, but got %d", input, expected, result)
 	}
 }
 
@@ -48,7 +66,7 @@ func Test_arrayOfFourWithTargetSeven_returnsZeroAndOne(t *testing.T) {
 	result := retention.TwoSum(input, target)
 	expected := []int{0, 1}
 	if !slices.Equal(result, expected) {
-		t.Fatalf("expected %v, but got %v", expected, result)
+		t.Fatalf("for input %v expected %v, but got %v", input, expected, result)
 	}
 }
 
@@ -58,7 +76,7 @@ func Test_arrayOfThreeWithTargetTen_returnsZeroAndTwo(t *testing.T) {
 	result := retention.TwoSum(input, target)
 	expected := []int{0, 2}
 	if !slices.Equal(result, expected) {
-		t.Fatalf("expected %v, but got %v", expected, result)
+		t.Fatalf("for input %v expected %v, but got %v", input, expected, result)
 	}
 }
 
@@ -68,7 +86,7 @@ func Test_arrayOfTwoWithTargetTen_returnsZeroAndOne(t *testing.T) {
 	result := retention.TwoSum(input, target)
 	expected := []int{0, 1}
 	if !slices.Equal(result, expected) {
-		t.Fatalf("expected %v, but got %v", expected, result)
+		t.Fatalf("for input %v expected %v, but got %v", input, expected, result)
 	}
 }
 
