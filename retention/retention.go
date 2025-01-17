@@ -2,6 +2,14 @@ package retention
 
 import "math"
 
+func SingleNumber(nums []int) int {
+	xor := 0
+	for _, n := range nums {
+		xor ^= n
+	}
+	return xor
+}
+
 func FindDisappearedNumbers(nums []int) []int {
 	for _, n := range nums {
 		i := int(math.Abs(float64(n))) - 1
@@ -14,15 +22,16 @@ func FindDisappearedNumbers(nums []int) []int {
 			result = append(result, i+1)
 		}
 	}
+
 	return result
 }
 
 func MissingNumber(nums []int) int {
-	sum := len(nums)
+	result := len(nums)
 	for i, n := range nums {
-		sum += i - n
+		result += i - n
 	}
-	return sum
+	return result
 }
 
 func MissingNumberXor(nums []int) int {

@@ -6,6 +6,33 @@ import (
 	"testing"
 )
 
+func Test_arrayWithOneDoubleAndOneSingle_returnsOne(t *testing.T) {
+	input := []int{2, 2, 1}
+	result := retention.SingleNumber(input)
+	expected := 1
+	if result != expected {
+		t.Fatalf("for input %v expected %d, but got %d", input, expected, result)
+	}
+}
+
+func Test_arrayWithTwoDoublesAndOneSingle_returnsFour(t *testing.T) {
+	input := []int{4, 1, 2, 1, 2}
+	result := retention.SingleNumber(input)
+	expected := 4
+	if result != expected {
+		t.Fatalf("for input %v expected %d, but got %d", input, expected, result)
+	}
+}
+
+func Test_arrayWithOneEntry_returnsThatEntry(t *testing.T) {
+	input := []int{1}
+	result := retention.SingleNumber(input)
+	expected := 1
+	if result != expected {
+		t.Fatalf("for input %v expected %d, but got %d", input, expected, result)
+	}
+}
+
 func Test_arrayOfEight_disappearedAreFiveAndSix(t *testing.T) {
 	input := []int{4, 3, 2, 7, 8, 2, 3, 1}
 	result := retention.FindDisappearedNumbers(input)
