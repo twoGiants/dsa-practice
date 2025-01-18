@@ -2,6 +2,35 @@ package retention
 
 import "math"
 
+func FindDuplicates(nums []int) []int {
+	res := []int{}
+	for _, n := range nums {
+		n := int(math.Abs(float64(n)))
+
+		if nums[n-1] < 0 {
+			res = append(res, n)
+		}
+
+		nums[n-1] = -1 * nums[n-1]
+	}
+	return res
+}
+
+func Construct2DArray(original []int, m, n int) [][]int {
+	if len(original) != m*n {
+		return [][]int{}
+	}
+
+	res := [][]int{}
+	for i := 0; i < m; i++ {
+		start := i * n
+		end := start + n
+		res = append(res, original[start:end])
+	}
+
+	return res
+}
+
 func SingleNumber(nums []int) int {
 	xor := 0
 	for _, n := range nums {
@@ -43,17 +72,15 @@ func MissingNumberXor(nums []int) int {
 }
 
 func TwoSum(nums []int, target int) []int {
-	indexes := make(map[int]int)
-
+	visited := make(map[int]int)
 	for i, n := range nums {
 		diff := target - n
-		if j, found := indexes[diff]; found {
+		if j, found := visited[diff]; found {
 			return []int{j, i}
 		}
-		indexes[n] = i
+		visited[n] = i
 	}
-
-	return nil
+	return []int{}
 }
 
 func HasDuplicate(nums []int) bool {
