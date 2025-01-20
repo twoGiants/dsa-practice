@@ -70,7 +70,7 @@ func Test_Construct2DArray_doNotConvertArrayOfThree_ifDimensionsAreOneByOne(t *t
 	}
 }
 
-func Test_arrayWithOneDoubleAndOneSingle_returnsOne(t *testing.T) {
+func Test_SingleNumber_arrayWithOneDoubleAndOneSingle_returnsOne(t *testing.T) {
 	input := []int{2, 2, 1}
 	result := retention.SingleNumber(input)
 	expected := 1
@@ -79,7 +79,7 @@ func Test_arrayWithOneDoubleAndOneSingle_returnsOne(t *testing.T) {
 	}
 }
 
-func Test_arrayWithTwoDoublesAndOneSingle_returnsFour(t *testing.T) {
+func Test_SingleNumber_arrayWithTwoDoublesAndOneSingle_returnsFour(t *testing.T) {
 	input := []int{4, 1, 2, 1, 2}
 	result := retention.SingleNumber(input)
 	expected := 4
@@ -88,7 +88,7 @@ func Test_arrayWithTwoDoublesAndOneSingle_returnsFour(t *testing.T) {
 	}
 }
 
-func Test_arrayWithOneEntry_returnsThatEntry(t *testing.T) {
+func Test_SingleNumber_arrayWithOneEntry_returnsThatEntry(t *testing.T) {
 	input := []int{1}
 	result := retention.SingleNumber(input)
 	expected := 1
@@ -97,7 +97,7 @@ func Test_arrayWithOneEntry_returnsThatEntry(t *testing.T) {
 	}
 }
 
-func Test_arrayOfEight_disappearedAreFiveAndSix(t *testing.T) {
+func Test_FindDisappearedNumbers_arrayOfEight_disappearedAreFiveAndSix(t *testing.T) {
 	input := []int{4, 3, 2, 7, 8, 2, 3, 1}
 	result := retention.FindDisappearedNumbers(input)
 	expected := []int{5, 6}
@@ -106,7 +106,7 @@ func Test_arrayOfEight_disappearedAreFiveAndSix(t *testing.T) {
 	}
 }
 
-func Test_arrayOfTwo_disappearedIsTwo(t *testing.T) {
+func Test_FindDisappearedNumbers_arrayOfTwo_disappearedIsTwo(t *testing.T) {
 	input := []int{1, 1}
 	result := retention.FindDisappearedNumbers(input)
 	expected := []int{2}
@@ -115,7 +115,7 @@ func Test_arrayOfTwo_disappearedIsTwo(t *testing.T) {
 	}
 }
 
-func Test_arrayOfTree_returnsMissingZero(t *testing.T) {
+func Test_MissingNumber_arrayOfTree_returnsMissingZero(t *testing.T) {
 	input := []int{1, 2, 3}
 	result := retention.MissingNumber(input)
 	expected := 0
@@ -124,7 +124,7 @@ func Test_arrayOfTree_returnsMissingZero(t *testing.T) {
 	}
 }
 
-func Test_arrayOfTwo_returnsMissingOne(t *testing.T) {
+func Test_MissingNumber_arrayOfTwo_returnsMissingOne(t *testing.T) {
 	input := []int{0, 2}
 	result := retention.MissingNumber(input)
 	expected := 1
@@ -133,7 +133,7 @@ func Test_arrayOfTwo_returnsMissingOne(t *testing.T) {
 	}
 }
 
-func TestXor_arrayOfTree_returnsMissingZero(t *testing.T) {
+func Test_MissingNumberXor_arrayOfTree_returnsMissingZero(t *testing.T) {
 	input := []int{1, 2, 3}
 	result := retention.MissingNumberXor(input)
 	expected := 0
@@ -142,7 +142,7 @@ func TestXor_arrayOfTree_returnsMissingZero(t *testing.T) {
 	}
 }
 
-func TestXor_arrayOfTwo_returnsMissingOne(t *testing.T) {
+func Test_MissingNumberXor_arrayOfTwo_returnsMissingOne(t *testing.T) {
 	input := []int{0, 2}
 	result := retention.MissingNumberXor(input)
 	expected := 1
@@ -181,7 +181,7 @@ func Test_TwoSum_arrayOfTwoWithTargetTen_returnsZeroAndOne(t *testing.T) {
 	}
 }
 
-func Test_arrayOfFourWithDuplicate_returnsTrue(t *testing.T) {
+func Test_HasDuplicate_arrayOfFourWithDuplicate_returnsTrue(t *testing.T) {
 	input := []int{1, 2, 3, 3}
 	result := retention.HasDuplicate(input)
 	if !result {
@@ -189,7 +189,7 @@ func Test_arrayOfFourWithDuplicate_returnsTrue(t *testing.T) {
 	}
 }
 
-func Test_arrayOfFourWithoutDuplicate_returnsFalse(t *testing.T) {
+func Test_HasDuplicate_arrayOfFourWithoutDuplicate_returnsFalse(t *testing.T) {
 	input := []int{1, 2, 3, 4}
 	result := retention.HasDuplicate(input)
 	if result {
@@ -197,7 +197,7 @@ func Test_arrayOfFourWithoutDuplicate_returnsFalse(t *testing.T) {
 	}
 }
 
-func Test_arrayOfOne_returnsFalse(t *testing.T) {
+func Test_HasDuplicate_arrayOfOne_returnsFalse(t *testing.T) {
 	input := []int{1}
 	result := retention.HasDuplicate(input)
 	if result {

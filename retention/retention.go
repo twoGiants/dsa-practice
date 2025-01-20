@@ -3,32 +3,32 @@ package retention
 import "math"
 
 func FindDuplicates(nums []int) []int {
-	res := []int{}
+	var result []int
 	for _, n := range nums {
-		n := int(math.Abs(float64(n)))
+		i := int(math.Abs(float64(n))) - 1
 
-		if nums[n-1] < 0 {
-			res = append(res, n)
+		if nums[i] < 0 {
+			result = append(result, i+1)
 		}
 
-		nums[n-1] = -1 * nums[n-1]
+		nums[i] = -1 * nums[i]
 	}
-	return res
+	return result
 }
 
 func Construct2DArray(original []int, m, n int) [][]int {
 	if len(original) != m*n {
-		return [][]int{}
+		return nil
 	}
 
-	res := [][]int{}
+	var result [][]int
 	for i := 0; i < m; i++ {
 		start := i * n
 		end := start + n
-		res = append(res, original[start:end])
+		result = append(result, original[start:end])
 	}
 
-	return res
+	return result
 }
 
 func SingleNumber(nums []int) int {
@@ -45,7 +45,7 @@ func FindDisappearedNumbers(nums []int) []int {
 		nums[i] = -1 * int(math.Abs(float64(nums[i])))
 	}
 
-	result := []int{}
+	var result []int
 	for i, n := range nums {
 		if n > 0 {
 			result = append(result, i+1)
