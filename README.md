@@ -14,6 +14,7 @@
 #### Medium
 
 - [Find All Duplicates in Array](/patterns/arrays/medium/find-duplicates/find-duplicates.md)
+- [Product of Array Except Self](/patterns/arrays/medium/product-except-self/product-except-self.md)
 
 ### Bit Manipulation
 
