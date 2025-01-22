@@ -1,46 +1,41 @@
 package arrays
 
 // Time: O(n), Space: O(n)
-func ProductExceptSelfV2(nums []int) []int {
-	prefix := 1
-	prefixList := []int{}
-	for _, n := range nums {
-		prefixList = append(prefixList, prefix)
-		prefix *= n
+func ProductExceptSelf(nums []int) []int {
+	n := len(nums)
+	result := make([]int, n)
+	prefixes := make([]int, n)
+	suffixes := make([]int, n)
+
+	prefixes[0], suffixes[n-1] = 1, 1
+	for i := 1; i < n; i++ {
+		prefixes[i] = prefixes[i-1] * nums[i-1]
 	}
 
-	postfix := 1
-	postfixList := make([]int, len(nums))
-	for i := len(nums) - 1; i > -1; i-- {
-		postfix *= nums[i]
-		postfixList[i] = postfix
+	for i := n - 2; i >= 0; i-- {
+		suffixes[i] = suffixes[i+1] * nums[i+1]
 	}
 
-	res := []int{}
-	for i := 0; i < len(nums); i++ {
-		if i == len(nums)-1 {
-			res = append(res, prefixList[i]*1)
-		} else {
-			res = append(res, prefixList[i]*postfixList[i+1])
-		}
+	for i := 0; i < n; i++ {
+		result[i] = prefixes[i] * suffixes[i]
 	}
 
-	return res
+	return result
 }
 
-func ProductExceptSelf(nums []int) []int {
+func ProductExceptSelfOptimal(nums []int) []int {
 	prefix := 1
-	res := []int{}
+	result := []int{}
 	for _, n := range nums {
-		res = append(res, prefix)
+		result = append(result, prefix)
 		prefix *= n
 	}
 
 	postfix := 1
 	for i := len(nums) - 1; i > -1; i-- {
-		res[i] *= postfix
+		result[i] *= postfix
 		postfix *= nums[i]
 	}
 
-	return res
+	return result
 }
