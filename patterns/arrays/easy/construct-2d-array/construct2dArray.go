@@ -1,11 +1,11 @@
 package arrays
 
 func Construct2DArray(original []int, m, n int) [][]int {
+	var result [][]int
 	if len(original) != m*n {
-		return [][]int{}
+		return result
 	}
 
-	result := [][]int{}
 	for i := 0; i < m; i++ {
 		start := i * n
 		end := start + n

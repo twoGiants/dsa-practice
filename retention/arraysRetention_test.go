@@ -60,7 +60,8 @@ func Test_Construct2DArray_convertArrayOfFourElements_intoATwoByTwoMatrix(t *tes
 
 	assert.SliceLengthEqual(t, result, expected)
 
-	if !slices.Equal(result[0], expected[0]) || !slices.Equal(result[1], expected[1]) {
+	if !slices.Equal(result[0], expected[0]) ||
+		!slices.Equal(result[1], expected[1]) {
 		t.Fatalf("for input %v expected output %v, but got %v", input, expected, result)
 	}
 }
@@ -101,7 +102,6 @@ func Test_FindDisappearedNumbers_arrayOfTwo_disappearedIsTwo(t *testing.T) {
 	result := retention.FindDisappearedNumbers(input)
 
 	assert.SlicesEqual(t, result, expected, input)
-
 }
 
 func Test_TwoSum_arrayOfFourWithTargetSeven_returnsZeroAndOne(t *testing.T) {
@@ -139,9 +139,7 @@ func Test_HasDuplicate_arrayOfFourWithDuplicate_returnsTrue(t *testing.T) {
 
 	result := retention.HasDuplicate(input)
 
-	if !result {
-		t.Fatalf("expected %v to have duplicate, but didn't", input)
-	}
+	assert.Duplicates(t, result, input)
 }
 
 func Test_HasDuplicate_arrayOfFourWithoutDuplicate_returnsFalse(t *testing.T) {
@@ -149,9 +147,7 @@ func Test_HasDuplicate_arrayOfFourWithoutDuplicate_returnsFalse(t *testing.T) {
 
 	result := retention.HasDuplicate(input)
 
-	if result {
-		t.Fatalf("expected %v to have no duplicate, but did", input)
-	}
+	assert.NoDuplicates(t, result, input)
 }
 
 func Test_HasDuplicate_arrayOfOne_returnsFalse(t *testing.T) {
@@ -159,7 +155,5 @@ func Test_HasDuplicate_arrayOfOne_returnsFalse(t *testing.T) {
 
 	result := retention.HasDuplicate(input)
 
-	if result {
-		t.Fatalf("expected %v to have no duplicate, but did", input)
-	}
+	assert.NoDuplicates(t, result, input)
 }

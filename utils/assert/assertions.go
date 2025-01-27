@@ -22,3 +22,15 @@ func NumbersEqual(t *testing.T, result, expected int, input []int) {
 		t.Fatalf("for input %v expected %d, but got %d", input, expected, result)
 	}
 }
+
+func NoDuplicates(t *testing.T, result bool, input []int) {
+	if result {
+		t.Fatalf("expected %v to have no duplicates, but got some", input)
+	}
+}
+
+func Duplicates(t *testing.T, result bool, input []int) {
+	if !result {
+		t.Fatalf("expected %v to have duplicates, but got none", input)
+	}
+}
