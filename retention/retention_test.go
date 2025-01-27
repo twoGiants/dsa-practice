@@ -6,6 +6,24 @@ import (
 	"testing"
 )
 
+func Test_ProductExceptSelf_arrayOfFiveElements_produces_0_m6_0_0_0(t *testing.T) {
+	input := []int{-1, 0, 1, 2, 3}
+	result := retention.ProductExceptSelf(input)
+	expected := []int{0, -6, 0, 0, 0}
+	if !slices.Equal(result, expected) {
+		t.Fatalf("for input %v expected output %v, but got %v", input, expected, result)
+	}
+}
+
+func Test_ProductExceptSelf_arrayOfFourElements_produces_48_24_12_8(t *testing.T) {
+	input := []int{1, 2, 4, 6}
+	result := retention.ProductExceptSelf(input)
+	expected := []int{48, 24, 12, 8}
+	if !slices.Equal(result, expected) {
+		t.Fatalf("for input %v expected output %v, but got %v", input, expected, result)
+	}
+}
+
 func Test_FindDuplicates_inArrayOfEightWithTwoDuplicates_findsTwoAndThree(t *testing.T) {
 	input := []int{4, 3, 2, 7, 8, 2, 3, 1}
 	result := retention.FindDuplicates(input)

@@ -2,6 +2,24 @@ package retention
 
 import "math"
 
+func ProductExceptSelf(nums []int) []int {
+	prefix := 1
+	result := make([]int, len(nums))
+	result[0] = 1
+	for i := 1; i < len(nums); i++ {
+		prefix *= nums[i-1]
+		result[i] = prefix
+	}
+
+	suffix := 1
+	for i := len(nums) - 1; i >= 1; i-- {
+		suffix *= nums[i]
+		result[i-1] *= suffix
+	}
+
+	return result
+}
+
 func FindDuplicates(nums []int) []int {
 	var result []int
 	for _, n := range nums {
