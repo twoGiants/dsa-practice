@@ -1,0 +1,165 @@
+package retention_test
+
+import (
+	"dsa/retention"
+	"dsa/utils/assert"
+	"slices"
+	"testing"
+)
+
+func Test_ProductExceptSelf_arrayOfFiveElements_produces_0_m6_0_0_0(t *testing.T) {
+	input := []int{-1, 0, 1, 2, 3}
+	expected := []int{0, -6, 0, 0, 0}
+
+	result := retention.ProductExceptSelf(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_ProductExceptSelf_arrayOfFourElements_produces_48_24_12_8(t *testing.T) {
+	input := []int{1, 2, 4, 6}
+	expected := []int{48, 24, 12, 8}
+
+	result := retention.ProductExceptSelf(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_FindDuplicates_inArrayOfEightWithTwoDuplicates_findsTwoAndThree(t *testing.T) {
+	input := []int{4, 3, 2, 7, 8, 2, 3, 1}
+	expected := []int{2, 3}
+
+	result := retention.FindDuplicates(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_FindDuplicates_inArrayOfThreeWithOneDuplicate_findsOne(t *testing.T) {
+	input := []int{1, 1, 2}
+	expected := []int{1}
+
+	result := retention.FindDuplicates(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_FindDuplicates_inArrayWithOneElement_findsNone(t *testing.T) {
+	input := []int{1}
+	expected := []int{}
+
+	result := retention.FindDuplicates(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_Construct2DArray_convertArrayOfFourElements_intoATwoByTwoMatrix(t *testing.T) {
+	input := []int{1, 2, 3, 4}
+	expected := [][]int{{1, 2}, {3, 4}}
+
+	result := retention.Construct2DArray(input, 2, 2)
+
+	assert.SliceLengthEqual(t, result, expected)
+
+	if !slices.Equal(result[0], expected[0]) || !slices.Equal(result[1], expected[1]) {
+		t.Fatalf("for input %v expected output %v, but got %v", input, expected, result)
+	}
+}
+
+func Test_Construct2DArray_convertArrayOfThreeElements_intoAOneByThreeMatrix(t *testing.T) {
+	input := []int{1, 2, 3}
+	expected := [][]int{{1, 2, 3}}
+
+	result := retention.Construct2DArray(input, 1, 3)
+
+	assert.SliceLengthEqual(t, result, expected)
+
+	assert.SlicesEqual(t, result[0], expected[0], input)
+}
+
+func Test_Construct2DArray_doNotConvertArrayOfThree_ifDimensionsAreOneByOne(t *testing.T) {
+	input := []int{1, 2}
+	expected := [][]int{}
+
+	result := retention.Construct2DArray(input, 1, 1)
+
+	assert.SliceLengthEqual(t, result, expected)
+}
+
+func Test_FindDisappearedNumbers_arrayOfEight_disappearedAreFiveAndSix(t *testing.T) {
+	input := []int{4, 3, 2, 7, 8, 2, 3, 1}
+	expected := []int{5, 6}
+
+	result := retention.FindDisappearedNumbers(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_FindDisappearedNumbers_arrayOfTwo_disappearedIsTwo(t *testing.T) {
+	input := []int{1, 1}
+	expected := []int{2}
+
+	result := retention.FindDisappearedNumbers(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+
+}
+
+func Test_TwoSum_arrayOfFourWithTargetSeven_returnsZeroAndOne(t *testing.T) {
+	input := []int{3, 4, 5, 6}
+	target := 7
+	expected := []int{0, 1}
+
+	result := retention.TwoSum(input, target)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_TwoSum_arrayOfThreeWithTargetTen_returnsZeroAndTwo(t *testing.T) {
+	input := []int{4, 5, 6}
+	target := 10
+	expected := []int{0, 2}
+
+	result := retention.TwoSum(input, target)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_TwoSum_arrayOfTwoWithTargetTen_returnsZeroAndOne(t *testing.T) {
+	input := []int{5, 5}
+	target := 10
+	expected := []int{0, 1}
+
+	result := retention.TwoSum(input, target)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_HasDuplicate_arrayOfFourWithDuplicate_returnsTrue(t *testing.T) {
+	input := []int{1, 2, 3, 3}
+
+	result := retention.HasDuplicate(input)
+
+	if !result {
+		t.Fatalf("expected %v to have duplicate, but didn't", input)
+	}
+}
+
+func Test_HasDuplicate_arrayOfFourWithoutDuplicate_returnsFalse(t *testing.T) {
+	input := []int{1, 2, 3, 4}
+
+	result := retention.HasDuplicate(input)
+
+	if result {
+		t.Fatalf("expected %v to have no duplicate, but did", input)
+	}
+}
+
+func Test_HasDuplicate_arrayOfOne_returnsFalse(t *testing.T) {
+	input := []int{1}
+
+	result := retention.HasDuplicate(input)
+
+	if result {
+		t.Fatalf("expected %v to have no duplicate, but did", input)
+	}
+}
