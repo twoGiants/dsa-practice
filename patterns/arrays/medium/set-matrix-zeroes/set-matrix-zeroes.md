@@ -40,6 +40,42 @@ Output: [
 ]
 ```
 
+## Example 3:
+
+![image](ex3.jpg)
+
+```ts
+Input: matrix = [
+  [1,1,1],
+  [1,0,1],
+  [1,1,1]
+]
+
+Output: [
+  [1,0,1],
+  [0,0,0],
+  [1,0,1]
+]
+```
+
+## Example 4:
+
+![image](ex4.jpg)
+
+```ts
+Input: matrix = [
+  [0,1,2,0],
+  [3,4,5,2],
+  [1,3,1,5]
+]
+
+Output: [
+  [0,0,0,0],
+  [0,4,5,0],
+  [0,3,1,0]
+]
+```
+
 ## Constrains
 
 -  `1 <= matrix.length, matrix[0].length <= 100`
