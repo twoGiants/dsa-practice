@@ -34,3 +34,16 @@ func Duplicates(t *testing.T, result bool, input []int) {
 		t.Fatalf("expected %v to have duplicates, but got none", input)
 	}
 }
+
+func MatrixEqual(t *testing.T, input, expected, copy [][]int) {
+	equal := true
+	for i := 0; i < len(input); i++ {
+		if !slices.Equal(input[i], expected[i]) {
+			equal = false
+		}
+	}
+
+	if !equal {
+		t.Fatalf("for input %v expected output %v, but got %v", copy, expected, input)
+	}
+}

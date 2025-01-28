@@ -2,7 +2,7 @@ package arrays_test
 
 import (
 	arrays "dsa/patterns/arrays/medium/set-matrix-zeroes"
-	"slices"
+	"dsa/utils/assert"
 	"testing"
 )
 
@@ -22,10 +22,7 @@ func Test_twoByTwoMatrixWithZeroInFirstRowFirstColumn_firstRowAndColumnBecomesZe
 
 	arrays.SetZeroes(input)
 
-	if !slices.Equal(input[0], expected[0]) ||
-		!slices.Equal(input[1], expected[1]) {
-		t.Fatalf("for input %v expected output %v, but got %v", copy, expected, input)
-	}
+	assert.MatrixEqual(t, input, expected, copy)
 }
 
 func Test_threeByThreeMatrixWithOneZeroInTheMiddle_secondRowAndSecondColumnBecomesZero(t *testing.T) {
@@ -47,11 +44,7 @@ func Test_threeByThreeMatrixWithOneZeroInTheMiddle_secondRowAndSecondColumnBecom
 
 	arrays.SetZeroes(input)
 
-	if !slices.Equal(input[0], expected[0]) ||
-		!slices.Equal(input[1], expected[1]) ||
-		!slices.Equal(input[2], expected[2]) {
-		t.Fatalf("for input %v expected output %v, but got %v", copy, expected, input)
-	}
+	assert.MatrixEqual(t, input, expected, copy)
 }
 
 func Test_threeByThreeMatrixFilledWithOnesAndOneZeroInTheMiddle_secondRowAndSecondColumnBecomesZero(t *testing.T) {
@@ -73,11 +66,7 @@ func Test_threeByThreeMatrixFilledWithOnesAndOneZeroInTheMiddle_secondRowAndSeco
 
 	arrays.SetZeroes(input)
 
-	if !slices.Equal(input[0], expected[0]) ||
-		!slices.Equal(input[1], expected[1]) ||
-		!slices.Equal(input[2], expected[2]) {
-		t.Fatalf("for input %v expected output %v, but got %v", copy, expected, input)
-	}
+	assert.MatrixEqual(t, input, expected, copy)
 }
 
 func Test_threeByFourMatrixWithTwoZerosInTheFirstRow_firstRowFirstColumnAndLastColumnBecomesZero(t *testing.T) {
@@ -99,9 +88,5 @@ func Test_threeByFourMatrixWithTwoZerosInTheFirstRow_firstRowFirstColumnAndLastC
 
 	arrays.SetZeroes(input)
 
-	if !slices.Equal(input[0], expected[0]) ||
-		!slices.Equal(input[1], expected[1]) ||
-		!slices.Equal(input[2], expected[2]) {
-		t.Fatalf("for input %v expected output %v, but got %v", copy, expected, input)
-	}
+	assert.MatrixEqual(t, input, expected, copy)
 }
