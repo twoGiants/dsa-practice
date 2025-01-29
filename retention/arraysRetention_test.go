@@ -7,6 +7,69 @@ import (
 	"testing"
 )
 
+func Test_SetZeroes_matrixWithOneZerosInLeftAndRightTopCorners_firstRowAndColumnAndLastColumnZeroes(t *testing.T) {
+	input := [][]int{
+		{0, 1, 2, 0},
+		{3, 4, 5, 2},
+		{1, 3, 1, 5},
+	}
+	copy := [][]int{
+		{0, 1, 2, 0},
+		{3, 4, 5, 2},
+		{1, 3, 1, 5},
+	}
+	expected := [][]int{
+		{0, 0, 0, 0},
+		{0, 4, 5, 0},
+		{0, 3, 1, 0},
+	}
+
+	retention.SetZeroes(input)
+
+	assert.MatrixEqual(t, input, expected, copy)
+}
+
+func Test_SetZeroes_matrixWithOneZeroInTheMiddle_secondRowAndColumnZeroes(t *testing.T) {
+	input := [][]int{
+		{1, 2, 3},
+		{4, 0, 5},
+		{6, 7, 8},
+	}
+	copy := [][]int{
+		{1, 2, 3},
+		{4, 0, 5},
+		{6, 7, 8},
+	}
+	expected := [][]int{
+		{1, 0, 3},
+		{0, 0, 0},
+		{6, 0, 8},
+	}
+
+	retention.SetZeroes(input)
+
+	assert.MatrixEqual(t, input, expected, copy)
+}
+
+func Test_SetZeroes_matrixWithOneZeroInRowAndColumnOne_firstRowAndColumnZeroes(t *testing.T) {
+	input := [][]int{
+		{0, 1},
+		{1, 1},
+	}
+	copy := [][]int{
+		{0, 1},
+		{1, 1},
+	}
+	expected := [][]int{
+		{0, 0},
+		{0, 1},
+	}
+
+	retention.SetZeroes(input)
+
+	assert.MatrixEqual(t, input, expected, copy)
+}
+
 func Test_ProductExceptSelf_arrayOfFiveElements_produces_0_m6_0_0_0(t *testing.T) {
 	input := []int{-1, 0, 1, 2, 3}
 	expected := []int{0, -6, 0, 0, 0}
