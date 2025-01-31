@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-type IntMatrixDimensions interface {
+type IntSliceDimensions interface {
 	[]int | [][]int
 }
 
@@ -15,7 +15,7 @@ func SliceLengthEqual(t *testing.T, result [][]int, expected [][]int) {
 	}
 }
 
-func SlicesEqual[T IntMatrixDimensions](t *testing.T, result, expected []int, input T) {
+func SlicesEqual[T IntSliceDimensions](t *testing.T, result, expected []int, input T) {
 	if !slices.Equal(result, expected) {
 		t.Fatalf("for input %v expected output %v, but got %v", input, expected, result)
 	}
