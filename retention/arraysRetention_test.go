@@ -7,6 +7,30 @@ import (
 	"testing"
 )
 
+func Test_SpiralMatrix_oneByThreeMatrix_spiralIsThoseThreeNumbers(t *testing.T) {
+	input := [][]int{
+		{1, 2, 3},
+	}
+	expected := []int{1, 2, 3}
+
+	result := retention.SpiralMatrix(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_SpiralMatrix_threeByOneMatrix_spiralIsThoseThreeNumbers(t *testing.T) {
+	input := [][]int{
+		{1},
+		{2},
+		{3},
+	}
+	expected := []int{1, 2, 3}
+
+	result := retention.SpiralMatrix(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
 func Test_SpiralMatrix_threeByThreeMatrix_spiralIs_1236689745(t *testing.T) {
 	input := [][]int{
 		{1, 2, 3},
@@ -14,6 +38,19 @@ func Test_SpiralMatrix_threeByThreeMatrix_spiralIs_1236689745(t *testing.T) {
 		{7, 8, 9},
 	}
 	expected := []int{1, 2, 3, 6, 9, 8, 7, 4, 5}
+
+	result := retention.SpiralMatrix(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_SpiralMatrix_fourByThreeMatrix_spiralIs_123481211109567(t *testing.T) {
+	input := [][]int{
+		{1, 2, 3, 4},
+		{5, 6, 7, 8},
+		{9, 10, 11, 12},
+	}
+	expected := []int{1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7}
 
 	result := retention.SpiralMatrix(input)
 

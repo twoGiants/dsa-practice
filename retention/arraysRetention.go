@@ -1,36 +1,42 @@
 package retention
 
-import "math"
+import (
+	"math"
+)
 
 func SpiralMatrix(matrix [][]int) []int {
 	var result []int
+	if len(matrix) == 0 || len(matrix[0]) == 0 {
+		return result
+	}
+
 	left, right := 0, len(matrix[0])
-	top, bottom := left, right
+	top, bottom := 0, len(matrix)
 
 	for left < right && top < bottom {
-		// from top left to top right
+		// collect from top left to top right
 		for i := left; i < right; i++ {
 			result = append(result, matrix[top][i])
 		}
 		top++
 
-		// from top right to bottom right
+		// collect from top right to bottom right
 		for i := top; i < bottom; i++ {
 			result = append(result, matrix[i][right-1])
 		}
 		right--
 
-		if left >= right || top >= bottom {
+		if !(left < right && top < bottom) {
 			break
 		}
 
-		// from bottom right to bottom left
+		// collect from bottom right to bottom left
 		for i := right - 1; i >= left; i-- {
 			result = append(result, matrix[bottom-1][i])
 		}
 		bottom--
 
-		// from bottom left to top left
+		// collect from bottom left to top left
 		for i := bottom - 1; i >= top; i-- {
 			result = append(result, matrix[i][left])
 		}
