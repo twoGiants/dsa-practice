@@ -64,3 +64,6 @@ Output: [
 - `1 <= n <= 20`
 - `-1000 <= matrix[i][j] <= 1000`
 
+## Solution
+
+[Rotate image solution.](rotate-image-solution.md)
