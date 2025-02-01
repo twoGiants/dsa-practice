@@ -7,18 +7,18 @@ import (
 	"testing"
 )
 
-func Test_SpiralMatrix_oneByThreeMatrix_spiralIsThoseThreeNumbers(t *testing.T) {
+func Test_SpiralOrder_oneByThreeMatrix_spiralIsThoseThreeNumbers(t *testing.T) {
 	input := [][]int{
 		{1, 2, 3},
 	}
 	expected := []int{1, 2, 3}
 
-	result := retention.SpiralMatrix(input)
+	result := retention.SpiralOrder(input)
 
 	assert.SlicesEqual(t, result, expected, input)
 }
 
-func Test_SpiralMatrix_threeByOneMatrix_spiralIsThoseThreeNumbers(t *testing.T) {
+func Test_SpiralOrder_threeByOneMatrix_spiralIsThoseThreeNumbers(t *testing.T) {
 	input := [][]int{
 		{1},
 		{2},
@@ -26,12 +26,12 @@ func Test_SpiralMatrix_threeByOneMatrix_spiralIsThoseThreeNumbers(t *testing.T) 
 	}
 	expected := []int{1, 2, 3}
 
-	result := retention.SpiralMatrix(input)
+	result := retention.SpiralOrder(input)
 
 	assert.SlicesEqual(t, result, expected, input)
 }
 
-func Test_SpiralMatrix_threeByThreeMatrix_spiralIs_1236689745(t *testing.T) {
+func Test_SpiralOrder_twoByTwoMatrix_spiralStartsWithOneAndEndsWithFive(t *testing.T) {
 	input := [][]int{
 		{1, 2, 3},
 		{4, 5, 6},
@@ -39,12 +39,12 @@ func Test_SpiralMatrix_threeByThreeMatrix_spiralIs_1236689745(t *testing.T) {
 	}
 	expected := []int{1, 2, 3, 6, 9, 8, 7, 4, 5}
 
-	result := retention.SpiralMatrix(input)
+	result := retention.SpiralOrder(input)
 
 	assert.SlicesEqual(t, result, expected, input)
 }
 
-func Test_SpiralMatrix_fourByThreeMatrix_spiralIs_123481211109567(t *testing.T) {
+func Test_SpiralOrder_threeByFourMatrix_spiralStartsWithOneAndEndsWithSeven(t *testing.T) {
 	input := [][]int{
 		{1, 2, 3, 4},
 		{5, 6, 7, 8},
@@ -52,7 +52,7 @@ func Test_SpiralMatrix_fourByThreeMatrix_spiralIs_123481211109567(t *testing.T) 
 	}
 	expected := []int{1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7}
 
-	result := retention.SpiralMatrix(input)
+	result := retention.SpiralOrder(input)
 
 	assert.SlicesEqual(t, result, expected, input)
 }

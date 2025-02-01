@@ -35,3 +35,6 @@ Output: [1,2,3,4,8,12,11,10,9,5,6,7]
 - `1 <= m, n <= 10`
 - `-100 <= matrix[i][j] <= 100`
 
+## Solution
+
+[Spiral matrix solution.](spiral-matrix-solution.md)

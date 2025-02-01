@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-func SpiralMatrix(matrix [][]int) []int {
+func SpiralOrder(matrix [][]int) []int {
 	var result []int
 	if len(matrix) == 0 || len(matrix[0]) == 0 {
 		return result

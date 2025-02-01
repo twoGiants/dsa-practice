@@ -6,6 +6,30 @@ import (
 	"testing"
 )
 
+func Test_oneByThreeMatrix_spiralIsThoseThreeNumbers(t *testing.T) {
+	input := [][]int{
+		{1, 2, 3},
+	}
+	expected := []int{1, 2, 3}
+
+	result := arrays.SpiralOrder(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_threeByOneMatrix_spiralIsThoseThreeNumbers(t *testing.T) {
+	input := [][]int{
+		{1},
+		{2},
+		{3},
+	}
+	expected := []int{1, 2, 3}
+
+	result := arrays.SpiralOrder(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
 func Test_twoByTwoMatrix_spiralStartsWithOneAndEndsWithFive(t *testing.T) {
 	input := [][]int{
 		{1, 2, 3},
