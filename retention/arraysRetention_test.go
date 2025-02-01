@@ -7,7 +7,20 @@ import (
 	"testing"
 )
 
-func Test_RotateImage_TwoByTwoMatrix(t *testing.T) {
+func Test_SpiralMatrix_threeByThreeMatrix_spiralIs_1236689745(t *testing.T) {
+	input := [][]int{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9},
+	}
+	expected := []int{1, 2, 3, 6, 9, 8, 7, 4, 5}
+
+	result := retention.SpiralMatrix(input)
+
+	assert.SlicesEqual(t, result, expected, input)
+}
+
+func Test_RotateImage_twoByTwoMatrix(t *testing.T) {
 	input := [][]int{
 		{1, 2},
 		{3, 4},
@@ -26,7 +39,7 @@ func Test_RotateImage_TwoByTwoMatrix(t *testing.T) {
 	assert.MatrixEqual(t, input, expected, copy)
 }
 
-func Test_RotateImage_ThreeByThreeMatrix(t *testing.T) {
+func Test_RotateImage_threeByThreeMatrix(t *testing.T) {
 	input := [][]int{
 		{1, 2, 3},
 		{4, 5, 6},
@@ -48,7 +61,7 @@ func Test_RotateImage_ThreeByThreeMatrix(t *testing.T) {
 	assert.MatrixEqual(t, input, expected, copy)
 }
 
-func Test_RotateImage_FourByFourMatrix(t *testing.T) {
+func Test_RotateImage_fourByFourMatrix(t *testing.T) {
 	input := [][]int{
 		{5, 1, 9, 11},
 		{2, 4, 8, 10},

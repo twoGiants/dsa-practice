@@ -2,6 +2,44 @@ package retention
 
 import "math"
 
+func SpiralMatrix(matrix [][]int) []int {
+	var result []int
+	left, right := 0, len(matrix[0])
+	top, bottom := left, right
+
+	for left < right && top < bottom {
+		// from top left to top right
+		for i := left; i < right; i++ {
+			result = append(result, matrix[top][i])
+		}
+		top++
+
+		// from top right to bottom right
+		for i := top; i < bottom; i++ {
+			result = append(result, matrix[i][right-1])
+		}
+		right--
+
+		if left >= right || top >= bottom {
+			break
+		}
+
+		// from bottom right to bottom left
+		for i := right - 1; i >= left; i-- {
+			result = append(result, matrix[bottom-1][i])
+		}
+		bottom--
+
+		// from bottom left to top left
+		for i := bottom - 1; i >= top; i-- {
+			result = append(result, matrix[i][left])
+		}
+		left++
+	}
+
+	return result
+}
+
 func RotateImage(matrix [][]int) {
 	left, right := 0, len(matrix)-1
 
