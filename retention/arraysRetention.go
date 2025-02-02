@@ -4,6 +4,32 @@ import (
 	"math"
 )
 
+func LongestConsecutive(nums []int) int {
+	numSet := make(map[int]struct{})
+	for _, n := range nums {
+		numSet[n] = struct{}{}
+	}
+
+	longest := 0
+	for num := range numSet {
+		if _, found := numSet[num-1]; !found {
+			length := 0
+			for {
+				if _, exists := numSet[num+length]; exists {
+					length++
+				} else {
+					break
+				}
+			}
+			if length > longest {
+				longest = length
+			}
+		}
+	}
+
+	return longest
+}
+
 func SpiralOrder(matrix [][]int) []int {
 	var result []int
 	if len(matrix) == 0 || len(matrix[0]) == 0 {
