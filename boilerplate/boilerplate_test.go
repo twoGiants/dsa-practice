@@ -7,8 +7,10 @@ import (
 
 func Test_XXX(t *testing.T) {
 	input := []int{}
-	result := boilerplate.BoilerplateFunc(input)
 	expected := 0
+
+	result := boilerplate.BoilerplateFunc(input)
+
 	if result != expected {
 		t.Fatalf("for input %v expected output %d, but got %d", input, expected, result)
 	}
