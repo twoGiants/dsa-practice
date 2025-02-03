@@ -19,3 +19,7 @@ tba
 ## Constrains
 
 - tba
+
+## Solution
+
+[Boilerplate solution.](boilerplate-solution.md)
