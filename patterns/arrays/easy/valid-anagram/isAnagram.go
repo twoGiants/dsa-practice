@@ -1,20 +1,29 @@
 package arrays
 
 func IsAnagram(s, t string) bool {
-	if len(s) != len(t) {
+	notEqualLength := len(s) != len(t)
+	if notEqualLength {
 		return false
 	}
 
-	countS, countT := make(map[rune]int), make(map[rune]int)
-	for i, ch := range s {
-		countS[ch]++
-		countT[rune(t[i])]++
-	}
+	countS, countT := countCharacters(s), countCharacters(t)
 
+	return equalCharacterCounts(countS, countT)
+}
+
+func equalCharacterCounts(countS, countT map[rune]int) bool {
 	for k, v := range countS {
 		if countT[k] != v {
 			return false
 		}
 	}
 	return true
+}
+
+func countCharacters(str string) map[rune]int {
+	result := make(map[rune]int)
+	for _, char := range str {
+		result[char]++
+	}
+	return result
 }
