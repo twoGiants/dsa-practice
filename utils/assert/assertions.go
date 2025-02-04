@@ -2,6 +2,7 @@ package assert
 
 import (
 	"slices"
+	"sort"
 	"testing"
 )
 
@@ -50,4 +51,21 @@ func MatrixEqual(t *testing.T, input, expected, copy [][]int) {
 	if !equal {
 		t.Fatalf("for input %v expected output %v, but got %v", copy, expected, input)
 	}
+}
+
+func SortGroups(groups [][]string) {
+	for _, group := range groups {
+		sort.Strings(group)
+	}
+	sort.Slice(groups, func(i, j int) bool {
+		if len(groups[i]) != len(groups[j]) {
+			return len(groups[i]) < len(groups[j])
+		}
+		for k := range groups[i] {
+			if groups[i][k] != groups[j][k] {
+				return groups[i][k] < groups[j][k]
+			}
+		}
+		return false
+	})
 }
