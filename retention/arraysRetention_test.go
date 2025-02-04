@@ -7,6 +7,57 @@ import (
 	"testing"
 )
 
+func Test_GroupAnagrams(t *testing.T) {
+	var anagramTests = []struct {
+		name     string
+		input    []string
+		expected [][]string
+	}{
+		{
+			"six words",
+			[]string{"act", "pots", "tops", "cat", "stop", "hat"},
+			[][]string{{"hat"}, {"act", "cat"}, {"pots", "stop", "tops"}},
+		},
+		{"x", []string{"x"}, [][]string{{"x"}}},
+		{"", []string{""}, [][]string{{""}}},
+	}
+
+	for _, at := range anagramTests {
+		t.Run(at.name, func(t *testing.T) {
+
+			result := retention.GroupAnagrams(at.input)
+
+			assert.SortGroups(result)
+
+			for i := 0; i < len(at.expected); i++ {
+				if !slices.Equal(result[i], at.expected[i]) {
+					t.Errorf("for input %v expected output %v, but got %v", at.input, at.expected[i], result[i])
+				}
+			}
+		})
+	}
+}
+
+func Test_ValidAnagram_IsAnagram(t *testing.T) {
+	var anagramTests = []struct {
+		s1, s2   string
+		expected bool
+	}{
+		{"racecar", "carrace", true},
+		{"jar", "jam", false},
+	}
+
+	for _, at := range anagramTests {
+		t.Run(at.s1+"."+at.s2, func(t *testing.T) {
+			result := retention.IsAnagram(at.s1, at.s2)
+
+			if result != at.expected {
+				t.Errorf("for input '%s', '%s', expected output %t, but got %t", at.s1, at.s2, at.expected, result)
+			}
+		})
+	}
+}
+
 func Test_LongestConsecutive_arrayOfEight_longestSequenceIsSeven(t *testing.T) {
 	input := []int{0, 3, 2, 5, 4, 6, 1, 1}
 	expected := 7

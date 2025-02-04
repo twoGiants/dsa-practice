@@ -4,6 +4,45 @@ import (
 	"math"
 )
 
+func GroupAnagrams(strs []string) [][]string {
+	anagramMap := make(map[[26]int][]string)
+
+	for _, str := range strs {
+		var count [26]int
+		for _, ch := range str {
+			count[ch-'a']++
+		}
+		anagramMap[count] = append(anagramMap[count], str)
+	}
+
+	var result [][]string
+	for _, group := range anagramMap {
+		result = append(result, group)
+	}
+
+	return result
+}
+
+func IsAnagram(s, t string) bool {
+	if len(s) != len(t) {
+		return false
+	}
+
+	countS, countT := make(map[rune]int), make(map[rune]int)
+	for i, ch := range s {
+		countS[ch]++
+		countT[rune(t[i])]++
+	}
+
+	for k, v := range countS {
+		if countT[k] != v {
+			return false
+		}
+	}
+
+	return true
+}
+
 func LongestConsecutive(nums []int) int {
 	numSet := make(map[int]struct{})
 	for _, n := range nums {
