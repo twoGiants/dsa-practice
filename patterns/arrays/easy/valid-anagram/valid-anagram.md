@@ -26,4 +26,4 @@ Output: false
 
 ## Solution
 
-[Valid Anagram.](valid-anagram.md)
+[Valid anagram solution.](valid-anagram-solution.md)
