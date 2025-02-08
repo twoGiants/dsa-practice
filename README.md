@@ -22,6 +22,8 @@
 - [Spiral Matrix](/patterns/arrays/medium/spiral-matrix/spiral-matrix.md)
 - [Longest Consecutive Sequence](/patterns/arrays/medium/longest-consecutive-sequence/longest-consecutive-sequence.md)
 - [Group Anagrams](/patterns/arrays/medium/group-anagrams/group-anagrams.md)
+- [Top K Frequent Elements](/patterns/arrays/medium/top-k-frequent-elements/top-k-frequent-elements.md)
+- [Encode Decode](/patterns/arrays/medium/encode-decode/encode-decode.md)
 
 ### Bit Manipulation
 
