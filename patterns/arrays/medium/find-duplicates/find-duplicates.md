@@ -29,8 +29,15 @@ Output: []
 
 ## Constrains
 
-
 - `n == nums.length`
 - `1 <= n <= 10^5`
 - `1 <= nums[i] <= n`
 - Each element in `nums` appears **once** or **twice**.
+
+## Solution
+
+[Find all duplicates in an array solution.](find-duplicates-solution.md)
+
+## Retention Tracking
+
+- [x] retained 11.02.24
