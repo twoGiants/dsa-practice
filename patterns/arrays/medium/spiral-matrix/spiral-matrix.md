@@ -38,3 +38,7 @@ Output: [1,2,3,4,8,12,11,10,9,5,6,7]
 ## Solution
 
 [Spiral matrix solution.](spiral-matrix-solution.md)
+
+## Retention Tracking
+
+- [x] retained 11.02.24
