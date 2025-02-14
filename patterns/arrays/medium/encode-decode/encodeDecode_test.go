@@ -8,7 +8,7 @@ import (
 
 func Test_EncodeDecode(t *testing.T) {
 	input := []string{"neet", "code", "love", "you"}
-	expected := []string{"neet", "code", "love", "you"}
+	expected := input
 
 	transfer := arrays.Transfer{}
 

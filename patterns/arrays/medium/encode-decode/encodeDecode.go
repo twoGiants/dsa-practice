@@ -1,38 +1,31 @@
 package arrays
 
-import (
-	"strconv"
-	"strings"
-)
+import "strconv"
 
 type Transfer struct{}
 
 func (t *Transfer) Encode(strs []string) string {
-	if len(strs) == 0 {
-		return ""
-	}
-	var sizes []string
+	var result string
 	for _, str := range strs {
-		sizes = append(sizes, strconv.Itoa(len(str)))
+		result += strconv.Itoa(len(str)) + "#" + str
 	}
-	return strings.Join(sizes, ",") + "#" + strings.Join(strs, "")
+	return result
 }
 
 func (t *Transfer) Decode(encoded string) []string {
-	if encoded == "" {
-		return []string{}
-	}
-	parts := strings.SplitN(encoded, "#", 2)
-	sizes := strings.Split(parts[0], ",")
-	var res []string
+	var result []string
 	i := 0
-	for _, sz := range sizes {
-		if sz == "" {
-			continue
+	for i < len(encoded) {
+		j := i
+		for encoded[j] != '#' {
+			j++
 		}
-		length, _ := strconv.Atoi(sz)
-		res = append(res, parts[1][i:i+length])
-		i += length
+		wordLength, _ := strconv.Atoi(encoded[i:j])
+		wordStart := j + 1
+		wordEnd := wordStart + wordLength
+		result = append(result, encoded[wordStart:wordEnd])
+		i = wordEnd
 	}
-	return res
+
+	return result
 }
