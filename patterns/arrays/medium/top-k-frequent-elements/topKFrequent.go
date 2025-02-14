@@ -20,7 +20,7 @@ func grabKMostFrequent(grouped [][]int, k int) []int {
 }
 
 func groupNumsByCount(nums []int, count map[int]int) [][]int {
-	result := make([][]int, len(nums))
+	result := make([][]int, len(nums)+1)
 	for num, itsCount := range count {
 		result[itsCount] = append(result[itsCount], num)
 	}
