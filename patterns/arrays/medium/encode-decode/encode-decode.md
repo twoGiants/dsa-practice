@@ -30,3 +30,7 @@ Output: ["we","say",":","yes"]
 ## Solution
 
 [Encode and decode strings solution.](encode-decode-solution.md)
+
+## Retention Tracking
+
+- [x] retained 15.02.24

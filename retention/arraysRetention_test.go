@@ -7,6 +7,20 @@ import (
 	"testing"
 )
 
+func Test_EncodeDecode(t *testing.T) {
+	input := []string{"neet", "code", "love", "you"}
+	expected := input
+
+	transfer := retention.Transfer{}
+
+	encoded := transfer.Encode(input)
+	result := transfer.Decode(encoded)
+
+	if !slices.Equal(result, expected) {
+		t.Fatalf("for input %v expected output %v, but got %v", input, expected, result)
+	}
+}
+
 func Test_TopKFrequent(t *testing.T) {
 	var topKTests = []struct {
 		name     string
