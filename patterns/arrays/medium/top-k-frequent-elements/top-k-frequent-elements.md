@@ -28,7 +28,10 @@ Output: [2,3]
 - `-1000 <= nums[i] <= 1000`
 - `1 <= k <= number of distinct elements in nums`
 
-
 ## Solution
 
 [Top k frequent elements solution.](top-k-frequent-elements-solution.md)
+
+## Retention Tracking
+
+- [x] retained 15.02.25

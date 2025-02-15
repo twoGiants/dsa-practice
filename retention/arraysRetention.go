@@ -4,6 +4,30 @@ import (
 	"math"
 )
 
+func TopKFrequent(nums []int, k int) []int {
+	count := make(map[int]int)
+	grouped := make([][]int, len(nums)+1)
+
+	for _, num := range nums {
+		count[num]++
+	}
+
+	for num, itsCount := range count {
+		grouped[itsCount] = append(grouped[itsCount], num)
+	}
+
+	var result []int
+	for i := len(grouped) - 1; i > 0; i-- {
+		for _, num := range grouped[i] {
+			result = append(result, num)
+			if len(result) == k {
+				return result
+			}
+		}
+	}
+	return result
+}
+
 func GroupAnagrams(strs []string) [][]string {
 	anagramMap := make(map[[26]int][]string)
 
@@ -71,10 +95,6 @@ func LongestConsecutive(nums []int) int {
 
 func SpiralOrder(matrix [][]int) []int {
 	var result []int
-	if len(matrix) == 0 || len(matrix[0]) == 0 {
-		return result
-	}
-
 	left, right := 0, len(matrix[0])
 	top, bottom := 0, len(matrix)
 

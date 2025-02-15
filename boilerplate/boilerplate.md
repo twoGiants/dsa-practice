@@ -26,4 +26,4 @@ tba
 
 ## Retention Tracking
 
-- dd.mm.yy
+- [x] retained dd.mm.yy
