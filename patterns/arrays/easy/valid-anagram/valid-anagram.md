@@ -27,3 +27,7 @@ Output: false
 ## Solution
 
 [Valid anagram solution.](valid-anagram-solution.md)
+
+## Retention Tracking
+
+- [x] retained 17.02.25
