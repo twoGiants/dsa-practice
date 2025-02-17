@@ -28,3 +28,11 @@ Output: 7
 - `0 <= nums.length <= 1000`
 - `-10^9 <= nums[i] <= 10^9`
 
+## Solution
+
+[Longest consecutive sequence solution.](longest-consecutive-sequence-solution.md)
+
+## Retention Tracking
+
+- [x] retained 17.02.25
+
