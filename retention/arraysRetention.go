@@ -59,18 +59,18 @@ func TopKFrequent(nums []int, k int) []int {
 }
 
 func GroupAnagrams(strs []string) [][]string {
-	anagramMap := make(map[[26]int][]string)
+	anagramGroups := make(map[[26]int][]string)
 
-	for _, str := range strs {
-		var count [26]int
-		for _, ch := range str {
-			count[ch-'a']++
+	for _, word := range strs {
+		var letterCount [26]int
+		for _, letter := range word {
+			letterCount[letter-'a']++
 		}
-		anagramMap[count] = append(anagramMap[count], str)
+		anagramGroups[letterCount] = append(anagramGroups[letterCount], word)
 	}
 
 	var result [][]string
-	for _, group := range anagramMap {
+	for _, group := range anagramGroups {
 		result = append(result, group)
 	}
 

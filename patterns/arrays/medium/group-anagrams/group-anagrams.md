@@ -30,3 +30,7 @@ Output: [[""]]
 ## Solution
 
 [Group anagrams solution.](group-anagrams-solution.md)
+
+## Retention Tracking
+
+- [x] retained 17.02.25
