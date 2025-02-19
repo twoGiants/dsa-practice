@@ -67,3 +67,7 @@ Output: [
 ## Solution
 
 [Rotate image solution.](rotate-image-solution.md)
+
+## Retention Tracking
+
+- [x] retained 19.02.25
