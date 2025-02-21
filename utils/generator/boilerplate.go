@@ -34,13 +34,28 @@ func Docs(notParsed, title string) (string, error) {
 	return result.String(), nil
 }
 
-func LoadDocs(path string) (string, error) {
-	result, err := os.ReadFile(path)
+func LoadDocs(tmplPath string) (string, error) {
+	result, err := os.ReadFile(tmplPath)
 	if err != nil {
 		return "", err
 	}
 
 	return string(result), err
+}
+
+func StoreDocs(boilerplate, path string) error {
+	if err := os.WriteFile(path, []byte(boilerplate), 0644); err != nil {
+		return err
+	}
+	return nil
+}
+
+func CreateExerciseDirectories(path string) error {
+	if err := os.MkdirAll(path, 0755); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func Sample() {

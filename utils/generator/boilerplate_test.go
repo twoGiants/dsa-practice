@@ -2,6 +2,7 @@ package generator_test
 
 import (
 	"dsa/utils/generator"
+	"os"
 	"strings"
 	"testing"
 )
@@ -63,11 +64,12 @@ func Test_GenerateBoilerplateDocs(t *testing.T) {
 	}
 }
 
-func Test_LoadDocsTemplateFile(t *testing.T) {
-	path := "docs.gotmpl"
+// Integration unit test - not faking fs
+func Test_LoadDocsTemplate(t *testing.T) {
+	tmplPath := "docs.gotmpl"
 	expected := "{{.Title}}"
 
-	actual, err := generator.LoadDocs(path)
+	actual, err := generator.LoadDocs(tmplPath)
 	if err != nil {
 		t.Fatal("unexpected error", err)
 	}
@@ -76,3 +78,46 @@ func Test_LoadDocsTemplateFile(t *testing.T) {
 		t.Fatalf("expected docs to contain %s but it didn't, docs \n%s", expected, actual)
 	}
 }
+
+// Integration unit test - not faking fs
+func Test_StoreDocsBoilerplate(t *testing.T) {
+	path := t.TempDir() + "/docs.md"
+	boilerplate := "Missing Number [Missing Number solution.](missing-number-solution.md)"
+
+	t.Log(path)
+
+	err := generator.StoreDocs(boilerplate, path)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
+
+	stored, err := generator.LoadDocs(path)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
+
+	if boilerplate != stored {
+		t.Fatalf("expected: %s, got: %s", boilerplate, stored)
+	}
+}
+
+// Integration unit test - not faking fs
+func Test_CreateExerciseDirectories(t *testing.T) {
+	path := t.TempDir() + "/arrays/easy/missing-numbers"
+
+	t.Log(path)
+
+	if err := generator.CreateExerciseDirectories(path); err != nil {
+		t.Fatal("unexpected error", err)
+	}
+
+	info, err := os.Stat(path)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
+
+	if !info.IsDir() {
+		t.Fatalf("expected path \"%s\" to exist but it didn't", path)
+	}
+}
+
