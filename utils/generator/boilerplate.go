@@ -2,21 +2,43 @@ package generator
 
 import (
 	"os"
+	"path/filepath"
 	"strings"
 	"text/template"
 )
 
+func DocsBoilerplate(rootPath, tmplPath, pattern, difficulty, title string) error {
+	tmpl, err := LoadDocs(tmplPath)
+	if err != nil {
+		return err
+	}
+
+	boilerplate, err := Docs(tmpl, title)
+	if err != nil {
+		return err
+	}
+
+	exercisePath := filepath.Join(rootPath, pattern, difficulty, smallKebab(title))
+	if err := CreateExerciseDirectories(exercisePath); err != nil {
+		return err
+	}
+
+	docsFileName := smallKebab(title) + ".md"
+	boilerplatePath := filepath.Join(exercisePath, docsFileName)
+	if err := StoreDocs(boilerplate, boilerplatePath); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Docs(notParsed, title string) (string, error) {
-	docsTmpl, err := template.New("docs").Parse(notParsed)
+	tmpl, err := template.New("docs").Parse(notParsed)
 	if err != nil {
 		return "", err
 	}
 
-	small := strings.ToLower(title)
-
-	if len(strings.Split(small, " ")) > 1 {
-		small = strings.ReplaceAll(small, " ", "-")
-	}
+	small := smallKebab(title)
 
 	data := struct {
 		Title      string
@@ -27,11 +49,20 @@ func Docs(notParsed, title string) (string, error) {
 	}
 
 	var result strings.Builder
-	if err := docsTmpl.Execute(&result, data); err != nil {
+	if err := tmpl.Execute(&result, data); err != nil {
 		return "", err
 	}
 
 	return result.String(), nil
+}
+
+func smallKebab(title string) string {
+	small := strings.ToLower(title)
+
+	if len(strings.Split(small, " ")) > 1 {
+		small = strings.ReplaceAll(small, " ", "-")
+	}
+	return small
 }
 
 func LoadDocs(tmplPath string) (string, error) {

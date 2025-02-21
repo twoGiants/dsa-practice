@@ -8,7 +8,7 @@ import (
 )
 
 func Test_GenerateBoilerplateDocs(t *testing.T) {
-	var docsTests = []struct {
+	docsTests := []struct {
 		name, pattern, input, expected string
 	}{
 		{
@@ -121,3 +121,25 @@ func Test_CreateExerciseDirectories(t *testing.T) {
 	}
 }
 
+// Integration unit test - not faking fs
+func Test_e2e_CreateMissingNumbersBoilerplateMd(t *testing.T) {
+	pattern, difficulty, title := "arrays", "easy", "Missing Numbers"
+	rootPath := t.TempDir()
+	tmplPath := "docs.gotmpl"
+	expectedPath := rootPath + "/arrays/easy/missing-numbers/missing-numbers.md"
+
+	if err := generator.DocsBoilerplate(rootPath, tmplPath, pattern, difficulty, title); err != nil {
+		t.Fatal("unexpected error", err)
+	}
+
+	actual, err := generator.LoadDocs(expectedPath)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
+
+	t.Log(actual)
+
+	if !strings.Contains(actual, title) {
+		t.Fatalf("expected title \"%s\", got \n%s", title, actual)
+	}
+}
