@@ -2,6 +2,7 @@ package generator_test
 
 import (
 	"dsa/utils/generator"
+	"strings"
 	"testing"
 )
 
@@ -59,5 +60,19 @@ func Test_GenerateBoilerplateDocs(t *testing.T) {
 				t.Fatalf("expected: %s, got: %s", tt.expected, actual)
 			}
 		})
+	}
+}
+
+func Test_LoadDocsTemplateFile(t *testing.T) {
+	path := "docs.gotmpl"
+	expected := "{{.Title}}"
+
+	actual, err := generator.LoadDocs(path)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
+
+	if !strings.Contains(actual, expected) {
+		t.Fatalf("expected docs to contain %s but it didn't, docs \n%s", expected, actual)
 	}
 }

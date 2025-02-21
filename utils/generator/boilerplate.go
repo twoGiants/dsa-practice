@@ -6,13 +6,13 @@ import (
 	"text/template"
 )
 
-func Docs(notParsed, pattern string) (string, error) {
+func Docs(notParsed, title string) (string, error) {
 	docsTmpl, err := template.New("docs").Parse(notParsed)
 	if err != nil {
 		return "", err
 	}
 
-	small := strings.ToLower(pattern)
+	small := strings.ToLower(title)
 
 	if len(strings.Split(small, " ")) > 1 {
 		small = strings.ReplaceAll(small, " ", "-")
@@ -22,7 +22,7 @@ func Docs(notParsed, pattern string) (string, error) {
 		Title      string
 		SmallTitle string
 	}{
-		Title:      pattern,
+		Title:      title,
 		SmallTitle: small,
 	}
 
@@ -32,6 +32,15 @@ func Docs(notParsed, pattern string) (string, error) {
 	}
 
 	return result.String(), nil
+}
+
+func LoadDocs(path string) (string, error) {
+	result, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+
+	return string(result), err
 }
 
 func Sample() {
