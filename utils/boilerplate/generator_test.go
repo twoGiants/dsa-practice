@@ -1,7 +1,7 @@
-package generator_test
+package boilerplate_test
 
 import (
-	"dsa/utils/generator"
+	"dsa/utils/boilerplate"
 	"os"
 	"strings"
 	"testing"
@@ -52,7 +52,7 @@ func Test_GenerateBoilerplateDocs(t *testing.T) {
 	for _, tt := range docsTests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			actual, err := generator.Docs(tt.input, tt.pattern)
+			actual, err := boilerplate.Docs(tt.input, tt.pattern)
 			if err != nil {
 				t.Fatal("unexpected error", err)
 			}
@@ -69,7 +69,7 @@ func Test_LoadDocsTemplate(t *testing.T) {
 	tmplPath := "docs.gotmpl"
 	expected := "{{.Title}}"
 
-	actual, err := generator.LoadDocs(tmplPath)
+	actual, err := boilerplate.LoadDocs(tmplPath)
 	if err != nil {
 		t.Fatal("unexpected error", err)
 	}
@@ -82,22 +82,22 @@ func Test_LoadDocsTemplate(t *testing.T) {
 // Integration unit test - not faking fs
 func Test_StoreDocsBoilerplate(t *testing.T) {
 	path := t.TempDir() + "/docs.md"
-	boilerplate := "Missing Number [Missing Number solution.](missing-number-solution.md)"
+	docsBoilerplate := "Missing Number [Missing Number solution.](missing-number-solution.md)"
 
 	t.Log(path)
 
-	err := generator.StoreDocs(boilerplate, path)
+	err := boilerplate.StoreDocs(docsBoilerplate, path)
 	if err != nil {
 		t.Fatal("unexpected error", err)
 	}
 
-	stored, err := generator.LoadDocs(path)
+	stored, err := boilerplate.LoadDocs(path)
 	if err != nil {
 		t.Fatal("unexpected error", err)
 	}
 
-	if boilerplate != stored {
-		t.Fatalf("expected: %s, got: %s", boilerplate, stored)
+	if docsBoilerplate != stored {
+		t.Fatalf("expected: %s, got: %s", docsBoilerplate, stored)
 	}
 }
 
@@ -107,7 +107,7 @@ func Test_CreateExerciseDirectories(t *testing.T) {
 
 	t.Log(path)
 
-	if err := generator.CreateExerciseDirectories(path); err != nil {
+	if err := boilerplate.CreateExerciseDirectories(path); err != nil {
 		t.Fatal("unexpected error", err)
 	}
 
@@ -128,11 +128,11 @@ func Test_e2e_CreateMissingNumbersBoilerplateMd(t *testing.T) {
 	tmplPath := "docs.gotmpl"
 	expectedPath := rootPath + "/arrays/easy/missing-numbers/missing-numbers.md"
 
-	if err := generator.DocsBoilerplate(rootPath, tmplPath, pattern, difficulty, title); err != nil {
+	if err := boilerplate.DocsBoilerplate(rootPath, tmplPath, pattern, difficulty, title); err != nil {
 		t.Fatal("unexpected error", err)
 	}
 
-	actual, err := generator.LoadDocs(expectedPath)
+	actual, err := boilerplate.LoadDocs(expectedPath)
 	if err != nil {
 		t.Fatal("unexpected error", err)
 	}
