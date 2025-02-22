@@ -3,9 +3,68 @@ package boilerplate
 import (
 	"fmt"
 	"path/filepath"
+	"slices"
 	"strings"
 	"text/template"
 )
+
+type metadata struct {
+	command,
+	pattern,
+	difficulty,
+	title string
+}
+
+func NewMetadata(
+	command,
+	pattern,
+	difficulty,
+	title string,
+) metadata {
+	return metadata{
+		command,
+		pattern,
+		difficulty,
+		title,
+	}
+}
+
+func ValidatedMetadata(m metadata) (metadata, error) {
+	if err := validate(
+		"command",
+		m.command,
+		[]string{"create", "delete"},
+	); err != nil {
+		return m, err
+	}
+
+	if err := validate(
+		"pattern",
+		m.pattern,
+		[]string{"arrays", "bit-manipulation", "stack"},
+	); err != nil {
+		return m, err
+	}
+
+	if err := validate(
+		"difficulty",
+		m.difficulty,
+		[]string{"easy", "medium", "hard"},
+	); err != nil {
+		return m, err
+	}
+
+	return m, nil
+}
+
+func validate(attr string, member string, list []string) error {
+	if !slices.Contains(list, member) {
+		return fmt.Errorf("invalid %s: %s, allowed: %v", attr, member, list)
+	}
+	fmt.Printf("%s: %s\n", attr, member)
+
+	return nil
+}
 
 type Config struct {
 	docsTmplPath string
@@ -42,19 +101,27 @@ func (c *Config) docsFilePath() string {
 	return filepath.Join(c.exercisePath(), docsFileName)
 }
 
-func Generate(conf Config) error {
-	if conf.create() {
-		if err := DocsBoilerplateV2(conf); err != nil {
+type Generator struct {
+	Config
+}
+
+func NewGenerator(c Config) *Generator {
+	return &Generator{c}
+}
+
+func (g *Generator) Run() error {
+	if g.create() {
+		if err := DocsBoilerplate(g.Config); err != nil {
 			return err
 		}
 	}
 
-	if conf.delete() {
+	if g.delete() {
 		if err := DeleteExercise(
-			conf.targetDir,
-			conf.exercise.pattern,
-			conf.exercise.difficulty,
-			conf.exercise.title,
+			g.targetDir,
+			g.exercise.pattern,
+			g.exercise.difficulty,
+			g.exercise.title,
 		); err != nil {
 			return err
 		}
@@ -65,7 +132,7 @@ func Generate(conf Config) error {
 	return nil
 }
 
-func DocsBoilerplateV2(conf Config) error {
+func DocsBoilerplate(conf Config) error {
 	tmpl, err := LoadDocs(conf.docsTmplPath)
 	if err != nil {
 		return err
@@ -81,31 +148,6 @@ func DocsBoilerplateV2(conf Config) error {
 	}
 
 	if err := StoreDocs(docs, conf.docsFilePath()); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func DocsBoilerplate(exerciseRoot, tmplPath, pattern, difficulty, title string) error {
-	tmpl, err := LoadDocs(tmplPath)
-	if err != nil {
-		return err
-	}
-
-	docs, err := Docs(tmpl, title)
-	if err != nil {
-		return err
-	}
-
-	exercisePath := filepath.Join(exerciseRoot, pattern, difficulty, smallKebab(title))
-	if err := CreateExerciseDirectories(exercisePath); err != nil {
-		return err
-	}
-
-	docsFileName := smallKebab(title) + ".md"
-	boilerplatePath := filepath.Join(exercisePath, docsFileName)
-	if err := StoreDocs(docs, boilerplatePath); err != nil {
 		return err
 	}
 

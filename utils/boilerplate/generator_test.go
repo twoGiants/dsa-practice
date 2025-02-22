@@ -122,13 +122,20 @@ func Test_CreateExerciseDirectories(t *testing.T) {
 }
 
 // Integration unit test - not faking fs
-func Test_e2e_CreateMissingNumbersBoilerplateMd(t *testing.T) {
-	pattern, difficulty, title := "arrays", "easy", "Missing Numbers"
-	rootPath := t.TempDir()
-	tmplPath := "docs.gotmpl"
-	expectedPath := rootPath + "/arrays/easy/missing-numbers/missing-numbers.md"
+func Test_e2e_GeneratesMissingNumbersDocsMd(t *testing.T) {
+	command, pattern, difficulty, title := "create", "arrays", "easy", "Missing Numbers"
+	targetDir := t.TempDir()
+	expectedPath := targetDir + "/arrays/easy/missing-numbers/missing-numbers.md"
 
-	if err := boilerplate.DocsBoilerplate(rootPath, tmplPath, pattern, difficulty, title); err != nil {
+	generator := boilerplate.NewGenerator(
+		boilerplate.NewConfig(
+			"docs.gotmpl",
+			targetDir,
+			boilerplate.NewMetadata(command, pattern, difficulty, title),
+		),
+	)
+
+	if err := generator.Run(); err != nil {
 		t.Fatal("unexpected error", err)
 	}
 
