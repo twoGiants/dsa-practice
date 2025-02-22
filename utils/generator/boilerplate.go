@@ -7,7 +7,7 @@ import (
 	"text/template"
 )
 
-func DocsBoilerplate(rootPath, tmplPath, pattern, difficulty, title string) error {
+func DocsBoilerplate(exerciseRoot, tmplPath, pattern, difficulty, title string) error {
 	tmpl, err := LoadDocs(tmplPath)
 	if err != nil {
 		return err
@@ -18,7 +18,7 @@ func DocsBoilerplate(rootPath, tmplPath, pattern, difficulty, title string) erro
 		return err
 	}
 
-	exercisePath := filepath.Join(rootPath, pattern, difficulty, smallKebab(title))
+	exercisePath := filepath.Join(exerciseRoot, pattern, difficulty, smallKebab(title))
 	if err := CreateExerciseDirectories(exercisePath); err != nil {
 		return err
 	}
@@ -26,6 +26,15 @@ func DocsBoilerplate(rootPath, tmplPath, pattern, difficulty, title string) erro
 	docsFileName := smallKebab(title) + ".md"
 	boilerplatePath := filepath.Join(exercisePath, docsFileName)
 	if err := StoreDocs(boilerplate, boilerplatePath); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeleteExercise(exerciseRoot, pattern, difficulty, title string) error {
+	path := filepath.Join(exerciseRoot, pattern, difficulty, smallKebab(title))
+	if err := os.RemoveAll(path); err != nil {
 		return err
 	}
 
