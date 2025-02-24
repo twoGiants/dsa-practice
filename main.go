@@ -11,13 +11,15 @@ func main() {
 
 	tempDir := "temp"
 	if _, err := os.Stat(tempDir); err != nil {
-		panic(fmt.Errorf("%v, create %s and try again", err, tempDir))
+		fmt.Printf("%v, create %s and try again\n", err, tempDir)
+		os.Exit(0)
 	}
 
 	args := os.Args[1:]
 	if len(args) != 4 {
 		printUsage()
-		panic("missing command, pattern, difficulty and title")
+		fmt.Println("missing command, pattern, difficulty and title")
+		os.Exit(0)
 	}
 
 	metadata, err := boilerplate.ValidatedMetadata(
