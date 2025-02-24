@@ -274,9 +274,10 @@ func Construct2DArray(original []int, m, n int) [][]int {
 }
 
 func FindDisappearedNumbers(nums []int) []int {
+	abs := func(n int) int { return int(math.Abs(float64(n))) }
 	for _, n := range nums {
-		i := int(math.Abs(float64(n))) - 1
-		nums[i] = -int(math.Abs(float64(nums[i])))
+		i := abs(n) - 1
+		nums[i] = -abs(nums[i])
 	}
 
 	var result []int
@@ -285,6 +286,7 @@ func FindDisappearedNumbers(nums []int) []int {
 			result = append(result, i+1)
 		}
 	}
+
 	return result
 }
 

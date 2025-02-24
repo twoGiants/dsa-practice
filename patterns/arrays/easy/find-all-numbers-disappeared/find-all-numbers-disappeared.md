@@ -23,3 +23,7 @@ Output: [2]
 - `n == nums.length`
 - `1 <= n <= 10^5`
 - `1 <= nums[i] <= n`
+
+## Retention Tracking
+
+- [x] retained 24.02.25
