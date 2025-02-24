@@ -1,7 +1,7 @@
 package arrays_test
 
 import (
-	arrays "dsa/patterns/arrays/easy/find-all-numbers-dissappeared"
+	arrays "dsa/patterns/arrays/easy/find-all-numbers-disappeared"
 	"dsa/utils/assert"
 	"testing"
 )
