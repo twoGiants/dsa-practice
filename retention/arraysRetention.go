@@ -291,7 +291,7 @@ func FindDisappearedNumbers(nums []int) []int {
 }
 
 func TwoSum(nums []int, target int) []int {
-	visited := make(map[int]int)
+	visited := make(map[int]int, len(nums))
 	for i, n := range nums {
 		diff := target - n
 		if j, found := visited[diff]; found {
