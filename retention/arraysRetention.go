@@ -9,8 +9,8 @@ type Transfer struct{}
 
 func (*Transfer) Encode(strs []string) string {
 	var result string
-	for _, str := range strs {
-		result += strconv.Itoa(len(str)) + "#" + str
+	for _, word := range strs {
+		result += strconv.Itoa(len(word)) + "#" + word
 	}
 	return result
 }
@@ -24,13 +24,12 @@ func (*Transfer) Decode(encoded string) []string {
 		for encoded[j] != '#' {
 			j++
 		}
-		wordLength, _ := strconv.Atoi(encoded[i:j])
-		wordStart := j + 1
-		wordEnd := wordStart + wordLength
-		result = append(result, encoded[wordStart:wordEnd])
-		i = wordEnd
+		length, _ := strconv.Atoi(encoded[i:j])
+		start := j + 1
+		end := start + length
+		result = append(result, encoded[start:end])
+		i = end
 	}
-
 	return result
 }
 
