@@ -9,11 +9,9 @@ func TopKFrequent(nums []int, k int) []int {
 func grabKMostFrequent(grouped [][]int, k int) []int {
 	var result []int
 	for i := len(grouped) - 1; i > 0; i-- {
-		for _, num := range grouped[i] {
-			result = append(result, num)
-			if len(result) == k {
-				return result
-			}
+		result = append(result, grouped[i]...)
+		if len(result) == k {
+			return result
 		}
 	}
 	return result

@@ -34,24 +34,21 @@ func (*Transfer) Decode(encoded string) []string {
 }
 
 func TopKFrequent(nums []int, k int) []int {
-	count := make(map[int]int)
-	grouped := make([][]int, len(nums)+1)
-
+	counts := make(map[int]int, len(nums))
 	for _, num := range nums {
-		count[num]++
+		counts[num]++
 	}
 
-	for num, itsCount := range count {
+	grouped := make([][]int, len(nums)+1)
+	for num, itsCount := range counts {
 		grouped[itsCount] = append(grouped[itsCount], num)
 	}
 
 	var result []int
-	for i := len(grouped) - 1; i > 0; i-- {
-		for _, num := range grouped[i] {
-			result = append(result, num)
-			if len(result) == k {
-				return result
-			}
+	for i := len(grouped) - 1; i >= 1; i-- {
+		result = append(result, grouped[i]...)
+		if len(result) == k {
+			return result
 		}
 	}
 	return result
