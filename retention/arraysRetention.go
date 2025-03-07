@@ -94,17 +94,18 @@ func IsAnagram(s, t string) bool {
 }
 
 func LongestConsecutive(nums []int) int {
-	uniqueNums := make(map[int]struct{})
+	uniqueNums := make(map[int]bool)
+
 	for _, num := range nums {
-		uniqueNums[num] = struct{}{}
+		uniqueNums[num] = true
 	}
 
-	longest := 0
+	longest := 1
 	for num := range uniqueNums {
-		if _, found := uniqueNums[num-1]; !found {
+		if !uniqueNums[num-1] {
 			length := 1
 			for {
-				if _, exist := uniqueNums[num+length]; exist {
+				if uniqueNums[num+length] {
 					length++
 				} else {
 					break
