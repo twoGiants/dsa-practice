@@ -8,16 +8,15 @@ import (
 type Transfer struct{}
 
 func (*Transfer) Encode(strs []string) string {
-	var result string
+	var encoded string
 	for _, word := range strs {
-		result += strconv.Itoa(len(word)) + "#" + word
+		encoded += strconv.Itoa(len(word)) + "#" + word
 	}
-	return result
+	return encoded
 }
 
 func (*Transfer) Decode(encoded string) []string {
-	var result []string
-
+	var decoded []string
 	i := 0
 	for i < len(encoded) {
 		j := i
@@ -27,10 +26,10 @@ func (*Transfer) Decode(encoded string) []string {
 		length, _ := strconv.Atoi(encoded[i:j])
 		start := j + 1
 		end := start + length
-		result = append(result, encoded[start:end])
+		decoded = append(decoded, encoded[start:end])
 		i = end
 	}
-	return result
+	return decoded
 }
 
 func TopKFrequent(nums []int, k int) []int {
