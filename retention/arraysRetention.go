@@ -78,13 +78,13 @@ func IsAnagram(s, t string) bool {
 	}
 
 	countS, countT := make(map[rune]int), make(map[rune]int)
-	for i, ch := range s {
-		countS[ch]++
+	for i, letter := range s {
+		countS[letter]++
 		countT[rune(t[i])]++
 	}
 
-	for k, v := range countS {
-		if countT[k] != v {
+	for letter, itsCount := range countS {
+		if countT[letter] != itsCount {
 			return false
 		}
 	}
