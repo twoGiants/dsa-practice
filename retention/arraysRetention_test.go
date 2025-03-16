@@ -30,7 +30,6 @@ func Test_TopKFrequent(t *testing.T) {
 	}{
 		{"array [1,2,2,3,3,3] with k=2", []int{1, 2, 2, 3, 3, 3}, 2, []int{3, 2}},
 		{"array [1,1,1,2,2,3] with k=2", []int{1, 1, 1, 2, 2, 3}, 2, []int{1, 2}},
-		{"array [1,2,3] with k=1", []int{1, 2, 3}, 1, []int{1}},
 		{"array [7,7] with k=1", []int{7, 7}, 1, []int{7}},
 		{"array [1] with k=1", []int{1}, 1, []int{1}},
 	}
@@ -42,6 +41,18 @@ func Test_TopKFrequent(t *testing.T) {
 
 			assert.SlicesEqual(t, result, tt.expected, tt.inputArr)
 		})
+	}
+}
+
+func Test_TopKFrequent_nonDeterministic(t *testing.T) {
+	inArr := []int{1, 2, 3}
+	inK := 1
+	expected := []int{1, 2, 3}
+
+	result := retention.TopKFrequent(inArr, inK)
+
+	if !slices.Contains(expected, result[0]) {
+		t.Errorf("expected one of %v, got %d", expected, result[0])
 	}
 }
 
