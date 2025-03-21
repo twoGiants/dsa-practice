@@ -1,9 +1,28 @@
-package game
+package elegantobjects
 
 import (
 	"fmt"
 	"math/rand"
 )
+
+// PlayGuessingGame written object oriented in Elegant Objects style from
+// Yegor Bugayenko. The top level object starts the run using .Say(). All
+// other objects call each other and pass them self to each other.
+func PlayGuessingGame() {
+	secret := NewSecret()
+	NewFarewell(
+		NewAttempts(
+			NewVerboseDiff(
+				NewDiff(
+					secret,
+					NewGuess(),
+				),
+			),
+			5,
+		),
+		secret,
+	).Say()
+}
 
 type Secret struct {
 	num int

@@ -2,27 +2,11 @@ package main
 
 import (
 	"dsa/utils/boilerplate"
-	. "dsa/utils/game"
 	"fmt"
 	"os"
 )
 
 func main() {
-
-	secret := NewSecret()
-	NewFarewell(
-		NewAttempts(
-			NewVerboseDiff(
-				NewDiff(
-					secret,
-					NewGuess(),
-				),
-			),
-			5,
-		),
-		secret,
-	).Say()
-
 	fmt.Println("--- DSA Practice ---")
 
 	tempDir := "temp"
