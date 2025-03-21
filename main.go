@@ -22,7 +22,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	metadata, err := boilerplate.ValidatedMetadata(
+	metadata, err := boilerplate.ValidMetadata(
 		boilerplate.NewMetadata(
 			args[0],
 			args[1],

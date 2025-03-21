@@ -29,7 +29,7 @@ func NewMetadata(
 	}
 }
 
-func ValidatedMetadata(m metadata) (metadata, error) {
+func ValidMetadata(m metadata) (metadata, error) {
 	if err := validate(
 		"command",
 		m.command,
