@@ -18,6 +18,7 @@ func StoreDocs(data, path string) error {
 	if err := os.WriteFile(path, []byte(data), 0644); err != nil {
 		return err
 	}
+
 	return nil
 }
 
