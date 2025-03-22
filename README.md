@@ -31,3 +31,7 @@
 
 - [Missing Number](/patterns/bit-manipulation/easy/missing-number/missing-number.md)
 - [Single Number](/patterns/bit-manipulation/easy/single-number/single-number.md)
+
+## To-Dos
+
+To-dos which improve this repository in any way are tracked [here](todo.md).
