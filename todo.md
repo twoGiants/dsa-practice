@@ -1,4 +1,4 @@
-# To Do
+# To-Dos
 
 ## Boilerplate Generator
 
@@ -62,6 +62,7 @@ OnDiskFile( // StoredFile
 
 ## Testing
 
+- [ ] add tests to assert package
 - [ ] assert package: provide 'name' instead of input
 
 ## CI
