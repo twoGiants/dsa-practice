@@ -28,18 +28,41 @@
       - [x] added validating "decorator" metadata
       - [x] moved args parsing to main, removed args.go
     - [x] implementing new idea from Elegant Objects
-      - [x] package generator with Boilerplate struct and StrValue so you can use it later as: `docs := NewBoilerplate(tmpl, "Missing Number")`
+      - [x] add `package generator` with `Boilerplate` struct and `StrValue` method so you can use it as: `docs := NewBoilerplate(tmpl, "Missing Number"); docs.StrValue()`
         - it represents a boilerplate file which knows how to generate itself => doesn't feel right
-      - [x] eoBoilerplate in `generator` package 
-        - implemented the structure from below using an interface for the Filesystem => we're getting there
+      - [x] add second implementation in `eoBoilerplate.go`
+        - [x] implemented the structure from below using an interface for the Filesystem => we're getting there
+        - [x] 22.03.25
+          - [x] implement the FS so that you can test the EO version => works
+          - [x] add DocsFile interface to use Content
+          - [x] add docFilePath and smallKebab methods to DocsBoilerplate => doesn't feel right
+          - [x] create `eoDocs.go` entrypoint for manual testing => works
     - [x] chore: switch git setting repo to ssh
   - NEXT:
     - [ ] EO version
-      - [ ] CONTINUE HERE: implement the FS so that you can test the EO version
+      - [ ] CONTINUE HERE: read what you did on 22.04.25
+      - [ ] refactor docsFilePath and smallKebab
+      - [ ] add `Delete(fs filesystem)` method to DocsBoilerplate
       - [ ] can I use accessor functions w/o get? not sure tmpl.Execute accepts
     - [ ] clean up main
     - [ ] clarify what was this task: "exercise directory deletion => no test"
     - [ ] idea: create Generator struct with ?Process(request) and ?Execute() methods
+
+This is procedural thinking:
+- receive config info with: 
+  - where is template, where to save boilerplate
+  - data for template parameters
+- load template from disk
+- replace template parameters with data which results in the boilerplate
+- store boilerplate to disk
+
+Is this living objects thinking?:
+- The boilerplate docs file stores itself
+  - it wraps a template file
+   - which provides its content
+   - knows how to load itself
+  - it wraps a config to know where to store itself
+  - it wraps data which is used to populate the template 
 
 *Elegant Objects* inspired prototype:
 
