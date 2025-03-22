@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dsa/utils/boilerplate"
+	"dsa/hack/boilerplate"
 	"fmt"
 	"os"
 )
@@ -36,7 +36,7 @@ func main() {
 
 	generator := boilerplate.NewGenerator(
 		boilerplate.NewConfig(
-			"utils/boilerplate/docs.gotmpl",
+			"hack/boilerplate/docs.gotmpl",
 			tempDir,
 			metadata,
 		),
