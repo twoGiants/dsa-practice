@@ -85,7 +85,16 @@ OnDiskFile( // StoredFile
 
 ## Testing
 
+WHAT YOU DID
+- [x] add tests to assert package
+  - [x] make FirstDimensionLengthEqual testable
+  - [x] add first positive test
+
+CONTINUE HERE
 - [ ] add tests to assert package
+  - [ ] add negative FirstDimensionLengthEqual test
+  - [ ] make other assert functions testable
+  - [ ] refactor FirstDimensionLengthEqual to assert all dimensions; update tests
 - [ ] assert package: provide 'name' instead of input
 
 ## CI
