@@ -10,7 +10,7 @@ type IntSliceDimensions interface {
 	[]int | [][]int
 }
 
-func SliceLengthEqual(t *testing.T, result [][]int, expected [][]int) {
+func FirstDimensionLengthEqual(t *testing.T, result [][]int, expected [][]int) bool {
 	if len(result) != len(expected) {
 		t.Fatalf("expected length %d, but got %d", len(expected), len(result))
 	}

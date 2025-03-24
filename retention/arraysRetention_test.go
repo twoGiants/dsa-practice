@@ -355,7 +355,7 @@ func Test_Construct2DArray_convertArrayOfFourElements_intoATwoByTwoMatrix(t *tes
 
 	result := retention.Construct2DArray(input, 2, 2)
 
-	assert.SliceLengthEqual(t, result, expected)
+	assert.FirstDimensionLengthEqual(t, result, expected)
 
 	if !slices.Equal(result[0], expected[0]) ||
 		!slices.Equal(result[1], expected[1]) {
@@ -369,7 +369,7 @@ func Test_Construct2DArray_convertArrayOfThreeElements_intoAOneByThreeMatrix(t *
 
 	result := retention.Construct2DArray(input, 1, 3)
 
-	assert.SliceLengthEqual(t, result, expected)
+	assert.FirstDimensionLengthEqual(t, result, expected)
 
 	assert.SlicesEqual(t, result[0], expected[0], input)
 }
@@ -380,7 +380,7 @@ func Test_Construct2DArray_doNotConvertArrayOfThree_ifDimensionsAreOneByOne(t *t
 
 	result := retention.Construct2DArray(input, 1, 1)
 
-	assert.SliceLengthEqual(t, result, expected)
+	assert.FirstDimensionLengthEqual(t, result, expected)
 }
 
 func Test_FindDisappearedNumbers_arrayOfEight_disappearedAreFiveAndSix(t *testing.T) {
