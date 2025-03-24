@@ -1,7 +1,7 @@
 package boilerplate_test
 
 import (
-	"dsa/utils/boilerplate"
+	"dsa/hack/boilerplate"
 	"os"
 	"strings"
 	"testing"
