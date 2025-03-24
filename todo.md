@@ -86,9 +86,10 @@ OnDiskFile( // StoredFile
 ## Testing
 
 WHAT YOU DID
-- [x] add tests to assert package
-  - [x] make FirstDimensionLengthEqual testable
-  - [x] add first positive test
+- [x] 24.03.25
+  - [x] add tests to assert package
+    - [x] make FirstDimensionLengthEqual testable
+    - [x] add first positive test
 
 CONTINUE HERE
 - [ ] add tests to assert package
