@@ -236,9 +236,9 @@ func ProductExceptSelf(nums []int) []int {
 	}
 
 	suffix := 1
-	for i := len(nums) - 1; i > 0; i-- {
+	for i := len(nums) - 1; i >= 0; i-- {
+		result[i] *= suffix
 		suffix *= nums[i]
-		result[i-1] *= suffix
 	}
 
 	return result
