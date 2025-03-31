@@ -28,7 +28,7 @@ func (fsi FilesystemImpl) Load(from string) (string, error) {
 func (fsi FilesystemImpl) Save(data, to string) error {
 	fmt.Println(data)
 	fmt.Println(to)
-	if err := os.WriteFile(to, []byte(data), 0644); err != nil {
+	if err := os.WriteFile(to, []byte(data), 0600); err != nil {
 		return err
 	}
 

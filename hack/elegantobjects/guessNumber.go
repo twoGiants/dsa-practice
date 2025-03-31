@@ -1,8 +1,9 @@
 package elegantobjects
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"math/big"
 )
 
 // PlayGuessingGame written object oriented in Elegant Objects style from
@@ -29,7 +30,13 @@ type Secret struct {
 }
 
 func NewSecret() Secret {
-	return Secret{rand.Intn(99)}
+	nBig, err := rand.Int(rand.Reader, big.NewInt(27))
+	if err != nil {
+		panic(err)
+	}
+	n := int(nBig.Int64())
+
+	return Secret{n}
 }
 
 func (s Secret) Number() int {

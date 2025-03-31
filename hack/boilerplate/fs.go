@@ -15,7 +15,7 @@ func LoadDocs(tmplPath string) (string, error) {
 }
 
 func StoreDocs(data, path string) error {
-	if err := os.WriteFile(path, []byte(data), 0644); err != nil {
+	if err := os.WriteFile(path, []byte(data), 0600); err != nil {
 		return err
 	}
 
