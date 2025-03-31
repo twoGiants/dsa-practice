@@ -1,14 +1,31 @@
 #!/usr/bin/env bash
 
-echo "Installing Go dependencies..."
+  info() {
+  echo -e "[\e[93mINFO\e[0m]: $1"
+}
+
+install_go_tool() {
+  local name=$1
+  local github_path=$2
+
+  if ! command -v "$name" &> /dev/null; then
+    info "$name could not be found. Installing..."
+    go install "$github_path"
+  else
+    info "$name is already installed."
+  fi
+}
+
+info "Installing Go dependencies..."
 go mod download
 
-if ! command -v golangci-lint &> /dev/null
-then
-  echo "golangci-lint could not be found. Installing..."
-  go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+install_go_tool "golangci-lint" "github.com/golangci/golangci-lint/cmd/golangci-lint@latest"
+
+if [ -z "$CI" ]; then
+  info "Running locally."
+  install_go_tool "gow" "go install github.com/mitranim/gow@latest"
 else
-  echo "golangci-lint is already installed."
+  info "Running in CI environment."
 fi
 
-echo "Setup complete!"
+info "Setup complete!"
