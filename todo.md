@@ -108,7 +108,10 @@ WHAT YOU DID
 
 CONTINUE HERE
 - [ ] use Copilot to build strong CI/CD
-  - [x] setup.sh script to 
+  - [x] setup.sh script
+  - [x] add Makefile
+  - [x] add golangci-lint with configuration
+  - [x] add Github Actions CI/verify pipeline
 - [ ] maybe testcontainers/devcontainers
 - [ ] do the docker.com tutorial on Go images, multistage builds and kubernetes deployments [here](https://docs.docker.com/guides/golang/build-images/)
 - [ ] decide what to do: create an ephemeral pod to run tests in or stay with pure docker

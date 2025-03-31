@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  ci:
+  verify:
 
     runs-on: ubuntu-latest
 
