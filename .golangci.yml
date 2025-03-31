@@ -4,6 +4,7 @@ run:
 linters:
   enable:
     - gofmt
+    - gosec
     - goimports
     - typecheck
 
