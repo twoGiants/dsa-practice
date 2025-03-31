@@ -1,6 +1,6 @@
 package generator
 
-func EoDocs() {
+func EoDocs() error {
 	filesystem := NewFilesystem()
 	config := Config{
 		To:   "temp",
@@ -13,5 +13,5 @@ func EoDocs() {
 		NewDocsTemplateData("Missing Number", "missing-number"),
 	)
 
-	docsBoilerplate.Save(filesystem)
+	return docsBoilerplate.Save(filesystem)
 }
