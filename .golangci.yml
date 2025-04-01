@@ -5,6 +5,10 @@ run:
 
 linters:
   enable:
-    - gofmt
     - gosec
+
+formatters:
+  enable:
     - goimports
+    - gofmt
+    - golines
