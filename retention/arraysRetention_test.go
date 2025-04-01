@@ -80,7 +80,12 @@ func Test_GroupAnagrams(t *testing.T) {
 
 			for i := 0; i < len(at.expected); i++ {
 				if !slices.Equal(result[i], at.expected[i]) {
-					t.Errorf("for input %v expected output %v, but got %v", at.input, at.expected[i], result[i])
+					t.Errorf(
+						"for input %v expected output %v, but got %v",
+						at.input,
+						at.expected[i],
+						result[i],
+					)
 				}
 			}
 		})
@@ -101,7 +106,13 @@ func Test_ValidAnagram_IsAnagram(t *testing.T) {
 			result := retention.IsAnagram(at.s1, at.s2)
 
 			if result != at.expected {
-				t.Errorf("for input '%s', '%s', expected output %t, but got %t", at.s1, at.s2, at.expected, result)
+				t.Errorf(
+					"for input '%s', '%s', expected output %t, but got %t",
+					at.s1,
+					at.s2,
+					at.expected,
+					result,
+				)
 			}
 		})
 	}
@@ -241,7 +252,9 @@ func Test_RotateImage_fourByFourMatrix(t *testing.T) {
 	assert.MatrixEqual(t, input, expected, copy)
 }
 
-func Test_SetZeroes_matrixWithOneZerosInLeftAndRightTopCorners_firstRowAndColumnAndLastColumnZeroes(t *testing.T) {
+func Test_SetZeroes_matrixWithOneZerosInLeftAndRightTopCorners_firstRowAndColumnAndLastColumnZeroes(
+	t *testing.T,
+) {
 	input := [][]int{
 		{0, 1, 2, 0},
 		{3, 4, 5, 2},

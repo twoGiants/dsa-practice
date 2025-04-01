@@ -140,7 +140,7 @@ func SpiralOrder(matrix [][]int) []int {
 		}
 		right--
 
-		if !(left < right && top < bottom) {
+		if left >= right || top >= bottom {
 			break
 		}
 

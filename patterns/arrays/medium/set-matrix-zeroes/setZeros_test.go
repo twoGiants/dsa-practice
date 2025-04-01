@@ -25,7 +25,9 @@ func Test_twoByTwoMatrixWithZeroInFirstRowFirstColumn_firstRowAndColumnBecomesZe
 	assert.MatrixEqual(t, input, expected, copy)
 }
 
-func Test_threeByThreeMatrixWithOneZeroInTheMiddle_secondRowAndSecondColumnBecomesZero(t *testing.T) {
+func Test_threeByThreeMatrixWithOneZeroInTheMiddle_secondRowAndSecondColumnBecomesZero(
+	t *testing.T,
+) {
 	input := [][]int{
 		{1, 2, 3},
 		{4, 0, 5},
@@ -47,7 +49,9 @@ func Test_threeByThreeMatrixWithOneZeroInTheMiddle_secondRowAndSecondColumnBecom
 	assert.MatrixEqual(t, input, expected, copy)
 }
 
-func Test_threeByThreeMatrixFilledWithOnesAndOneZeroInTheMiddle_secondRowAndSecondColumnBecomesZero(t *testing.T) {
+func Test_threeByThreeMatrixFilledWithOnesAndOneZeroInTheMiddle_secondRowAndSecondColumnBecomesZero(
+	t *testing.T,
+) {
 	input := [][]int{
 		{1, 1, 1},
 		{1, 0, 1},
@@ -69,7 +73,9 @@ func Test_threeByThreeMatrixFilledWithOnesAndOneZeroInTheMiddle_secondRowAndSeco
 	assert.MatrixEqual(t, input, expected, copy)
 }
 
-func Test_threeByFourMatrixWithTwoZerosInTheFirstRow_firstRowFirstColumnAndLastColumnBecomesZero(t *testing.T) {
+func Test_threeByFourMatrixWithTwoZerosInTheFirstRow_firstRowFirstColumnAndLastColumnBecomesZero(
+	t *testing.T,
+) {
 	input := [][]int{
 		{0, 1, 2, 0},
 		{3, 4, 5, 2},

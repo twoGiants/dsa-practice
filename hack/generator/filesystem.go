@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 type Filesystem interface {
@@ -17,7 +18,7 @@ func NewFilesystem() FilesystemImpl {
 }
 
 func (fsi FilesystemImpl) Load(from string) (string, error) {
-	result, err := os.ReadFile(from)
+	result, err := os.ReadFile(filepath.Clean(from))
 	if err != nil {
 		return "", err
 	}

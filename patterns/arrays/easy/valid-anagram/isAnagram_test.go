@@ -21,7 +21,13 @@ func Test_IsAnagram(t *testing.T) {
 			result := arrays.IsAnagram(at.s1, at.s2)
 
 			if result != at.expected {
-				t.Errorf("for input '%s', '%s' expected output %t, but got %t", at.s1, at.s2, at.expected, result)
+				t.Errorf(
+					"for input '%s', '%s' expected output %t, but got %t",
+					at.s1,
+					at.s2,
+					at.expected,
+					result,
+				)
 			}
 		})
 	}

@@ -6,7 +6,7 @@ import (
 )
 
 func LoadDocs(tmplPath string) (string, error) {
-	result, err := os.ReadFile(tmplPath)
+	result, err := os.ReadFile(filepath.Clean(tmplPath))
 	if err != nil {
 		return "", err
 	}
@@ -32,7 +32,7 @@ func DeleteExercise(exerciseRoot, pattern, difficulty, title string) error {
 }
 
 func CreateExerciseDirectories(path string) error {
-	if err := os.MkdirAll(path, 0755); err != nil {
+	if err := os.MkdirAll(path, 0750); err != nil {
 		return err
 	}
 

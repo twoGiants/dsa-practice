@@ -93,7 +93,12 @@ func (c *Config) delete() bool {
 }
 
 func (c *Config) exercisePath() string {
-	return filepath.Join(c.targetDir, c.exercise.pattern, c.exercise.difficulty, smallKebab(c.exercise.title))
+	return filepath.Join(
+		c.targetDir,
+		c.exercise.pattern,
+		c.exercise.difficulty,
+		smallKebab(c.exercise.title),
+	)
 }
 
 func (c *Config) docsFilePath() string {

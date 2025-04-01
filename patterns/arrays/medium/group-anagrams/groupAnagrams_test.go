@@ -31,7 +31,12 @@ func Test_GroupAnagrams(t *testing.T) {
 
 			for i := 0; i < len(at.expected); i++ {
 				if !slices.Equal(result[i], at.expected[i]) {
-					t.Errorf("for input %v expected output %v, but got %v", at.input, at.expected[i], result[i])
+					t.Errorf(
+						"for input %v expected output %v, but got %v",
+						at.input,
+						at.expected[i],
+						result[i],
+					)
 				}
 			}
 		})
