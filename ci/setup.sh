@@ -19,7 +19,7 @@ install_go_tool() {
 info "Installing Go dependencies..."
 go mod download
 
-install_go_tool "golangci-lint" "github.com/golangci/golangci-lint/cmd/golangci-lint@latest"
+install_go_tool "golangci-lint" "github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.0.2"
 
 if [ -z "$CI" ]; then
   info "Running locally."
