@@ -101,12 +101,15 @@ CONTINUE HERE
 ## CI
 
 WHAT YOU DID
+
 - [x] add Dockerfile => the image is large => you can run tests there
 - [x] run all tests in container using the Dockerfile
-- [x] you added a dsa-pod.yaml and you can deploy it in kind using `ko ` => just executes main and prints the temp message
+- [x] you added a dsa-pod.yaml and you can deploy it in kind using `ko` => just executes main and prints the temp message
 - [x] added a test-pod.yaml with command to run tests but it crashes => looks like `ko` images are not supposed to run tests
 
 CONTINUE HERE
+
+- [ ] remove tools installation in Pipeline use existing GitHub action
 - [ ] use Copilot to build strong CI/CD
   - [x] setup.sh script
   - [x] add Makefile
@@ -117,6 +120,12 @@ CONTINUE HERE
 - [ ] decide what to do: create an ephemeral pod to run tests in or stay with pure docker
 - [ ] configure yaml extension => its not recognizing kubernetes manifests
 - [ ] run CI on every push to master - see fabric samples
+
+## Refactoring
+
+- [x] add refactoring section with first sample
+- [x] practice theatrical sample
+  - [ ] CONTINUE HERE: page 14 - Extracting Volume Credits
 
 ## Resources
 
