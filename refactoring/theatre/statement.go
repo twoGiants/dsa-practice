@@ -22,15 +22,19 @@ type Performance struct {
 	Audience int
 }
 
+type StatementData struct{}
+
 type StatementPrinter struct{}
 
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
-	return PlainTextStatement{plays, invoice}.Render()
+	statementData := StatementData{}
+	return PlainTextStatement{plays, invoice, statementData}.Render()
 }
 
 type PlainTextStatement struct {
 	plays   map[string]Play
 	invoice Invoice
+	data    StatementData
 }
 
 func (s PlainTextStatement) Render() (string, error) {
