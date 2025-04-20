@@ -24,7 +24,7 @@ type Performance struct {
 
 type StatementData struct {
 	Customer     string
-	Performances []Performance
+	Performances []EnrichedPerformance
 }
 
 type StatementPrinter struct{}
@@ -32,9 +32,26 @@ type StatementPrinter struct{}
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
 	statementData := StatementData{
 		invoice.Customer,
-		invoice.Performances,
+		enrichPerformances(invoice.Performances),
 	}
 	return PlainTextStatement{statementData, plays}.Render()
+}
+
+type EnrichedPerformance struct {
+	PlayID   string
+	Audience int
+	play     Play
+}
+
+func enrichPerformances(performances []Performance) []EnrichedPerformance {
+	var result []EnrichedPerformance
+	for _, performance := range performances {
+		enrichedPerformance := EnrichedPerformance{}
+		enrichedPerformance.PlayID = performance.PlayID
+		enrichedPerformance.Audience = performance.Audience
+		result = append(result, enrichedPerformance)
+	}
+	return result
 }
 
 type PlainTextStatement struct {
@@ -92,7 +109,7 @@ func (PlainTextStatement) usd(number int) string {
 	return ac.FormatMoney(number / 100)
 }
 
-func (s PlainTextStatement) volumeCreditsFor(aPerformance Performance) int {
+func (s PlainTextStatement) volumeCreditsFor(aPerformance EnrichedPerformance) int {
 	result := int(math.Max(float64(aPerformance.Audience)-30, 0))
 	// add extra credit for every ten comedy attendees
 	if s.playFor(aPerformance).Type == "comedy" {
@@ -101,11 +118,11 @@ func (s PlainTextStatement) volumeCreditsFor(aPerformance Performance) int {
 	return result
 }
 
-func (s PlainTextStatement) playFor(aPerformance Performance) Play {
+func (s PlainTextStatement) playFor(aPerformance EnrichedPerformance) Play {
 	return s.plays[aPerformance.PlayID]
 }
 
-func (s PlainTextStatement) amountFor(aPerformance Performance) (int, error) {
+func (s PlainTextStatement) amountFor(aPerformance EnrichedPerformance) (int, error) {
 	result := 0
 	switch s.playFor(aPerformance).Type {
 	case "tragedy":
