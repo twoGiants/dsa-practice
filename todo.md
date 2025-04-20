@@ -129,7 +129,8 @@ CONTINUE HERE
   - [x] page 14 - Extracting Volume Credits
   - [x] add non refactored version
   - [x] resolve ci issues
-  - [ ] CH: page 25 - Splitting the Phases of Calculation and Formatting
+  - [x] page 25 - Splitting the Phases of Calculation and Formatting
+  - [ ] CONTINUE HERE: page 28: move amountFor and replace
 
 ## Resources
 
