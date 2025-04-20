@@ -22,17 +22,17 @@ type Performance struct {
 	Audience int
 }
 
-type StatementData struct {
-	Customer     string
-	Performances []EnrichedPerformance
+type StatementPrinter struct {
+	invoice Invoice
+	plays   map[string]Play
 }
 
-type StatementPrinter struct{}
-
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
+	s.invoice = invoice
+	s.plays = plays
 	statementData := StatementData{
 		invoice.Customer,
-		enrichPerformances(invoice.Performances),
+		s.enrichPerformances(invoice.Performances),
 	}
 	return PlainTextStatement{statementData, plays}.Render()
 }
@@ -43,20 +43,30 @@ type EnrichedPerformance struct {
 	play     Play
 }
 
-func enrichPerformances(performances []Performance) []EnrichedPerformance {
+func (s StatementPrinter) enrichPerformances(performances []Performance) []EnrichedPerformance {
 	var result []EnrichedPerformance
 	for _, performance := range performances {
 		enrichedPerformance := EnrichedPerformance{}
 		enrichedPerformance.PlayID = performance.PlayID
 		enrichedPerformance.Audience = performance.Audience
+		enrichedPerformance.play = s.playFor(performance)
 		result = append(result, enrichedPerformance)
 	}
 	return result
 }
 
+func (s StatementPrinter) playFor(aPerformance Performance) Play {
+	return s.plays[aPerformance.PlayID]
+}
+
 type PlainTextStatement struct {
 	data  StatementData
 	plays map[string]Play
+}
+
+type StatementData struct {
+	Customer     string
+	Performances []EnrichedPerformance
 }
 
 func (s PlainTextStatement) Render() (string, error) {
@@ -69,7 +79,7 @@ func (s PlainTextStatement) Render() (string, error) {
 		}
 		result += fmt.Sprintf(
 			"  %s: %s (%d seats)\n",
-			s.playFor(perf).Name,
+			perf.play.Name,
 			s.usd(amount),
 			perf.Audience,
 		)
@@ -109,22 +119,18 @@ func (PlainTextStatement) usd(number int) string {
 	return ac.FormatMoney(number / 100)
 }
 
-func (s PlainTextStatement) volumeCreditsFor(aPerformance EnrichedPerformance) int {
+func (PlainTextStatement) volumeCreditsFor(aPerformance EnrichedPerformance) int {
 	result := int(math.Max(float64(aPerformance.Audience)-30, 0))
 	// add extra credit for every ten comedy attendees
-	if s.playFor(aPerformance).Type == "comedy" {
+	if aPerformance.play.Type == "comedy" {
 		result += int(math.Floor(float64(aPerformance.Audience) / 5))
 	}
 	return result
 }
 
-func (s PlainTextStatement) playFor(aPerformance EnrichedPerformance) Play {
-	return s.plays[aPerformance.PlayID]
-}
-
-func (s PlainTextStatement) amountFor(aPerformance EnrichedPerformance) (int, error) {
+func (PlainTextStatement) amountFor(aPerformance EnrichedPerformance) (int, error) {
 	result := 0
-	switch s.playFor(aPerformance).Type {
+	switch aPerformance.play.Type {
 	case "tragedy":
 		result = 40000
 		if aPerformance.Audience > 30 {
@@ -137,7 +143,7 @@ func (s PlainTextStatement) amountFor(aPerformance EnrichedPerformance) (int, er
 		}
 		result += 300 * aPerformance.Audience
 	default:
-		return 0, fmt.Errorf("unknown type: %s", s.playFor(aPerformance).Type)
+		return 0, fmt.Errorf("unknown type: %s", aPerformance.play.Type)
 	}
 	return result, nil
 }
