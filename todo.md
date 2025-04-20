@@ -125,7 +125,10 @@ CONTINUE HERE
 
 - [x] add refactoring section with first sample
 - [x] practice theatrical sample
-  - [ ] CONTINUE HERE: page 14 - Extracting Volume Credits
+  - [x] page 14 - Extracting Volume Credits
+  - [x] add non refactored version
+  - [x] resolve ci issues
+  - [ ] CH: page 25 - Splitting the Phases of Calculation and Formatting
 
 ## Resources
 
