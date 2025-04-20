@@ -109,6 +109,7 @@ WHAT YOU DID
 
 CONTINUE HERE
 
+- [ ] add pre-commit or pre-push hook to run CI
 - [ ] remove tools installation in Pipeline use existing GitHub action
 - [ ] use Copilot to build strong CI/CD
   - [x] setup.sh script
