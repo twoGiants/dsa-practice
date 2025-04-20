@@ -23,7 +23,8 @@ type Performance struct {
 }
 
 type StatementData struct {
-	Customer string
+	Customer     string
+	Performances []Performance
 }
 
 type StatementPrinter struct{}
@@ -31,20 +32,20 @@ type StatementPrinter struct{}
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
 	statementData := StatementData{
 		invoice.Customer,
+		invoice.Performances,
 	}
-	return PlainTextStatement{statementData, plays, invoice}.Render()
+	return PlainTextStatement{statementData, plays}.Render()
 }
 
 type PlainTextStatement struct {
-	data    StatementData
-	plays   map[string]Play
-	invoice Invoice
+	data  StatementData
+	plays map[string]Play
 }
 
 func (s PlainTextStatement) Render() (string, error) {
 	result := fmt.Sprintf("Statement for %s\n", s.data.Customer)
 
-	for _, perf := range s.invoice.Performances {
+	for _, perf := range s.data.Performances {
 		amount, err := s.amountFor(perf)
 		if err != nil {
 			return "", err
@@ -68,7 +69,7 @@ func (s PlainTextStatement) Render() (string, error) {
 
 func (s PlainTextStatement) totalAmount() (int, error) {
 	result := 0
-	for _, perf := range s.invoice.Performances {
+	for _, perf := range s.data.Performances {
 		amount, err := s.amountFor(perf)
 		if err != nil {
 			return 0, err
@@ -80,7 +81,7 @@ func (s PlainTextStatement) totalAmount() (int, error) {
 
 func (s PlainTextStatement) totalVolumeCredits() int {
 	result := 0
-	for _, perf := range s.invoice.Performances {
+	for _, perf := range s.data.Performances {
 		result += s.volumeCreditsFor(perf)
 	}
 	return result
