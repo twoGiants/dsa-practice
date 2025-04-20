@@ -22,23 +22,27 @@ type Performance struct {
 	Audience int
 }
 
-type StatementData struct{}
+type StatementData struct {
+	Customer string
+}
 
 type StatementPrinter struct{}
 
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
-	statementData := StatementData{}
-	return PlainTextStatement{plays, invoice, statementData}.Render()
+	statementData := StatementData{
+		invoice.Customer,
+	}
+	return PlainTextStatement{statementData, plays, invoice}.Render()
 }
 
 type PlainTextStatement struct {
+	data    StatementData
 	plays   map[string]Play
 	invoice Invoice
-	data    StatementData
 }
 
 func (s PlainTextStatement) Render() (string, error) {
-	result := fmt.Sprintf("Statement for %s\n", s.invoice.Customer)
+	result := fmt.Sprintf("Statement for %s\n", s.data.Customer)
 
 	for _, perf := range s.invoice.Performances {
 		amount, err := s.amountFor(perf)
