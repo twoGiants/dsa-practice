@@ -52,11 +52,20 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	statementData.Performances = enrichedPerformances
 
 	statementData.totalAmount = s.totalAmount(statementData)
+	statementData.totalVolumeCredits = s.totalVolumeCredits(statementData)
 
 	return PlainTextStatement{statementData, plays}.Render(), nil
 }
 
-func (s StatementPrinter) totalAmount(data StatementData) int {
+func (StatementPrinter) totalVolumeCredits(data StatementData) int {
+	result := 0
+	for _, perf := range data.Performances {
+		result += perf.volumeCredits
+	}
+	return result
+}
+
+func (StatementPrinter) totalAmount(data StatementData) int {
 	result := 0
 	for _, perf := range data.Performances {
 		result += perf.amount
@@ -137,15 +146,7 @@ func (s PlainTextStatement) Render() string {
 	}
 
 	result += fmt.Sprintf("Amount owed is %s\n", s.usd(s.data.totalAmount))
-	result += fmt.Sprintf("You earned %d credits\n", s.totalVolumeCredits())
-	return result
-}
-
-func (s PlainTextStatement) totalVolumeCredits() int {
-	result := 0
-	for _, perf := range s.data.Performances {
-		result += perf.volumeCredits
-	}
+	result += fmt.Sprintf("You earned %d credits\n", s.data.totalVolumeCredits)
 	return result
 }
 
