@@ -46,11 +46,21 @@ func createStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 	return result, nil
 }
 
+type PerformanceCalculator struct {
+	performance Performance
+	play        Play
+}
+
+func NewPerformanceCalculator(pe Performance, pl Play) PerformanceCalculator {
+	return PerformanceCalculator{pe, pl}
+}
+
 func enrichPerformance(performance Performance, plays Plays) (EnrichedPerformance, error) {
+	calculator := NewPerformanceCalculator(performance, plays.playFor(performance))
 	result := EnrichedPerformance{}
 	result.PlayID = performance.PlayID
 	result.Audience = performance.Audience
-	result.play = plays.playFor(performance)
+	result.play = calculator.play
 	amount, err := amountFor(result)
 	if err != nil {
 		return EnrichedPerformance{}, err
