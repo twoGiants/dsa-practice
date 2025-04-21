@@ -23,10 +23,11 @@ type Performance struct {
 }
 
 type EnrichedPerformance struct {
-	PlayID   string
-	Audience int
-	play     Play
-	amount   int
+	PlayID        string
+	Audience      int
+	play          Play
+	amount        int
+	volumeCredits int
 }
 
 type StatementPrinter struct {
@@ -38,33 +39,42 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	s.invoice = invoice
 	s.plays = plays
 	statementData := StatementData{s.invoice.Customer, nil}
-	enrichedPerformances, err := s.enrichPerformances(s.invoice.Performances)
-	if err != nil {
-		return "", err
+
+	var enrichedPerformances []EnrichedPerformance
+	for _, performance := range s.invoice.Performances {
+		enrichedPerformance, err := s.enrichPerformance(performance)
+		if err != nil {
+			return "", err
+		}
+		enrichedPerformances = append(enrichedPerformances, enrichedPerformance)
 	}
 	statementData.Performances = enrichedPerformances
 
 	return PlainTextStatement{statementData, plays}.Render(), nil
 }
 
-func (s StatementPrinter) enrichPerformances(performances []Performance) ([]EnrichedPerformance, error) {
-	var result []EnrichedPerformance
-	for _, performance := range performances {
-		enrichedPerformance := EnrichedPerformance{}
-		enrichedPerformance.PlayID = performance.PlayID
-		enrichedPerformance.Audience = performance.Audience
-		enrichedPerformance.play = s.playFor(performance)
-
-		amount, err := s.amountFor(enrichedPerformance)
-		if err != nil {
-			return nil, err
-		}
-		enrichedPerformance.amount = amount
-
-		result = append(result, enrichedPerformance)
+func (s StatementPrinter) enrichPerformance(performance Performance) (EnrichedPerformance, error) {
+	result := EnrichedPerformance{}
+	result.PlayID = performance.PlayID
+	result.Audience = performance.Audience
+	result.play = s.playFor(performance)
+	amount, err := s.amountFor(result)
+	if err != nil {
+		return EnrichedPerformance{}, err
 	}
+	result.amount = amount
+	result.volumeCredits = s.volumeCreditsFor(result)
 
 	return result, nil
+}
+
+func (StatementPrinter) volumeCreditsFor(aPerformance EnrichedPerformance) int {
+	result := int(math.Max(float64(aPerformance.Audience)-30, 0))
+	// add extra credit for every ten comedy attendees
+	if aPerformance.play.Type == "comedy" {
+		result += int(math.Floor(float64(aPerformance.Audience) / 5))
+	}
+	return result
 }
 
 func (s StatementPrinter) playFor(aPerformance Performance) Play {
