@@ -2,7 +2,6 @@ package theatre
 
 import (
 	"fmt"
-	"math"
 
 	"github.com/leekchan/accounting"
 )
@@ -22,110 +21,15 @@ type Performance struct {
 	Audience int
 }
 
-type EnrichedPerformance struct {
-	PlayID        string
-	Audience      int
-	play          Play
-	amount        int
-	volumeCredits int
-}
-
-type StatementPrinter struct {
-	invoice Invoice
-	plays   map[string]Play
-}
+type StatementPrinter struct{}
 
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
-	s.invoice = invoice
-	s.plays = plays
-	statementData := StatementData{}
-	statementData.Customer = s.invoice.Customer
-
-	var enrichedPerformances []EnrichedPerformance
-	for _, performance := range s.invoice.Performances {
-		enrichedPerformance, err := s.enrichPerformance(performance)
-		if err != nil {
-			return "", err
-		}
-		enrichedPerformances = append(enrichedPerformances, enrichedPerformance)
+	statementData, err := createStatementData(invoice, plays)
+	if err != nil {
+		return "", err
 	}
-	statementData.Performances = enrichedPerformances
-
-	statementData.totalAmount = s.totalAmount(statementData)
-	statementData.totalVolumeCredits = s.totalVolumeCredits(statementData)
 
 	return renderPlainText(statementData), nil
-}
-
-func (StatementPrinter) totalVolumeCredits(data StatementData) int {
-	result := 0
-	for _, perf := range data.Performances {
-		result += perf.volumeCredits
-	}
-	return result
-}
-
-func (StatementPrinter) totalAmount(data StatementData) int {
-	result := 0
-	for _, perf := range data.Performances {
-		result += perf.amount
-	}
-	return result
-}
-
-func (s StatementPrinter) enrichPerformance(performance Performance) (EnrichedPerformance, error) {
-	result := EnrichedPerformance{}
-	result.PlayID = performance.PlayID
-	result.Audience = performance.Audience
-	result.play = s.playFor(performance)
-	amount, err := s.amountFor(result)
-	if err != nil {
-		return EnrichedPerformance{}, err
-	}
-	result.amount = amount
-	result.volumeCredits = s.volumeCreditsFor(result)
-
-	return result, nil
-}
-
-func (StatementPrinter) volumeCreditsFor(aPerformance EnrichedPerformance) int {
-	result := int(math.Max(float64(aPerformance.Audience)-30, 0))
-	// add extra credit for every ten comedy attendees
-	if aPerformance.play.Type == "comedy" {
-		result += int(math.Floor(float64(aPerformance.Audience) / 5))
-	}
-	return result
-}
-
-func (s StatementPrinter) playFor(aPerformance Performance) Play {
-	return s.plays[aPerformance.PlayID]
-}
-
-func (StatementPrinter) amountFor(aPerformance EnrichedPerformance) (int, error) {
-	result := 0
-	switch aPerformance.play.Type {
-	case "tragedy":
-		result = 40000
-		if aPerformance.Audience > 30 {
-			result += 1000 * (aPerformance.Audience - 30)
-		}
-	case "comedy":
-		result = 30000
-		if aPerformance.Audience > 20 {
-			result += 10000 + 500*(aPerformance.Audience-20)
-		}
-		result += 300 * aPerformance.Audience
-	default:
-		return 0, fmt.Errorf("unknown type: %s", aPerformance.play.Type)
-	}
-	return result, nil
-}
-
-type StatementData struct {
-	Customer           string
-	Performances       []EnrichedPerformance
-	totalAmount        int
-	totalVolumeCredits int
 }
 
 func renderPlainText(data StatementData) string {
@@ -140,8 +44,8 @@ func renderPlainText(data StatementData) string {
 		)
 	}
 
-	result += fmt.Sprintf("Amount owed is %s\n", usd(data.totalAmount))
-	result += fmt.Sprintf("You earned %d credits\n", data.totalVolumeCredits)
+	result += fmt.Sprintf("Amount owed is %s\n", usd(data.TotalAmount))
+	result += fmt.Sprintf("You earned %d credits\n", data.TotalVolumeCredits)
 	return result
 }
 
