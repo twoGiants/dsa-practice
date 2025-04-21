@@ -54,7 +54,7 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	statementData.totalAmount = s.totalAmount(statementData)
 	statementData.totalVolumeCredits = s.totalVolumeCredits(statementData)
 
-	return PlainTextStatement{statementData}.Render(), nil
+	return renderPlainText(statementData), nil
 }
 
 func (StatementPrinter) totalVolumeCredits(data StatementData) int {
@@ -121,10 +121,6 @@ func (StatementPrinter) amountFor(aPerformance EnrichedPerformance) (int, error)
 	return result, nil
 }
 
-type PlainTextStatement struct {
-	data StatementData
-}
-
 type StatementData struct {
 	Customer           string
 	Performances       []EnrichedPerformance
@@ -132,24 +128,24 @@ type StatementData struct {
 	totalVolumeCredits int
 }
 
-func (s PlainTextStatement) Render() string {
-	result := fmt.Sprintf("Statement for %s\n", s.data.Customer)
+func renderPlainText(data StatementData) string {
+	result := fmt.Sprintf("Statement for %s\n", data.Customer)
 
-	for _, perf := range s.data.Performances {
+	for _, perf := range data.Performances {
 		result += fmt.Sprintf(
 			"  %s: %s (%d seats)\n",
 			perf.play.Name,
-			s.usd(perf.amount),
+			usd(perf.amount),
 			perf.Audience,
 		)
 	}
 
-	result += fmt.Sprintf("Amount owed is %s\n", s.usd(s.data.totalAmount))
-	result += fmt.Sprintf("You earned %d credits\n", s.data.totalVolumeCredits)
+	result += fmt.Sprintf("Amount owed is %s\n", usd(data.totalAmount))
+	result += fmt.Sprintf("You earned %d credits\n", data.totalVolumeCredits)
 	return result
 }
 
-func (PlainTextStatement) usd(number int) string {
+func usd(number int) string {
 	ac := accounting.Accounting{Symbol: "$", Precision: 2}
 	return ac.FormatMoney(number / 100)
 }
