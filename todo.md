@@ -126,11 +126,13 @@ CONTINUE HERE
 
 - [x] add refactoring section with first sample
 - [x] practice theatrical sample
-  - [x] page 14 - Extracting Volume Credits
+  - [x] page 14: Extracting Volume Credits
   - [x] add non refactored version
   - [x] resolve ci issues
-  - [x] page 25 - Splitting the Phases of Calculation and Formatting
-  - [ ] CONTINUE HERE: page 28: move amountFor and replace
+  - [x] page 25: Splitting the Phases of Calculation and Formatting
+  - [x] page 28: move amountFor and replace
+  - [ ] CONTINUE HERE: page 36: Creating a Performance Calculator
+  - [ ] page 34 at the end: add tests that probe the intermediate data structure
 
 ## Resources
 
