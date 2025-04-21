@@ -139,7 +139,7 @@ func (s PlainTextStatement) totalAmount() int {
 func (s PlainTextStatement) totalVolumeCredits() int {
 	result := 0
 	for _, perf := range s.data.Performances {
-		result += s.volumeCreditsFor(perf)
+		result += perf.volumeCredits
 	}
 	return result
 }
@@ -147,13 +147,4 @@ func (s PlainTextStatement) totalVolumeCredits() int {
 func (PlainTextStatement) usd(number int) string {
 	ac := accounting.Accounting{Symbol: "$", Precision: 2}
 	return ac.FormatMoney(number / 100)
-}
-
-func (PlainTextStatement) volumeCreditsFor(aPerformance EnrichedPerformance) int {
-	result := int(math.Max(float64(aPerformance.Audience)-30, 0))
-	// add extra credit for every ten comedy attendees
-	if aPerformance.play.Type == "comedy" {
-		result += int(math.Floor(float64(aPerformance.Audience) / 5))
-	}
-	return result
 }
