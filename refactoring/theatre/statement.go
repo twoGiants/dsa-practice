@@ -22,6 +22,13 @@ type Performance struct {
 	Audience int
 }
 
+type EnrichedPerformance struct {
+	PlayID   string
+	Audience int
+	play     Play
+	amount   int
+}
+
 type StatementPrinter struct {
 	invoice Invoice
 	plays   map[string]Play
@@ -30,33 +37,58 @@ type StatementPrinter struct {
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
 	s.invoice = invoice
 	s.plays = plays
-	statementData := StatementData{
-		invoice.Customer,
-		s.enrichPerformances(invoice.Performances),
+	statementData := StatementData{s.invoice.Customer, nil}
+	enrichedPerformances, err := s.enrichPerformances(s.invoice.Performances)
+	if err != nil {
+		return "", err
 	}
-	return PlainTextStatement{statementData, plays}.Render()
+	statementData.Performances = enrichedPerformances
+
+	return PlainTextStatement{statementData, plays}.Render(), nil
 }
 
-type EnrichedPerformance struct {
-	PlayID   string
-	Audience int
-	play     Play
-}
-
-func (s StatementPrinter) enrichPerformances(performances []Performance) []EnrichedPerformance {
+func (s StatementPrinter) enrichPerformances(performances []Performance) ([]EnrichedPerformance, error) {
 	var result []EnrichedPerformance
 	for _, performance := range performances {
 		enrichedPerformance := EnrichedPerformance{}
 		enrichedPerformance.PlayID = performance.PlayID
 		enrichedPerformance.Audience = performance.Audience
 		enrichedPerformance.play = s.playFor(performance)
+
+		amount, err := s.amountFor(enrichedPerformance)
+		if err != nil {
+			return nil, err
+		}
+		enrichedPerformance.amount = amount
+
 		result = append(result, enrichedPerformance)
 	}
-	return result
+
+	return result, nil
 }
 
 func (s StatementPrinter) playFor(aPerformance Performance) Play {
 	return s.plays[aPerformance.PlayID]
+}
+
+func (StatementPrinter) amountFor(aPerformance EnrichedPerformance) (int, error) {
+	result := 0
+	switch aPerformance.play.Type {
+	case "tragedy":
+		result = 40000
+		if aPerformance.Audience > 30 {
+			result += 1000 * (aPerformance.Audience - 30)
+		}
+	case "comedy":
+		result = 30000
+		if aPerformance.Audience > 20 {
+			result += 10000 + 500*(aPerformance.Audience-20)
+		}
+		result += 300 * aPerformance.Audience
+	default:
+		return 0, fmt.Errorf("unknown type: %s", aPerformance.play.Type)
+	}
+	return result, nil
 }
 
 type PlainTextStatement struct {
@@ -69,41 +101,29 @@ type StatementData struct {
 	Performances []EnrichedPerformance
 }
 
-func (s PlainTextStatement) Render() (string, error) {
+func (s PlainTextStatement) Render() string {
 	result := fmt.Sprintf("Statement for %s\n", s.data.Customer)
 
 	for _, perf := range s.data.Performances {
-		amount, err := s.amountFor(perf)
-		if err != nil {
-			return "", err
-		}
 		result += fmt.Sprintf(
 			"  %s: %s (%d seats)\n",
 			perf.play.Name,
-			s.usd(amount),
+			s.usd(perf.amount),
 			perf.Audience,
 		)
 	}
 
-	totalAmount, err := s.totalAmount()
-	if err != nil {
-		return "", err
-	}
-	result += fmt.Sprintf("Amount owed is %s\n", s.usd(totalAmount))
+	result += fmt.Sprintf("Amount owed is %s\n", s.usd(s.totalAmount()))
 	result += fmt.Sprintf("You earned %d credits\n", s.totalVolumeCredits())
-	return result, nil
+	return result
 }
 
-func (s PlainTextStatement) totalAmount() (int, error) {
+func (s PlainTextStatement) totalAmount() int {
 	result := 0
 	for _, perf := range s.data.Performances {
-		amount, err := s.amountFor(perf)
-		if err != nil {
-			return 0, err
-		}
-		result += amount
+		result += perf.amount
 	}
-	return result, nil
+	return result
 }
 
 func (s PlainTextStatement) totalVolumeCredits() int {
@@ -126,24 +146,4 @@ func (PlainTextStatement) volumeCreditsFor(aPerformance EnrichedPerformance) int
 		result += int(math.Floor(float64(aPerformance.Audience) / 5))
 	}
 	return result
-}
-
-func (PlainTextStatement) amountFor(aPerformance EnrichedPerformance) (int, error) {
-	result := 0
-	switch aPerformance.play.Type {
-	case "tragedy":
-		result = 40000
-		if aPerformance.Audience > 30 {
-			result += 1000 * (aPerformance.Audience - 30)
-		}
-	case "comedy":
-		result = 30000
-		if aPerformance.Audience > 20 {
-			result += 10000 + 500*(aPerformance.Audience-20)
-		}
-		result += 300 * aPerformance.Audience
-	default:
-		return 0, fmt.Errorf("unknown type: %s", aPerformance.play.Type)
-	}
-	return result, nil
 }
