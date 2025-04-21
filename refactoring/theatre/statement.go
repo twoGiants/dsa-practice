@@ -54,7 +54,7 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	statementData.totalAmount = s.totalAmount(statementData)
 	statementData.totalVolumeCredits = s.totalVolumeCredits(statementData)
 
-	return PlainTextStatement{statementData, plays}.Render(), nil
+	return PlainTextStatement{statementData}.Render(), nil
 }
 
 func (StatementPrinter) totalVolumeCredits(data StatementData) int {
@@ -122,8 +122,7 @@ func (StatementPrinter) amountFor(aPerformance EnrichedPerformance) (int, error)
 }
 
 type PlainTextStatement struct {
-	data  StatementData
-	plays map[string]Play
+	data StatementData
 }
 
 type StatementData struct {
