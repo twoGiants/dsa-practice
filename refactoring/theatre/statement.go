@@ -49,6 +49,33 @@ func renderPlainText(data StatementData) string {
 	return result
 }
 
+func (s StatementPrinter) HtmlPrint(invoice Invoice, plays map[string]Play) (string, error) {
+	statementData, err := createStatementData(invoice, plays)
+	if err != nil {
+		return "", err
+	}
+
+	return renderHtml(statementData), nil
+}
+
+func renderHtml(data StatementData) string {
+	result := fmt.Sprintf("<h1>Statement for %s</h1>\n", data.Customer)
+	result += "<table>\n"
+	result += "<tr><th>play</th><th>seats</th><th>cost</th></tr>\n"
+	for _, perf := range data.Performances {
+		result += fmt.Sprintf(
+			"  <tr><td>%s</td><td>%s</td><td>%d</td></tr>\n",
+			perf.play.Name,
+			usd(perf.amount),
+			perf.Audience,
+		)
+	}
+	result += "</table>\n"
+	result += fmt.Sprintf("<p>Amount owed is <em>%s</em></p>\n", usd(data.TotalAmount))
+	result += fmt.Sprintf("<p>You earned <em>%d</em> credits</p>\n", data.TotalVolumeCredits)
+	return result
+}
+
 func usd(number int) string {
 	ac := accounting.Accounting{Symbol: "$", Precision: 2}
 	return ac.FormatMoney(number / 100)
