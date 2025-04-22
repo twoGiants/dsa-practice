@@ -75,6 +75,15 @@ func (p PerformanceCalculator) Amount() (int, error) {
 	return result, nil
 }
 
+func (p PerformanceCalculator) VolumeCredits() int {
+	result := int(math.Max(float64(p.performance.Audience)-30, 0))
+	// add extra credit for every ten comedy attendees
+	if p.play.Type == "comedy" {
+		result += int(math.Floor(float64(p.performance.Audience) / 5))
+	}
+	return result
+}
+
 func enrichPerformance(performance Performance, plays Plays) (EnrichedPerformance, error) {
 	calculator := NewPerformanceCalculator(performance, plays.playFor(performance))
 	result := EnrichedPerformance{}
@@ -86,7 +95,7 @@ func enrichPerformance(performance Performance, plays Plays) (EnrichedPerformanc
 		return EnrichedPerformance{}, err
 	}
 	result.amount = amount
-	result.volumeCredits = volumeCreditsFor(result)
+	result.volumeCredits = calculator.VolumeCredits()
 
 	return result, nil
 }
@@ -103,15 +112,6 @@ func totalAmount(data StatementData) int {
 	result := 0
 	for _, perf := range data.Performances {
 		result += perf.amount
-	}
-	return result
-}
-
-func volumeCreditsFor(aPerformance EnrichedPerformance) int {
-	result := int(math.Max(float64(aPerformance.Audience)-30, 0))
-	// add extra credit for every ten comedy attendees
-	if aPerformance.play.Type == "comedy" {
-		result += int(math.Floor(float64(aPerformance.Audience) / 5))
 	}
 	return result
 }
