@@ -131,7 +131,8 @@ CONTINUE HERE
   - [x] resolve ci issues
   - [x] page 25: Splitting the Phases of Calculation and Formatting
   - [x] page 28: move amountFor and replace
-  - [ ] CONTINUE HERE: page 36: Creating a Performance Calculator
+  - [x] page 36: Creating a Performance Calculator
+  - [ ] CONTINUE HERE page 39: at the top, polymorphic calculator
   - [ ] page 34 at the end: add tests that probe the intermediate data structure
 
 ## Resources
