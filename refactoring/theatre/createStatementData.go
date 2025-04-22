@@ -55,13 +55,33 @@ func NewPerformanceCalculator(pe Performance, pl Play) PerformanceCalculator {
 	return PerformanceCalculator{pe, pl}
 }
 
+func (p PerformanceCalculator) Amount() (int, error) {
+	result := 0
+	switch p.play.Type {
+	case "tragedy":
+		result = 40000
+		if p.performance.Audience > 30 {
+			result += 1000 * (p.performance.Audience - 30)
+		}
+	case "comedy":
+		result = 30000
+		if p.performance.Audience > 20 {
+			result += 10000 + 500*(p.performance.Audience-20)
+		}
+		result += 300 * p.performance.Audience
+	default:
+		return 0, fmt.Errorf("unknown type: %s", p.play.Type)
+	}
+	return result, nil
+}
+
 func enrichPerformance(performance Performance, plays Plays) (EnrichedPerformance, error) {
 	calculator := NewPerformanceCalculator(performance, plays.playFor(performance))
 	result := EnrichedPerformance{}
 	result.PlayID = performance.PlayID
 	result.Audience = performance.Audience
 	result.play = calculator.play
-	amount, err := amountFor(result)
+	amount, err := calculator.Amount()
 	if err != nil {
 		return EnrichedPerformance{}, err
 	}
@@ -94,24 +114,4 @@ func volumeCreditsFor(aPerformance EnrichedPerformance) int {
 		result += int(math.Floor(float64(aPerformance.Audience) / 5))
 	}
 	return result
-}
-
-func amountFor(aPerformance EnrichedPerformance) (int, error) {
-	result := 0
-	switch aPerformance.play.Type {
-	case "tragedy":
-		result = 40000
-		if aPerformance.Audience > 30 {
-			result += 1000 * (aPerformance.Audience - 30)
-		}
-	case "comedy":
-		result = 30000
-		if aPerformance.Audience > 20 {
-			result += 10000 + 500*(aPerformance.Audience-20)
-		}
-		result += 300 * aPerformance.Audience
-	default:
-		return 0, fmt.Errorf("unknown type: %s", aPerformance.play.Type)
-	}
-	return result, nil
 }
