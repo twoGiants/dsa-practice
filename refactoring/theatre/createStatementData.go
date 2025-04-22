@@ -46,16 +46,21 @@ func createStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 	return result, nil
 }
 
-type PerformanceCalculator struct {
+type PerformanceCalculator interface {
+	Amount() (int, error)
+	VolumeCredits() int
+}
+
+type PerformanceCalculatorImpl struct {
 	performance Performance
 	play        Play
 }
 
-func NewPerformanceCalculator(pe Performance, pl Play) PerformanceCalculator {
-	return PerformanceCalculator{pe, pl}
+func NewPerformanceCalculator(pe Performance, pl Play) PerformanceCalculatorImpl {
+	return PerformanceCalculatorImpl{pe, pl}
 }
 
-func (p PerformanceCalculator) Amount() (int, error) {
+func (p PerformanceCalculatorImpl) Amount() (int, error) {
 	result := 0
 	switch p.play.Type {
 	case "tragedy":
@@ -75,7 +80,7 @@ func (p PerformanceCalculator) Amount() (int, error) {
 	return result, nil
 }
 
-func (p PerformanceCalculator) VolumeCredits() int {
+func (p PerformanceCalculatorImpl) VolumeCredits() int {
 	result := int(math.Max(float64(p.performance.Audience)-30, 0))
 	// add extra credit for every ten comedy attendees
 	if p.play.Type == "comedy" {
