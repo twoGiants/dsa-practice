@@ -61,6 +61,14 @@ type TragedyCalculatorImpl struct {
 	PerformanceCalculatorImpl
 }
 
+func (t TragedyCalculatorImpl) Amount() (int, error) {
+	result := 40000
+	if t.performance.Audience > 30 {
+		result += 1000 * (t.performance.Audience - 30)
+	}
+	return result, nil
+}
+
 type ComedyCalculatorImpl struct {
 	PerformanceCalculatorImpl
 }
@@ -88,10 +96,7 @@ func (p PerformanceCalculatorImpl) Amount() (int, error) {
 	result := 0
 	switch p.play.Type {
 	case "tragedy":
-		result = 40000
-		if p.performance.Audience > 30 {
-			result += 1000 * (p.performance.Audience - 30)
-		}
+		return 0, fmt.Errorf("bad thing")
 	case "comedy":
 		result = 30000
 		if p.performance.Audience > 20 {
