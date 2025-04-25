@@ -73,6 +73,15 @@ type ComedyCalculatorImpl struct {
 	PerformanceCalculatorImpl
 }
 
+func (c ComedyCalculatorImpl) Amount() (int, error) {
+	result := 30000
+	if c.performance.Audience > 20 {
+		result += 10000 + 500*(c.performance.Audience-20)
+	}
+	result += 300 * c.performance.Audience
+	return result, nil
+}
+
 func NewPerformanceCalculator(pe Performance, pl Play) PerformanceCalculatorImpl {
 	return PerformanceCalculatorImpl{pe, pl}
 }
@@ -92,21 +101,8 @@ func (p PerformanceCalculatorImpl) Play() Play {
 	return p.play
 }
 
-func (p PerformanceCalculatorImpl) Amount() (int, error) {
-	result := 0
-	switch p.play.Type {
-	case "tragedy":
-		return 0, fmt.Errorf("bad thing")
-	case "comedy":
-		result = 30000
-		if p.performance.Audience > 20 {
-			result += 10000 + 500*(p.performance.Audience-20)
-		}
-		result += 300 * p.performance.Audience
-	default:
-		return 0, fmt.Errorf("unknown type: %s", p.play.Type)
-	}
-	return result, nil
+func (PerformanceCalculatorImpl) Amount() (int, error) {
+	return 0, fmt.Errorf("subclass responsibility")
 }
 
 func (p PerformanceCalculatorImpl) VolumeCredits() int {
