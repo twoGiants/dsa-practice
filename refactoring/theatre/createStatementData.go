@@ -47,7 +47,7 @@ func createStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 }
 
 type PerformanceCalculator interface {
-	Amount() (int, error)
+	Amount() int
 	VolumeCredits() int
 	Play() Play
 }
@@ -61,25 +61,25 @@ type TragedyCalculatorImpl struct {
 	PerformanceCalculatorImpl
 }
 
-func (t TragedyCalculatorImpl) Amount() (int, error) {
+func (t TragedyCalculatorImpl) Amount() int {
 	result := 40000
 	if t.performance.Audience > 30 {
 		result += 1000 * (t.performance.Audience - 30)
 	}
-	return result, nil
+	return result
 }
 
 type ComedyCalculatorImpl struct {
 	PerformanceCalculatorImpl
 }
 
-func (c ComedyCalculatorImpl) Amount() (int, error) {
+func (c ComedyCalculatorImpl) Amount() int {
 	result := 30000
 	if c.performance.Audience > 20 {
 		result += 10000 + 500*(c.performance.Audience-20)
 	}
 	result += 300 * c.performance.Audience
-	return result, nil
+	return result
 }
 
 func NewPerformanceCalculator(pe Performance, pl Play) PerformanceCalculatorImpl {
@@ -101,10 +101,6 @@ func (p PerformanceCalculatorImpl) Play() Play {
 	return p.play
 }
 
-func (PerformanceCalculatorImpl) Amount() (int, error) {
-	return 0, fmt.Errorf("subclass responsibility")
-}
-
 func (p PerformanceCalculatorImpl) VolumeCredits() int {
 	result := int(math.Max(float64(p.performance.Audience)-30, 0))
 	// add extra credit for every ten comedy attendees
@@ -119,15 +115,12 @@ func enrichPerformance(performance Performance, plays Plays) (EnrichedPerformanc
 	if err != nil {
 		return EnrichedPerformance{}, err
 	}
+
 	result := EnrichedPerformance{}
 	result.PlayID = performance.PlayID
 	result.Audience = performance.Audience
 	result.play = calculator.Play()
-	amount, err := calculator.Amount()
-	if err != nil {
-		return EnrichedPerformance{}, err
-	}
-	result.amount = amount
+	result.amount = calculator.Amount()
 	result.volumeCredits = calculator.VolumeCredits()
 
 	return result, nil
