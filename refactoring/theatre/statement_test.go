@@ -9,6 +9,7 @@ import (
 	approvals "github.com/approvals/go-approval-tests"
 
 	"dsa/refactoring/theatre"
+	"dsa/refactoring/theatre/types"
 )
 
 func TestMain(m *testing.M) {
@@ -31,13 +32,13 @@ func TestPrinterPrintByApproval(t *testing.T) {
 }
 
 func TestStatementWithNewPlayTypes(t *testing.T) {
-	plays := map[string]theatre.Play{
+	plays := map[string]types.Play{
 		"henry-v": {Name: "Henry V", Type: "history"},
 		"as-like": {Name: "As You Like It", Type: "pastoral"},
 	}
-	invoice := theatre.Invoice{
+	invoice := types.Invoice{
 		Customer: "BigCo",
-		Performances: []theatre.Performance{
+		Performances: []types.Performance{
 			{PlayID: "henry-v", Audience: 53},
 			{PlayID: "as-like", Audience: 55},
 		},
@@ -50,7 +51,7 @@ func TestStatementWithNewPlayTypes(t *testing.T) {
 	}
 }
 
-func createTestData(t testing.TB, r io.Reader) (theatre.Invoice, map[string]theatre.Play) {
+func createTestData(t testing.TB, r io.Reader) (types.Invoice, map[string]types.Play) {
 	var in struct {
 		Plays []struct {
 			ID   string
@@ -59,14 +60,14 @@ func createTestData(t testing.TB, r io.Reader) (theatre.Invoice, map[string]thea
 				Type string
 			}
 		}
-		Invoice theatre.Invoice
+		Invoice types.Invoice
 	}
 
 	if err := json.NewDecoder(r).Decode(&in); err != nil {
 		t.Fatalf("failed to decode input data: %v", err)
 	}
 
-	plays := make(map[string]theatre.Play)
+	plays := make(map[string]types.Play)
 	for _, identifiedPlay := range in.Plays {
 		plays[identifiedPlay.ID] = identifiedPlay.Play
 	}

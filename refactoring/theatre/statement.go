@@ -1,29 +1,18 @@
 package theatre
 
 import (
+	"dsa/refactoring/theatre/types"
 	"fmt"
 
 	"github.com/leekchan/accounting"
 )
 
-type Play struct {
-	Name string
-	Type string
-}
-
-type Invoice struct {
-	Customer     string
-	Performances []Performance
-}
-
-type Performance struct {
-	PlayID   string
-	Audience int
-}
-
 type StatementPrinter struct{}
 
-func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
+func (s StatementPrinter) Print(
+	invoice types.Invoice,
+	plays map[string]types.Play,
+) (string, error) {
 	statementData, err := CreateStatementData(invoice, plays)
 	if err != nil {
 		return "", err
@@ -49,7 +38,10 @@ func renderPlainText(data StatementData) string {
 	return result
 }
 
-func (s StatementPrinter) HtmlPrint(invoice Invoice, plays map[string]Play) (string, error) {
+func (s StatementPrinter) HtmlPrint(
+	invoice types.Invoice,
+	plays map[string]types.Play,
+) (string, error) {
 	statementData, err := CreateStatementData(invoice, plays)
 	if err != nil {
 		return "", err

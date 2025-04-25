@@ -1,20 +1,21 @@
 package theatre
 
 import (
+	"dsa/refactoring/theatre/types"
 	"fmt"
 	"math"
 )
 
-type Plays map[string]Play
+type Plays map[string]types.Play
 
-func (p Plays) PlayFor(aPerformance Performance) Play {
+func (p Plays) PlayFor(aPerformance types.Performance) types.Play {
 	return p[aPerformance.PlayID]
 }
 
 type EnrichedPerformance struct {
 	Audience      int
 	Amount        int
-	Play          Play
+	Play          types.Play
 	playID        string
 	volumeCredits int
 }
@@ -24,7 +25,10 @@ type StatementData struct {
 	Performances []EnrichedPerformance
 }
 
-func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData, error) {
+func CreateStatementData(
+	invoice types.Invoice,
+	plays map[string]types.Play,
+) (StatementData, error) {
 	result := StatementData{}
 	result.Customer = invoice.Customer
 
@@ -42,7 +46,7 @@ func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 }
 
 func (StatementData) enrichPerformance(
-	performance Performance,
+	performance types.Performance,
 	plays Plays,
 ) (EnrichedPerformance, error) {
 	calculator, err := CreatePerformanceCalculator(performance, plays.PlayFor(performance))
@@ -79,19 +83,22 @@ func (s StatementData) TotalAmount() int {
 type PerformanceCalculator interface {
 	Amount() int
 	VolumeCredits() int
-	Play() Play
+	Play() types.Play
 }
 
 type PerformanceCalculatorImpl struct {
-	performance Performance
-	play        Play
+	performance types.Performance
+	play        types.Play
 }
 
-func NewPerformanceCalculator(pe Performance, pl Play) PerformanceCalculatorImpl {
+func NewPerformanceCalculator(pe types.Performance, pl types.Play) PerformanceCalculatorImpl {
 	return PerformanceCalculatorImpl{pe, pl}
 }
 
-func CreatePerformanceCalculator(pe Performance, pl Play) (PerformanceCalculator, error) {
+func CreatePerformanceCalculator(
+	pe types.Performance,
+	pl types.Play,
+) (PerformanceCalculator, error) {
 	switch pl.Type {
 	case "tragedy":
 		return TragedyCalculatorImpl{NewPerformanceCalculator(pe, pl)}, nil
@@ -102,7 +109,7 @@ func CreatePerformanceCalculator(pe Performance, pl Play) (PerformanceCalculator
 	}
 }
 
-func (p PerformanceCalculatorImpl) Play() Play {
+func (p PerformanceCalculatorImpl) Play() types.Play {
 	return p.play
 }
 
