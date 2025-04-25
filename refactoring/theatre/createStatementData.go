@@ -32,7 +32,7 @@ func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 
 	var enrichedPerformances []EnrichedPerformance
 	for _, performance := range invoice.Performances {
-		enrichedPerformance, err := enrichPerformance(performance, Plays(plays))
+		enrichedPerformance, err := result.enrichPerformance(performance, Plays(plays))
 		if err != nil {
 			return StatementData{}, err
 		}
@@ -46,7 +46,7 @@ func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 	return result, nil
 }
 
-func enrichPerformance(performance Performance, plays Plays) (EnrichedPerformance, error) {
+func (StatementData) enrichPerformance(performance Performance, plays Plays) (EnrichedPerformance, error) {
 	calculator, err := CreatePerformanceCalculator(performance, plays.PlayFor(performance))
 	if err != nil {
 		return EnrichedPerformance{}, err
