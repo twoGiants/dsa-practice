@@ -40,8 +40,8 @@ func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 	}
 	result.Performances = enrichedPerformances
 
-	result.TotalAmount = totalAmount(result)
-	result.TotalVolumeCredits = totalVolumeCredits(result)
+	result.TotalAmount = result.totalAmount()
+	result.TotalVolumeCredits = result.totalVolumeCredits()
 
 	return result, nil
 }
@@ -62,17 +62,17 @@ func (StatementData) enrichPerformance(performance Performance, plays Plays) (En
 	return result, nil
 }
 
-func totalVolumeCredits(data StatementData) int {
+func (s StatementData) totalVolumeCredits() int {
 	result := 0
-	for _, perf := range data.Performances {
+	for _, perf := range s.Performances {
 		result += perf.volumeCredits
 	}
 	return result
 }
 
-func totalAmount(data StatementData) int {
+func (s StatementData) totalAmount() int {
 	result := 0
-	for _, perf := range data.Performances {
+	for _, perf := range s.Performances {
 		result += perf.amount
 	}
 	return result
