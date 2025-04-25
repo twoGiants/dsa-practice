@@ -12,18 +12,16 @@ func (p Plays) PlayFor(aPerformance Performance) Play {
 }
 
 type EnrichedPerformance struct {
-	PlayID        string
 	Audience      int
-	play          Play
-	amount        int
+	Amount        int
+	Play          Play
+	playID        string
 	volumeCredits int
 }
 
 type StatementData struct {
-	Customer           string
-	Performances       []EnrichedPerformance
-	TotalAmount        int
-	TotalVolumeCredits int
+	Customer     string
+	Performances []EnrichedPerformance
 }
 
 func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData, error) {
@@ -40,9 +38,6 @@ func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 	}
 	result.Performances = enrichedPerformances
 
-	result.TotalAmount = result.totalAmount()
-	result.TotalVolumeCredits = result.totalVolumeCredits()
-
 	return result, nil
 }
 
@@ -53,16 +48,16 @@ func (StatementData) enrichPerformance(performance Performance, plays Plays) (En
 	}
 
 	result := EnrichedPerformance{}
-	result.PlayID = performance.PlayID
+	result.playID = performance.PlayID
 	result.Audience = performance.Audience
-	result.play = calculator.Play()
-	result.amount = calculator.Amount()
+	result.Play = calculator.Play()
+	result.Amount = calculator.Amount()
 	result.volumeCredits = calculator.VolumeCredits()
 
 	return result, nil
 }
 
-func (s StatementData) totalVolumeCredits() int {
+func (s StatementData) TotalVolumeCredits() int {
 	result := 0
 	for _, perf := range s.Performances {
 		result += perf.volumeCredits
@@ -70,10 +65,10 @@ func (s StatementData) totalVolumeCredits() int {
 	return result
 }
 
-func (s StatementData) totalAmount() int {
+func (s StatementData) TotalAmount() int {
 	result := 0
 	for _, perf := range s.Performances {
-		result += perf.amount
+		result += perf.Amount
 	}
 	return result
 }

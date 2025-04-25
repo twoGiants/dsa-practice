@@ -38,14 +38,14 @@ func renderPlainText(data StatementData) string {
 	for _, perf := range data.Performances {
 		result += fmt.Sprintf(
 			"  %s: %s (%d seats)\n",
-			perf.play.Name,
-			usd(perf.amount),
+			perf.Play.Name,
+			usd(perf.Amount),
 			perf.Audience,
 		)
 	}
 
-	result += fmt.Sprintf("Amount owed is %s\n", usd(data.TotalAmount))
-	result += fmt.Sprintf("You earned %d credits\n", data.TotalVolumeCredits)
+	result += fmt.Sprintf("Amount owed is %s\n", usd(data.TotalAmount()))
+	result += fmt.Sprintf("You earned %d credits\n", data.TotalVolumeCredits())
 	return result
 }
 
@@ -65,14 +65,14 @@ func renderHtml(data StatementData) string {
 	for _, perf := range data.Performances {
 		result += fmt.Sprintf(
 			"  <tr><td>%s</td><td>%s</td><td>%d</td></tr>\n",
-			perf.play.Name,
-			usd(perf.amount),
+			perf.Play.Name,
+			usd(perf.Amount),
 			perf.Audience,
 		)
 	}
 	result += "</table>\n"
-	result += fmt.Sprintf("<p>Amount owed is <em>%s</em></p>\n", usd(data.TotalAmount))
-	result += fmt.Sprintf("<p>You earned <em>%d</em> credits</p>\n", data.TotalVolumeCredits)
+	result += fmt.Sprintf("<p>Amount owed is <em>%s</em></p>\n", usd(data.TotalAmount()))
+	result += fmt.Sprintf("<p>You earned <em>%d</em> credits</p>\n", data.TotalVolumeCredits())
 	return result
 }
 
