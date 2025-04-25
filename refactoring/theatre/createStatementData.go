@@ -41,7 +41,10 @@ func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 	return result, nil
 }
 
-func (StatementData) enrichPerformance(performance Performance, plays Plays) (EnrichedPerformance, error) {
+func (StatementData) enrichPerformance(
+	performance Performance,
+	plays Plays,
+) (EnrichedPerformance, error) {
 	calculator, err := CreatePerformanceCalculator(performance, plays.PlayFor(performance))
 	if err != nil {
 		return EnrichedPerformance{}, err
@@ -133,5 +136,7 @@ func (c ComedyCalculatorImpl) Amount() int {
 }
 
 func (c ComedyCalculatorImpl) VolumeCredits() int {
-	return c.PerformanceCalculatorImpl.VolumeCredits() + int(math.Floor(float64(c.performance.Audience)/5))
+	return c.PerformanceCalculatorImpl.VolumeCredits() + int(
+		math.Floor(float64(c.performance.Audience)/5),
+	)
 }
