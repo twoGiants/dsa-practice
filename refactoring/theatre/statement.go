@@ -24,7 +24,7 @@ type Performance struct {
 type StatementPrinter struct{}
 
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
-	statementData, err := createStatementData(invoice, plays)
+	statementData, err := CreateStatementData(invoice, plays)
 	if err != nil {
 		return "", err
 	}
@@ -50,7 +50,7 @@ func renderPlainText(data StatementData) string {
 }
 
 func (s StatementPrinter) HtmlPrint(invoice Invoice, plays map[string]Play) (string, error) {
-	statementData, err := createStatementData(invoice, plays)
+	statementData, err := CreateStatementData(invoice, plays)
 	if err != nil {
 		return "", err
 	}

@@ -5,11 +5,10 @@ import (
 	"math"
 )
 
-type StatementData struct {
-	Customer           string
-	Performances       []EnrichedPerformance
-	TotalAmount        int
-	TotalVolumeCredits int
+type Plays map[string]Play
+
+func (p Plays) PlayFor(aPerformance Performance) Play {
+	return p[aPerformance.PlayID]
 }
 
 type EnrichedPerformance struct {
@@ -20,13 +19,14 @@ type EnrichedPerformance struct {
 	volumeCredits int
 }
 
-type Plays map[string]Play
-
-func (p Plays) playFor(aPerformance Performance) Play {
-	return p[aPerformance.PlayID]
+type StatementData struct {
+	Customer           string
+	Performances       []EnrichedPerformance
+	TotalAmount        int
+	TotalVolumeCredits int
 }
 
-func createStatementData(invoice Invoice, plays map[string]Play) (StatementData, error) {
+func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData, error) {
 	result := StatementData{}
 	result.Customer = invoice.Customer
 
@@ -46,6 +46,38 @@ func createStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 	return result, nil
 }
 
+func enrichPerformance(performance Performance, plays Plays) (EnrichedPerformance, error) {
+	calculator, err := CreatePerformanceCalculator(performance, plays.PlayFor(performance))
+	if err != nil {
+		return EnrichedPerformance{}, err
+	}
+
+	result := EnrichedPerformance{}
+	result.PlayID = performance.PlayID
+	result.Audience = performance.Audience
+	result.play = calculator.Play()
+	result.amount = calculator.Amount()
+	result.volumeCredits = calculator.VolumeCredits()
+
+	return result, nil
+}
+
+func totalVolumeCredits(data StatementData) int {
+	result := 0
+	for _, perf := range data.Performances {
+		result += perf.volumeCredits
+	}
+	return result
+}
+
+func totalAmount(data StatementData) int {
+	result := 0
+	for _, perf := range data.Performances {
+		result += perf.amount
+	}
+	return result
+}
+
 type PerformanceCalculator interface {
 	Amount() int
 	VolumeCredits() int
@@ -55,6 +87,29 @@ type PerformanceCalculator interface {
 type PerformanceCalculatorImpl struct {
 	performance Performance
 	play        Play
+}
+
+func NewPerformanceCalculator(pe Performance, pl Play) PerformanceCalculatorImpl {
+	return PerformanceCalculatorImpl{pe, pl}
+}
+
+func CreatePerformanceCalculator(pe Performance, pl Play) (PerformanceCalculator, error) {
+	switch pl.Type {
+	case "tragedy":
+		return TragedyCalculatorImpl{NewPerformanceCalculator(pe, pl)}, nil
+	case "comedy":
+		return ComedyCalculatorImpl{NewPerformanceCalculator(pe, pl)}, nil
+	default:
+		return nil, fmt.Errorf("unknown type: %s", pl.Type)
+	}
+}
+
+func (p PerformanceCalculatorImpl) Play() Play {
+	return p.play
+}
+
+func (p PerformanceCalculatorImpl) VolumeCredits() int {
+	return int(math.Max(float64(p.performance.Audience)-30, 0))
 }
 
 type TragedyCalculatorImpl struct {
@@ -84,59 +139,4 @@ func (c ComedyCalculatorImpl) Amount() int {
 
 func (c ComedyCalculatorImpl) VolumeCredits() int {
 	return c.PerformanceCalculatorImpl.VolumeCredits() + int(math.Floor(float64(c.performance.Audience)/5))
-}
-
-func NewPerformanceCalculator(pe Performance, pl Play) PerformanceCalculatorImpl {
-	return PerformanceCalculatorImpl{pe, pl}
-}
-
-func CreatePerformanceCalculator(pe Performance, pl Play) (PerformanceCalculator, error) {
-	switch pl.Type {
-	case "tragedy":
-		return TragedyCalculatorImpl{NewPerformanceCalculator(pe, pl)}, nil
-	case "comedy":
-		return ComedyCalculatorImpl{NewPerformanceCalculator(pe, pl)}, nil
-	default:
-		return nil, fmt.Errorf("unknown type: %s", pl.Type)
-	}
-}
-
-func (p PerformanceCalculatorImpl) Play() Play {
-	return p.play
-}
-
-func (p PerformanceCalculatorImpl) VolumeCredits() int {
-	return int(math.Max(float64(p.performance.Audience)-30, 0))
-}
-
-func enrichPerformance(performance Performance, plays Plays) (EnrichedPerformance, error) {
-	calculator, err := CreatePerformanceCalculator(performance, plays.playFor(performance))
-	if err != nil {
-		return EnrichedPerformance{}, err
-	}
-
-	result := EnrichedPerformance{}
-	result.PlayID = performance.PlayID
-	result.Audience = performance.Audience
-	result.play = calculator.Play()
-	result.amount = calculator.Amount()
-	result.volumeCredits = calculator.VolumeCredits()
-
-	return result, nil
-}
-
-func totalVolumeCredits(data StatementData) int {
-	result := 0
-	for _, perf := range data.Performances {
-		result += perf.volumeCredits
-	}
-	return result
-}
-
-func totalAmount(data StatementData) int {
-	result := 0
-	for _, perf := range data.Performances {
-		result += perf.amount
-	}
-	return result
 }
