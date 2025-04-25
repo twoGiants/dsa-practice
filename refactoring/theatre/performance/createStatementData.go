@@ -1,4 +1,4 @@
-package theatre
+package performance
 
 import (
 	"dsa/refactoring/theatre/types"
@@ -6,13 +6,13 @@ import (
 	"math"
 )
 
-type Plays map[string]types.Play
+type plays map[string]types.Play
 
-func (p Plays) PlayFor(aPerformance types.Performance) types.Play {
+func (p plays) playFor(aPerformance types.Performance) types.Play {
 	return p[aPerformance.PlayID]
 }
 
-type EnrichedPerformance struct {
+type enrichedPerformance struct {
 	Audience      int
 	Amount        int
 	Play          types.Play
@@ -22,19 +22,19 @@ type EnrichedPerformance struct {
 
 type StatementData struct {
 	Customer     string
-	Performances []EnrichedPerformance
+	Performances []enrichedPerformance
 }
 
 func CreateStatementData(
 	invoice types.Invoice,
-	plays map[string]types.Play,
+	thePlays map[string]types.Play,
 ) (StatementData, error) {
 	result := StatementData{}
 	result.Customer = invoice.Customer
 
-	var enrichedPerformances []EnrichedPerformance
+	var enrichedPerformances []enrichedPerformance
 	for _, performance := range invoice.Performances {
-		enrichedPerformance, err := result.enrichPerformance(performance, Plays(plays))
+		enrichedPerformance, err := result.enrichPerformance(performance, plays(thePlays))
 		if err != nil {
 			return StatementData{}, err
 		}
@@ -47,14 +47,14 @@ func CreateStatementData(
 
 func (StatementData) enrichPerformance(
 	performance types.Performance,
-	plays Plays,
-) (EnrichedPerformance, error) {
-	calculator, err := CreatePerformanceCalculator(performance, plays.PlayFor(performance))
+	plays plays,
+) (enrichedPerformance, error) {
+	calculator, err := createPerformanceCalculator(performance, plays.playFor(performance))
 	if err != nil {
-		return EnrichedPerformance{}, err
+		return enrichedPerformance{}, err
 	}
 
-	result := EnrichedPerformance{}
+	result := enrichedPerformance{}
 	result.playID = performance.PlayID
 	result.Audience = performance.Audience
 	result.Play = calculator.Play()
@@ -80,48 +80,48 @@ func (s StatementData) TotalAmount() int {
 	return result
 }
 
-type PerformanceCalculator interface {
+type performanceCalculator interface {
 	Amount() int
 	VolumeCredits() int
 	Play() types.Play
 }
 
-type PerformanceCalculatorImpl struct {
+type performanceCalculatorImpl struct {
 	performance types.Performance
 	play        types.Play
 }
 
-func NewPerformanceCalculator(pe types.Performance, pl types.Play) PerformanceCalculatorImpl {
-	return PerformanceCalculatorImpl{pe, pl}
+func newPerformanceCalculator(pe types.Performance, pl types.Play) performanceCalculatorImpl {
+	return performanceCalculatorImpl{pe, pl}
 }
 
-func CreatePerformanceCalculator(
+func createPerformanceCalculator(
 	pe types.Performance,
 	pl types.Play,
-) (PerformanceCalculator, error) {
+) (performanceCalculator, error) {
 	switch pl.Type {
 	case "tragedy":
-		return TragedyCalculatorImpl{NewPerformanceCalculator(pe, pl)}, nil
+		return tragedyCalculatorImpl{newPerformanceCalculator(pe, pl)}, nil
 	case "comedy":
-		return ComedyCalculatorImpl{NewPerformanceCalculator(pe, pl)}, nil
+		return comedyCalculatorImpl{newPerformanceCalculator(pe, pl)}, nil
 	default:
 		return nil, fmt.Errorf("unknown type: %s", pl.Type)
 	}
 }
 
-func (p PerformanceCalculatorImpl) Play() types.Play {
+func (p performanceCalculatorImpl) Play() types.Play {
 	return p.play
 }
 
-func (p PerformanceCalculatorImpl) VolumeCredits() int {
+func (p performanceCalculatorImpl) VolumeCredits() int {
 	return int(math.Max(float64(p.performance.Audience)-30, 0))
 }
 
-type TragedyCalculatorImpl struct {
-	PerformanceCalculatorImpl
+type tragedyCalculatorImpl struct {
+	performanceCalculatorImpl
 }
 
-func (t TragedyCalculatorImpl) Amount() int {
+func (t tragedyCalculatorImpl) Amount() int {
 	result := 40000
 	if t.performance.Audience > 30 {
 		result += 1000 * (t.performance.Audience - 30)
@@ -129,11 +129,11 @@ func (t TragedyCalculatorImpl) Amount() int {
 	return result
 }
 
-type ComedyCalculatorImpl struct {
-	PerformanceCalculatorImpl
+type comedyCalculatorImpl struct {
+	performanceCalculatorImpl
 }
 
-func (c ComedyCalculatorImpl) Amount() int {
+func (c comedyCalculatorImpl) Amount() int {
 	result := 30000
 	if c.performance.Audience > 20 {
 		result += 10000 + 500*(c.performance.Audience-20)
@@ -142,8 +142,8 @@ func (c ComedyCalculatorImpl) Amount() int {
 	return result
 }
 
-func (c ComedyCalculatorImpl) VolumeCredits() int {
-	return c.PerformanceCalculatorImpl.VolumeCredits() + int(
+func (c comedyCalculatorImpl) VolumeCredits() int {
+	return c.performanceCalculatorImpl.VolumeCredits() + int(
 		math.Floor(float64(c.performance.Audience)/5),
 	)
 }

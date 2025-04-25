@@ -1,6 +1,7 @@
 package theatre
 
 import (
+	perf "dsa/refactoring/theatre/performance"
 	"dsa/refactoring/theatre/types"
 	"fmt"
 
@@ -13,7 +14,7 @@ func (s StatementPrinter) Print(
 	invoice types.Invoice,
 	plays map[string]types.Play,
 ) (string, error) {
-	statementData, err := CreateStatementData(invoice, plays)
+	statementData, err := perf.CreateStatementData(invoice, plays)
 	if err != nil {
 		return "", err
 	}
@@ -21,7 +22,7 @@ func (s StatementPrinter) Print(
 	return renderPlainText(statementData), nil
 }
 
-func renderPlainText(data StatementData) string {
+func renderPlainText(data perf.StatementData) string {
 	result := fmt.Sprintf("Statement for %s\n", data.Customer)
 
 	for _, perf := range data.Performances {
@@ -42,7 +43,7 @@ func (s StatementPrinter) HtmlPrint(
 	invoice types.Invoice,
 	plays map[string]types.Play,
 ) (string, error) {
-	statementData, err := CreateStatementData(invoice, plays)
+	statementData, err := perf.CreateStatementData(invoice, plays)
 	if err != nil {
 		return "", err
 	}
@@ -50,7 +51,7 @@ func (s StatementPrinter) HtmlPrint(
 	return renderHtml(statementData), nil
 }
 
-func renderHtml(data StatementData) string {
+func renderHtml(data perf.StatementData) string {
 	result := fmt.Sprintf("<h1>Statement for %s</h1>\n", data.Customer)
 	result += "<table>\n"
 	result += "<tr><th>play</th><th>seats</th><th>cost</th></tr>\n"
