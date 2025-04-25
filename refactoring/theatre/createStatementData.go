@@ -49,6 +49,7 @@ func createStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 type PerformanceCalculator interface {
 	Amount() (int, error)
 	VolumeCredits() int
+	Play() Play
 }
 
 type PerformanceCalculatorImpl struct {
@@ -56,8 +57,31 @@ type PerformanceCalculatorImpl struct {
 	play        Play
 }
 
+type TragedyCalculatorImpl struct {
+	PerformanceCalculatorImpl
+}
+
+type ComedyCalculatorImpl struct {
+	PerformanceCalculatorImpl
+}
+
 func NewPerformanceCalculator(pe Performance, pl Play) PerformanceCalculatorImpl {
 	return PerformanceCalculatorImpl{pe, pl}
+}
+
+func CreatePerformanceCalculator(pe Performance, pl Play) (PerformanceCalculator, error) {
+	switch pl.Type {
+	case "tragedy":
+		return TragedyCalculatorImpl{NewPerformanceCalculator(pe, pl)}, nil
+	case "comedy":
+		return ComedyCalculatorImpl{NewPerformanceCalculator(pe, pl)}, nil
+	default:
+		return nil, fmt.Errorf("unknown type: %s", pl.Type)
+	}
+}
+
+func (p PerformanceCalculatorImpl) Play() Play {
+	return p.play
 }
 
 func (p PerformanceCalculatorImpl) Amount() (int, error) {
@@ -90,11 +114,14 @@ func (p PerformanceCalculatorImpl) VolumeCredits() int {
 }
 
 func enrichPerformance(performance Performance, plays Plays) (EnrichedPerformance, error) {
-	calculator := NewPerformanceCalculator(performance, plays.playFor(performance))
+	calculator, err := CreatePerformanceCalculator(performance, plays.playFor(performance))
+	if err != nil {
+		return EnrichedPerformance{}, err
+	}
 	result := EnrichedPerformance{}
 	result.PlayID = performance.PlayID
 	result.Audience = performance.Audience
-	result.play = calculator.play
+	result.play = calculator.Play()
 	amount, err := calculator.Amount()
 	if err != nil {
 		return EnrichedPerformance{}, err
