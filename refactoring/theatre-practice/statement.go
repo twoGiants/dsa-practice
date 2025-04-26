@@ -12,15 +12,22 @@ type StatementPrinter struct {
 	invoice Invoice
 }
 
+type StatementData struct {
+	Customer string
+}
+
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
 	s.plays = plays
 	s.invoice = invoice
 
-	return renderPlayText(s, invoice)
+	statementData := StatementData{}
+	statementData.Customer = invoice.Customer
+
+	return renderPlayText(s, statementData, invoice)
 }
 
-func renderPlayText(s StatementPrinter, invoice Invoice) (string, error) {
-	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
+func renderPlayText(s StatementPrinter, data StatementData, invoice Invoice) (string, error) {
+	result := fmt.Sprintf("Statement for %s\n", data.Customer)
 
 	for _, perf := range invoice.Performances {
 		amount, err := s.amount(perf)
