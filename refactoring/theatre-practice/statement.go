@@ -14,12 +14,10 @@ type StatementPrinter struct {
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
 	s.plays = plays
 
-	totalAmount := 0
-	volumeCredits := 0
 	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
 
-	ac := accounting.Accounting{Symbol: "$", Precision: 2}
-
+	totalAmount := 0
+	volumeCredits := 0
 	for _, perf := range invoice.Performances {
 		volumeCredits += s.volumeCreditsFor(perf)
 
@@ -31,14 +29,19 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 		result += fmt.Sprintf(
 			"  %s: %s (%d seats)\n",
 			s.playFor(perf).Name,
-			ac.FormatMoney(float64(amount)/100),
+			usd(amount),
 			perf.Audience,
 		)
 		totalAmount += amount
 	}
-	result += fmt.Sprintf("Amount owed is %s\n", ac.FormatMoney(float64(totalAmount)/100))
+	result += fmt.Sprintf("Amount owed is %s\n", usd(totalAmount))
 	result += fmt.Sprintf("You earned %d credits\n", volumeCredits)
 	return result, nil
+}
+
+func usd(amount int) string {
+	ac := accounting.Accounting{Symbol: "$", Precision: 2}
+	return ac.FormatMoney(float64(amount) / 100)
 }
 
 func (s StatementPrinter) volumeCreditsFor(perf Performance) int {
