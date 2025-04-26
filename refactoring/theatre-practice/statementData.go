@@ -44,22 +44,23 @@ func CreateStatementData(invoice common.Invoice, plays map[string]common.Play) (
 
 func (s StatementData) enrichPerformance(perf common.Performance) (enrichedPerformance, error) {
 	result := enrichedPerformance{}
-	amount, err := s.amount(perf)
-	if err != nil {
-		return enrichedPerformance{}, err
-	}
-	result.Amount = amount
 	result.Audience = perf.Audience
 	result.Name = s.playFor(perf).Name
 	result.theType = s.playFor(perf).Type
 
+	amount, err := s.amount(result)
+	if err != nil {
+		return enrichedPerformance{}, err
+	}
+	result.Amount = amount
+
 	return result, nil
 }
 
-func (s StatementData) amount(perf common.Performance) (int, error) {
+func (StatementData) amount(perf enrichedPerformance) (int, error) {
 	result := 0
 
-	switch s.playFor(perf).Type {
+	switch perf.theType {
 	case "tragedy":
 		result = 40000
 		if perf.Audience > 30 {
@@ -72,7 +73,7 @@ func (s StatementData) amount(perf common.Performance) (int, error) {
 		}
 		result += 300 * perf.Audience
 	default:
-		return 0, fmt.Errorf("unknown type: %s", s.playFor(perf).Type)
+		return 0, fmt.Errorf("unknown type: %s", perf.theType)
 	}
 
 	return result, nil
