@@ -10,7 +10,10 @@ import (
 
 type StatementPrinter struct{}
 
-func (s StatementPrinter) Print(invoice common.Invoice, plays map[string]common.Play) (string, error) {
+func (s StatementPrinter) Print(
+	invoice common.Invoice,
+	plays map[string]common.Play,
+) (string, error) {
 	statementData, err := performance.CreateStatementData(invoice, plays)
 	if err != nil {
 		return "", err

@@ -23,7 +23,10 @@ type enrichedPerformance struct {
 	volumeCredits int
 }
 
-func CreateStatementData(invoice common.Invoice, plays map[string]common.Play) (StatementData, error) {
+func CreateStatementData(
+	invoice common.Invoice,
+	plays map[string]common.Play,
+) (StatementData, error) {
 	result := StatementData{}
 	result.plays = plays
 	result.Customer = invoice.Customer
