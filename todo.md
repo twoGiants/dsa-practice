@@ -86,12 +86,14 @@ OnDiskFile( // StoredFile
 ## Testing
 
 WHAT YOU DID
+
 - [x] 24.03.25
   - [x] add tests to assert package
     - [x] make FirstDimensionLengthEqual testable
     - [x] add first positive test
 
 CONTINUE HERE
+
 - [ ] add tests to assert package
   - [ ] add negative FirstDimensionLengthEqual test
   - [ ] make other assert functions testable
@@ -132,8 +134,9 @@ CONTINUE HERE
   - [x] page 25: Splitting the Phases of Calculation and Formatting
   - [x] page 28: move amountFor and replace
   - [x] page 36: Creating a Performance Calculator
-  - [ ] CONTINUE HERE page 39: at the top, polymorphic calculator
+  - [x] page 39: at the top, polymorphic calculator
   - [ ] page 34 at the end: add tests that probe the intermediate data structure
+- [x] practice retention => retained
 
 ## Resources
 
