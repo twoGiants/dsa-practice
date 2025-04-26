@@ -59,24 +59,32 @@ func (s StatementData) enrichPerformance(perf common.Performance) (enrichedPerfo
 	return result, nil
 }
 
-func (StatementData) amount(perf enrichedPerformance) (int, error) {
+type performanceCalculator struct {
+	perf enrichedPerformance
+}
+
+func (p performanceCalculator) amount() (int, error) {
 	result := 0
-	switch perf.theType {
+	switch p.perf.theType {
 	case "tragedy":
 		result = 40000
-		if perf.Audience > 30 {
-			result += 1000 * (perf.Audience - 30)
+		if p.perf.Audience > 30 {
+			result += 1000 * (p.perf.Audience - 30)
 		}
 	case "comedy":
 		result = 30000
-		if perf.Audience > 20 {
-			result += 10000 + 500*(perf.Audience-20)
+		if p.perf.Audience > 20 {
+			result += 10000 + 500*(p.perf.Audience-20)
 		}
-		result += 300 * perf.Audience
+		result += 300 * p.perf.Audience
 	default:
-		return 0, fmt.Errorf("unknown type: %s", perf.theType)
+		return 0, fmt.Errorf("unknown type: %s", p.perf.theType)
 	}
 	return result, nil
+}
+
+func (StatementData) amount(perf enrichedPerformance) (int, error) {
+	return performanceCalculator{perf}.amount()
 }
 
 func (s StatementData) playFor(perf enrichedPerformance) common.Play {
