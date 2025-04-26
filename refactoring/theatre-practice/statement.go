@@ -13,9 +13,10 @@ type StatementPrinter struct {
 }
 
 type StatementData struct {
-	Customer     string
-	Performances []EnrichedPerformance
-	TotalAmount  int
+	Customer           string
+	Performances       []EnrichedPerformance
+	TotalAmount        int
+	TotalVolumeCredits int
 }
 
 type EnrichedPerformance struct {
@@ -41,8 +42,9 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	}
 	statementData.Performances = enrichedPerformances
 	statementData.TotalAmount = totalAmount(enrichedPerformances)
+	statementData.TotalVolumeCredits = s.totalVolumeCredits()
 
-	return renderPlayText(s, statementData)
+	return renderPlayText(statementData)
 }
 
 func (s StatementPrinter) enrichPerformance(perf Performance) (EnrichedPerformance, error) {
@@ -57,7 +59,7 @@ func (s StatementPrinter) enrichPerformance(perf Performance) (EnrichedPerforman
 	return result, nil
 }
 
-func renderPlayText(s StatementPrinter, data StatementData) (string, error) {
+func renderPlayText(data StatementData) (string, error) {
 	result := fmt.Sprintf("Statement for %s\n", data.Customer)
 
 	for _, perf := range data.Performances {
@@ -70,7 +72,7 @@ func renderPlayText(s StatementPrinter, data StatementData) (string, error) {
 	}
 
 	result += fmt.Sprintf("Amount owed is %s\n", usd(data.TotalAmount))
-	result += fmt.Sprintf("You earned %d credits\n", s.totalVolumeCredits())
+	result += fmt.Sprintf("You earned %d credits\n", data.TotalVolumeCredits)
 
 	return result, nil
 }
