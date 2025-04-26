@@ -9,7 +9,7 @@ import (
 
 type StatementPrinter struct{}
 
-func (StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
+func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
 	totalAmount := 0
 	volumeCredits := 0
 	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
@@ -18,22 +18,9 @@ func (StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, e
 
 	for _, perf := range invoice.Performances {
 		play := plays[perf.PlayID]
-		thisAmount := 0
-
-		switch play.Type {
-		case "tragedy":
-			thisAmount = 40000
-			if perf.Audience > 30 {
-				thisAmount += 1000 * (perf.Audience - 30)
-			}
-		case "comedy":
-			thisAmount = 30000
-			if perf.Audience > 20 {
-				thisAmount += 10000 + 500*(perf.Audience-20)
-			}
-			thisAmount += 300 * perf.Audience
-		default:
-			return "", fmt.Errorf("unknown type: %s", play.Type)
+		amount, err := s.amount(play, perf)
+		if err != nil {
+			return "", err
 		}
 
 		// add volume credits
@@ -47,12 +34,34 @@ func (StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, e
 		result += fmt.Sprintf(
 			"  %s: %s (%d seats)\n",
 			play.Name,
-			ac.FormatMoney(float64(thisAmount)/100),
+			ac.FormatMoney(float64(amount)/100),
 			perf.Audience,
 		)
-		totalAmount += thisAmount
+		totalAmount += amount
 	}
 	result += fmt.Sprintf("Amount owed is %s\n", ac.FormatMoney(float64(totalAmount)/100))
 	result += fmt.Sprintf("You earned %d credits\n", volumeCredits)
+	return result, nil
+}
+
+func (StatementPrinter) amount(play Play, perf Performance) (int, error) {
+	result := 0
+
+	switch play.Type {
+	case "tragedy":
+		result = 40000
+		if perf.Audience > 30 {
+			result += 1000 * (perf.Audience - 30)
+		}
+	case "comedy":
+		result = 30000
+		if perf.Audience > 20 {
+			result += 10000 + 500*(perf.Audience-20)
+		}
+		result += 300 * perf.Audience
+	default:
+		return 0, fmt.Errorf("unknown type: %s", play.Type)
+	}
+
 	return result, nil
 }
