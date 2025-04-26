@@ -18,7 +18,6 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 
 	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
 
-	totalAmount := 0
 	for _, perf := range invoice.Performances {
 		amount, err := s.amount(s.playFor(perf), perf)
 		if err != nil {
@@ -31,12 +30,28 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 			usd(amount),
 			perf.Audience,
 		)
-		totalAmount += amount
 	}
 
+	totalAmount, err := s.totalAmount()
+	if err != nil {
+		return "", err
+	}
 	result += fmt.Sprintf("Amount owed is %s\n", usd(totalAmount))
+
 	result += fmt.Sprintf("You earned %d credits\n", s.totalVolumeCredits())
 
+	return result, nil
+}
+
+func (s StatementPrinter) totalAmount() (int, error) {
+	result := 0
+	for _, perf := range s.invoice.Performances {
+		amount, err := s.amount(s.playFor(perf), perf)
+		if err != nil {
+			return 0, err
+		}
+		result += amount
+	}
 	return result, nil
 }
 
