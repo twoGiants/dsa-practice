@@ -24,6 +24,7 @@ type EnrichedPerformance struct {
 	Name     string
 	Amount   int
 	Audience int
+	Type     string
 }
 
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
@@ -43,8 +44,9 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 		enrichedPerformances = append(enrichedPerformances, ep)
 	}
 	statementData.Performances = enrichedPerformances
+
 	statementData.TotalAmount = statementData.totalAmount()
-	statementData.TotalVolumeCredits = s.totalVolumeCredits()
+	statementData.TotalVolumeCredits = statementData.totalVolumeCredits()
 
 	return renderPlayText(statementData)
 }
@@ -58,6 +60,8 @@ func (s StatementData) enrichPerformance(perf Performance) (EnrichedPerformance,
 	result.Amount = amount
 	result.Audience = perf.Audience
 	result.Name = s.playFor(perf).Name
+	result.Type = s.playFor(perf).Type
+
 	return result, nil
 }
 
@@ -87,6 +91,32 @@ func (s StatementData) playFor(perf Performance) Play {
 	return s.plays[perf.PlayID]
 }
 
+func (s StatementData) totalAmount() int {
+	result := 0
+	for _, perf := range s.Performances {
+		result += perf.Amount
+	}
+	return result
+}
+
+func (s StatementData) totalVolumeCredits() int {
+	result := 0
+	for _, perf := range s.Performances {
+		result += s.volumeCreditsFor(perf)
+	}
+	return result
+}
+
+func (StatementData) volumeCreditsFor(perf EnrichedPerformance) int {
+	result := 0
+	result += int(math.Max(float64(perf.Audience)-30, 0))
+
+	if perf.Type == "comedy" {
+		result += int(math.Floor(float64(perf.Audience) / 5))
+	}
+	return result
+}
+
 func renderPlayText(data StatementData) (string, error) {
 	result := fmt.Sprintf("Statement for %s\n", data.Customer)
 
@@ -105,37 +135,7 @@ func renderPlayText(data StatementData) (string, error) {
 	return result, nil
 }
 
-func (s StatementData) totalAmount() int {
-	result := 0
-	for _, perf := range s.Performances {
-		result += perf.Amount
-	}
-	return result
-}
-
-func (s StatementPrinter) totalVolumeCredits() int {
-	result := 0
-	for _, perf := range s.invoice.Performances {
-		result += s.volumeCreditsFor(perf)
-	}
-	return result
-}
-
 func usd(amount int) string {
 	ac := accounting.Accounting{Symbol: "$", Precision: 2}
 	return ac.FormatMoney(float64(amount) / 100)
-}
-
-func (s StatementPrinter) volumeCreditsFor(perf Performance) int {
-	result := 0
-	result += int(math.Max(float64(perf.Audience)-30, 0))
-
-	if s.playFor(perf).Type == "comedy" {
-		result += int(math.Floor(float64(perf.Audience) / 5))
-	}
-	return result
-}
-
-func (s StatementPrinter) playFor(perf Performance) Play {
-	return s.plays[perf.PlayID]
 }
