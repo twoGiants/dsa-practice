@@ -1,4 +1,4 @@
-package theatre
+package performance
 
 import (
 	"dsa/refactoring/theatre-practice/common"

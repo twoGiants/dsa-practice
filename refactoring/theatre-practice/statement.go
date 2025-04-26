@@ -2,6 +2,7 @@ package theatre
 
 import (
 	"dsa/refactoring/theatre-practice/common"
+	"dsa/refactoring/theatre-practice/performance"
 	"fmt"
 
 	"github.com/leekchan/accounting"
@@ -10,7 +11,7 @@ import (
 type StatementPrinter struct{}
 
 func (s StatementPrinter) Print(invoice common.Invoice, plays map[string]common.Play) (string, error) {
-	statementData, err := CreateStatementData(invoice, plays)
+	statementData, err := performance.CreateStatementData(invoice, plays)
 	if err != nil {
 		return "", err
 	}
@@ -18,7 +19,7 @@ func (s StatementPrinter) Print(invoice common.Invoice, plays map[string]common.
 	return renderPlayText(statementData)
 }
 
-func renderPlayText(data StatementData) (string, error) {
+func renderPlayText(data performance.StatementData) (string, error) {
 	result := fmt.Sprintf("Statement for %s\n", data.Customer)
 
 	for _, perf := range data.Performances {
