@@ -16,6 +16,10 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	s.plays = plays
 	s.invoice = invoice
 
+	return renderPlayText(s, invoice, plays)
+}
+
+func renderPlayText(s StatementPrinter, invoice Invoice, plays map[string]Play) (string, error) {
 	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
 
 	for _, perf := range invoice.Performances {
@@ -71,6 +75,7 @@ func usd(amount int) string {
 func (s StatementPrinter) volumeCreditsFor(perf Performance) int {
 	result := 0
 	result += int(math.Max(float64(perf.Audience)-30, 0))
+
 	if s.playFor(perf).Type == "comedy" {
 		result += int(math.Floor(float64(perf.Audience) / 5))
 	}
