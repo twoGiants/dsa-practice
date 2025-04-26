@@ -21,18 +21,12 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	ac := accounting.Accounting{Symbol: "$", Precision: 2}
 
 	for _, perf := range invoice.Performances {
+		volumeCredits += s.volumeCreditsFor(perf)
+
 		amount, err := s.amount(s.playFor(perf), perf)
 		if err != nil {
 			return "", err
 		}
-
-		// add volume credits
-		volumeCredits += int(math.Max(float64(perf.Audience)-30, 0))
-		// add extra credit for every ten comedy attendees
-		if s.playFor(perf).Type == "comedy" {
-			volumeCredits += int(math.Floor(float64(perf.Audience) / 5))
-		}
-
 		// print line for this order
 		result += fmt.Sprintf(
 			"  %s: %s (%d seats)\n",
@@ -45,6 +39,15 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	result += fmt.Sprintf("Amount owed is %s\n", ac.FormatMoney(float64(totalAmount)/100))
 	result += fmt.Sprintf("You earned %d credits\n", volumeCredits)
 	return result, nil
+}
+
+func (s StatementPrinter) volumeCreditsFor(perf Performance) int {
+	result := 0
+	result += int(math.Max(float64(perf.Audience)-30, 0))
+	if s.playFor(perf).Type == "comedy" {
+		result += int(math.Floor(float64(perf.Audience) / 5))
+	}
+	return result
 }
 
 func (s StatementPrinter) playFor(perf Performance) Play {
