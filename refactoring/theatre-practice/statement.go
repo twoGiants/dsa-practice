@@ -7,9 +7,13 @@ import (
 	"github.com/leekchan/accounting"
 )
 
-type StatementPrinter struct{}
+type StatementPrinter struct {
+	plays map[string]Play
+}
 
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
+	s.plays = plays
+
 	totalAmount := 0
 	volumeCredits := 0
 	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
@@ -17,8 +21,7 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	ac := accounting.Accounting{Symbol: "$", Precision: 2}
 
 	for _, perf := range invoice.Performances {
-		play := plays[perf.PlayID]
-		amount, err := s.amount(play, perf)
+		amount, err := s.amount(s.playFor(perf), perf)
 		if err != nil {
 			return "", err
 		}
@@ -26,14 +29,14 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 		// add volume credits
 		volumeCredits += int(math.Max(float64(perf.Audience)-30, 0))
 		// add extra credit for every ten comedy attendees
-		if play.Type == "comedy" {
+		if s.playFor(perf).Type == "comedy" {
 			volumeCredits += int(math.Floor(float64(perf.Audience) / 5))
 		}
 
 		// print line for this order
 		result += fmt.Sprintf(
 			"  %s: %s (%d seats)\n",
-			play.Name,
+			s.playFor(perf).Name,
 			ac.FormatMoney(float64(amount)/100),
 			perf.Audience,
 		)
@@ -42,6 +45,10 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	result += fmt.Sprintf("Amount owed is %s\n", ac.FormatMoney(float64(totalAmount)/100))
 	result += fmt.Sprintf("You earned %d credits\n", volumeCredits)
 	return result, nil
+}
+
+func (s StatementPrinter) playFor(perf Performance) Play {
+	return s.plays[perf.PlayID]
 }
 
 func (StatementPrinter) amount(play Play, perf Performance) (int, error) {
