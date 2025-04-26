@@ -16,10 +16,10 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	s.plays = plays
 	s.invoice = invoice
 
-	return renderPlayText(s, invoice, plays)
+	return renderPlayText(s, invoice)
 }
 
-func renderPlayText(s StatementPrinter, invoice Invoice, plays map[string]Play) (string, error) {
+func renderPlayText(s StatementPrinter, invoice Invoice) (string, error) {
 	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
 
 	for _, perf := range invoice.Performances {
