@@ -7,10 +7,7 @@ import (
 	"github.com/leekchan/accounting"
 )
 
-type StatementPrinter struct {
-	plays   map[string]Play
-	invoice Invoice
-}
+type StatementPrinter struct{}
 
 type StatementData struct {
 	Customer           string
@@ -28,9 +25,6 @@ type EnrichedPerformance struct {
 }
 
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
-	s.plays = plays
-	s.invoice = invoice
-
 	statementData := StatementData{}
 	statementData.plays = plays
 	statementData.Customer = invoice.Customer
