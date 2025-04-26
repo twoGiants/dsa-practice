@@ -8,19 +8,18 @@ import (
 )
 
 type StatementPrinter struct {
-	plays map[string]Play
+	plays   map[string]Play
+	invoice Invoice
 }
 
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
 	s.plays = plays
+	s.invoice = invoice
 
 	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
 
 	totalAmount := 0
-	volumeCredits := 0
 	for _, perf := range invoice.Performances {
-		volumeCredits += s.volumeCreditsFor(perf)
-
 		amount, err := s.amount(s.playFor(perf), perf)
 		if err != nil {
 			return "", err
@@ -34,9 +33,19 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 		)
 		totalAmount += amount
 	}
+
 	result += fmt.Sprintf("Amount owed is %s\n", usd(totalAmount))
-	result += fmt.Sprintf("You earned %d credits\n", volumeCredits)
+	result += fmt.Sprintf("You earned %d credits\n", s.totalVolumeCredits())
+
 	return result, nil
+}
+
+func (s StatementPrinter) totalVolumeCredits() int {
+	result := 0
+	for _, perf := range s.invoice.Performances {
+		result += s.volumeCreditsFor(perf)
+	}
+	return result
 }
 
 func usd(amount int) string {
