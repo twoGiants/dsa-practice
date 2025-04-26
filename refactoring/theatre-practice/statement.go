@@ -15,6 +15,7 @@ type StatementPrinter struct {
 type StatementData struct {
 	Customer     string
 	Performances []EnrichedPerformance
+	TotalAmount  int
 }
 
 type EnrichedPerformance struct {
@@ -39,8 +40,9 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 		enrichedPerformances = append(enrichedPerformances, ep)
 	}
 	statementData.Performances = enrichedPerformances
+	statementData.TotalAmount = totalAmount(enrichedPerformances)
 
-	return renderPlayText(s, statementData, invoice)
+	return renderPlayText(s, statementData)
 }
 
 func (s StatementPrinter) enrichPerformance(perf Performance) (EnrichedPerformance, error) {
@@ -55,11 +57,10 @@ func (s StatementPrinter) enrichPerformance(perf Performance) (EnrichedPerforman
 	return result, nil
 }
 
-func renderPlayText(s StatementPrinter, data StatementData, invoice Invoice) (string, error) {
+func renderPlayText(s StatementPrinter, data StatementData) (string, error) {
 	result := fmt.Sprintf("Statement for %s\n", data.Customer)
 
 	for _, perf := range data.Performances {
-		// print line for this order
 		result += fmt.Sprintf(
 			"  %s: %s (%d seats)\n",
 			perf.Name,
@@ -68,27 +69,18 @@ func renderPlayText(s StatementPrinter, data StatementData, invoice Invoice) (st
 		)
 	}
 
-	totalAmount, err := s.totalAmount()
-	if err != nil {
-		return "", err
-	}
-	result += fmt.Sprintf("Amount owed is %s\n", usd(totalAmount))
-
+	result += fmt.Sprintf("Amount owed is %s\n", usd(data.TotalAmount))
 	result += fmt.Sprintf("You earned %d credits\n", s.totalVolumeCredits())
 
 	return result, nil
 }
 
-func (s StatementPrinter) totalAmount() (int, error) {
+func totalAmount(ep []EnrichedPerformance) int {
 	result := 0
-	for _, perf := range s.invoice.Performances {
-		amount, err := s.amount(perf)
-		if err != nil {
-			return 0, err
-		}
-		result += amount
+	for _, perf := range ep {
+		result += perf.Amount
 	}
-	return result, nil
+	return result
 }
 
 func (s StatementPrinter) totalVolumeCredits() int {
