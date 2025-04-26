@@ -19,7 +19,7 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
 
 	for _, perf := range invoice.Performances {
-		amount, err := s.amount(s.playFor(perf), perf)
+		amount, err := s.amount(perf)
 		if err != nil {
 			return "", err
 		}
@@ -46,7 +46,7 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 func (s StatementPrinter) totalAmount() (int, error) {
 	result := 0
 	for _, perf := range s.invoice.Performances {
-		amount, err := s.amount(s.playFor(perf), perf)
+		amount, err := s.amount(perf)
 		if err != nil {
 			return 0, err
 		}
@@ -81,10 +81,10 @@ func (s StatementPrinter) playFor(perf Performance) Play {
 	return s.plays[perf.PlayID]
 }
 
-func (StatementPrinter) amount(play Play, perf Performance) (int, error) {
+func (s StatementPrinter) amount(perf Performance) (int, error) {
 	result := 0
 
-	switch play.Type {
+	switch s.playFor(perf).Type {
 	case "tragedy":
 		result = 40000
 		if perf.Audience > 30 {
@@ -97,7 +97,7 @@ func (StatementPrinter) amount(play Play, perf Performance) (int, error) {
 		}
 		result += 300 * perf.Audience
 	default:
-		return 0, fmt.Errorf("unknown type: %s", play.Type)
+		return 0, fmt.Errorf("unknown type: %s", s.playFor(perf).Type)
 	}
 
 	return result, nil
