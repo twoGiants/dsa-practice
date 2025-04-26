@@ -15,6 +15,7 @@ type StatementData struct {
 }
 
 type enrichedPerformance struct {
+	playID   string
 	Name     string
 	Amount   int
 	Audience int
@@ -45,8 +46,9 @@ func CreateStatementData(invoice common.Invoice, plays map[string]common.Play) (
 func (s StatementData) enrichPerformance(perf common.Performance) (enrichedPerformance, error) {
 	result := enrichedPerformance{}
 	result.Audience = perf.Audience
-	result.Name = s.playFor(perf).Name
-	result.theType = s.playFor(perf).Type
+	result.playID = perf.PlayID
+	result.Name = s.playFor(result).Name
+	result.theType = s.playFor(result).Type
 
 	amount, err := s.amount(result)
 	if err != nil {
@@ -59,7 +61,6 @@ func (s StatementData) enrichPerformance(perf common.Performance) (enrichedPerfo
 
 func (StatementData) amount(perf enrichedPerformance) (int, error) {
 	result := 0
-
 	switch perf.theType {
 	case "tragedy":
 		result = 40000
@@ -75,12 +76,11 @@ func (StatementData) amount(perf enrichedPerformance) (int, error) {
 	default:
 		return 0, fmt.Errorf("unknown type: %s", perf.theType)
 	}
-
 	return result, nil
 }
 
-func (s StatementData) playFor(perf common.Performance) common.Play {
-	return s.plays[perf.PlayID]
+func (s StatementData) playFor(perf enrichedPerformance) common.Play {
+	return s.plays[perf.playID]
 }
 
 func (s StatementData) totalAmount() int {
