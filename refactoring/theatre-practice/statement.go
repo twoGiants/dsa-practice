@@ -1,6 +1,7 @@
 package theatre
 
 import (
+	"dsa/refactoring/theatre-practice/common"
 	"fmt"
 
 	"github.com/leekchan/accounting"
@@ -8,7 +9,7 @@ import (
 
 type StatementPrinter struct{}
 
-func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
+func (s StatementPrinter) Print(invoice common.Invoice, plays map[string]common.Play) (string, error) {
 	statementData, err := CreateStatementData(invoice, plays)
 	if err != nil {
 		return "", err

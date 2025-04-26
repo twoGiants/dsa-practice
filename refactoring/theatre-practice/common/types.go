@@ -1,4 +1,4 @@
-package theatre
+package common
 
 type Performance struct {
 	PlayID   string

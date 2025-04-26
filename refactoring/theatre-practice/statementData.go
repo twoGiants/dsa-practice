@@ -1,6 +1,7 @@
 package theatre
 
 import (
+	"dsa/refactoring/theatre-practice/common"
 	"fmt"
 	"math"
 )
@@ -10,17 +11,17 @@ type StatementData struct {
 	Performances       []enrichedPerformance
 	TotalAmount        int
 	TotalVolumeCredits int
-	plays              map[string]Play
+	plays              map[string]common.Play
 }
 
 type enrichedPerformance struct {
 	Name     string
 	Amount   int
 	Audience int
-	Type     string
+	theType  string
 }
 
-func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData, error) {
+func CreateStatementData(invoice common.Invoice, plays map[string]common.Play) (StatementData, error) {
 	result := StatementData{}
 	result.plays = plays
 	result.Customer = invoice.Customer
@@ -41,7 +42,7 @@ func CreateStatementData(invoice Invoice, plays map[string]Play) (StatementData,
 	return result, nil
 }
 
-func (s StatementData) enrichPerformance(perf Performance) (enrichedPerformance, error) {
+func (s StatementData) enrichPerformance(perf common.Performance) (enrichedPerformance, error) {
 	result := enrichedPerformance{}
 	amount, err := s.amount(perf)
 	if err != nil {
@@ -50,12 +51,12 @@ func (s StatementData) enrichPerformance(perf Performance) (enrichedPerformance,
 	result.Amount = amount
 	result.Audience = perf.Audience
 	result.Name = s.playFor(perf).Name
-	result.Type = s.playFor(perf).Type
+	result.theType = s.playFor(perf).Type
 
 	return result, nil
 }
 
-func (s StatementData) amount(perf Performance) (int, error) {
+func (s StatementData) amount(perf common.Performance) (int, error) {
 	result := 0
 
 	switch s.playFor(perf).Type {
@@ -77,7 +78,7 @@ func (s StatementData) amount(perf Performance) (int, error) {
 	return result, nil
 }
 
-func (s StatementData) playFor(perf Performance) Play {
+func (s StatementData) playFor(perf common.Performance) common.Play {
 	return s.plays[perf.PlayID]
 }
 
@@ -101,7 +102,7 @@ func (StatementData) volumeCreditsFor(perf enrichedPerformance) int {
 	result := 0
 	result += int(math.Max(float64(perf.Audience)-30, 0))
 
-	if perf.Type == "comedy" {
+	if perf.theType == "comedy" {
 		result += int(math.Floor(float64(perf.Audience) / 5))
 	}
 	return result
