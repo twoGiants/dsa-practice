@@ -50,41 +50,58 @@ func (s StatementData) enrichPerformance(perf common.Performance) (enrichedPerfo
 	result.Name = s.playFor(result).Name
 	result.theType = s.playFor(result).Type
 
-	amount, err := s.amount(result)
+	calculator, err := createCalculator(result)
 	if err != nil {
 		return enrichedPerformance{}, err
 	}
-	result.Amount = amount
+	result.Amount = calculator.amount()
 
 	return result, nil
 }
 
-type performanceCalculator struct {
+type performanceCalculator interface {
+	amount() int
+}
+
+type performanceCalculatorImpl struct {
 	perf enrichedPerformance
 }
 
-func (p performanceCalculator) amount() (int, error) {
-	result := 0
-	switch p.perf.theType {
-	case "tragedy":
-		result = 40000
-		if p.perf.Audience > 30 {
-			result += 1000 * (p.perf.Audience - 30)
-		}
-	case "comedy":
-		result = 30000
-		if p.perf.Audience > 20 {
-			result += 10000 + 500*(p.perf.Audience-20)
-		}
-		result += 300 * p.perf.Audience
-	default:
-		return 0, fmt.Errorf("unknown type: %s", p.perf.theType)
-	}
-	return result, nil
+type tragedyCalculatorImpl struct {
+	performanceCalculatorImpl
 }
 
-func (StatementData) amount(perf enrichedPerformance) (int, error) {
-	return performanceCalculator{perf}.amount()
+func (t tragedyCalculatorImpl) amount() int {
+	result := 40000
+	if t.perf.Audience > 30 {
+		result += 1000 * (t.perf.Audience - 30)
+	}
+	return result
+}
+
+type comedyCalculatorImpl struct {
+	performanceCalculatorImpl
+}
+
+func (t comedyCalculatorImpl) amount() int {
+	result := 30000
+	if t.perf.Audience > 20 {
+		result += 10000 + 500*(t.perf.Audience-20)
+	}
+	result += 300 * t.perf.Audience
+	return result
+}
+
+func createCalculator(perf enrichedPerformance) (performanceCalculator, error) {
+	calc := performanceCalculatorImpl{perf}
+	switch perf.theType {
+	case "tragedy":
+		return tragedyCalculatorImpl{calc}, nil
+	case "comedy":
+		return comedyCalculatorImpl{calc}, nil
+	default:
+		return nil, fmt.Errorf("unknown type: %s", perf.theType)
+	}
 }
 
 func (s StatementData) playFor(perf enrichedPerformance) common.Play {
