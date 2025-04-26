@@ -13,7 +13,14 @@ type StatementPrinter struct {
 }
 
 type StatementData struct {
-	Customer string
+	Customer     string
+	Performances []EnrichedPerformance
+}
+
+type EnrichedPerformance struct {
+	Name     string
+	Amount   int
+	Audience int
 }
 
 func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string, error) {
@@ -23,22 +30,40 @@ func (s StatementPrinter) Print(invoice Invoice, plays map[string]Play) (string,
 	statementData := StatementData{}
 	statementData.Customer = invoice.Customer
 
+	enrichedPerformances := []EnrichedPerformance{}
+	for _, perf := range invoice.Performances {
+		ep, err := s.enrichPerformance(perf)
+		if err != nil {
+			return "", err
+		}
+		enrichedPerformances = append(enrichedPerformances, ep)
+	}
+	statementData.Performances = enrichedPerformances
+
 	return renderPlayText(s, statementData, invoice)
+}
+
+func (s StatementPrinter) enrichPerformance(perf Performance) (EnrichedPerformance, error) {
+	result := EnrichedPerformance{}
+	amount, err := s.amount(perf)
+	if err != nil {
+		return EnrichedPerformance{}, err
+	}
+	result.Amount = amount
+	result.Audience = perf.Audience
+	result.Name = s.playFor(perf).Name
+	return result, nil
 }
 
 func renderPlayText(s StatementPrinter, data StatementData, invoice Invoice) (string, error) {
 	result := fmt.Sprintf("Statement for %s\n", data.Customer)
 
-	for _, perf := range invoice.Performances {
-		amount, err := s.amount(perf)
-		if err != nil {
-			return "", err
-		}
+	for _, perf := range data.Performances {
 		// print line for this order
 		result += fmt.Sprintf(
 			"  %s: %s (%d seats)\n",
-			s.playFor(perf).Name,
-			usd(amount),
+			perf.Name,
+			usd(perf.Amount),
 			perf.Audience,
 		)
 	}
