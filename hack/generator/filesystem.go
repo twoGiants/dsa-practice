@@ -6,11 +6,6 @@ import (
 	"path/filepath"
 )
 
-type Filesystem interface {
-	Load(from string) (string, error)
-	Save(data, to string) error
-}
-
 type FilesystemImpl struct{}
 
 func NewFilesystem() FilesystemImpl {
@@ -29,9 +24,9 @@ func (fsi FilesystemImpl) Load(from string) (string, error) {
 func (fsi FilesystemImpl) Save(data, to string) error {
 	fmt.Println(data)
 	fmt.Println(to)
-	if err := os.WriteFile(to, []byte(data), 0600); err != nil {
-		return err
-	}
+	return os.WriteFile(to, []byte(data), 0600)
+}
 
-	return nil
+func (fsi FilesystemImpl) Delete(from string) error {
+	return os.RemoveAll(from)
 }
