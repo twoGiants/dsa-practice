@@ -284,7 +284,6 @@ func FindDisappearedNumbers(nums []int) []int {
 			result = append(result, i+1)
 		}
 	}
-
 	return result
 }
 

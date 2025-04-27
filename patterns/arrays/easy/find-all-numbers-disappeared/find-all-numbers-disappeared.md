@@ -4,14 +4,14 @@ Given an array `nums` of n integers where `nums[i]` is in the range `[1, n]`, re
 
 **Follow up:** Could you do it without extra space and in `O(n)` runtime? You may assume the returned list does not count as extra space.
 
-## Example 1:
+## Example 1
 
 ```ts
 Input: nums = [4,3,2,7,8,2,3,1]
 Output: [5,6]
 ```
 
-## Example 2:
+## Example 2
 
 ```ts
 Input: nums = [1,1]
@@ -28,3 +28,4 @@ Output: [2]
 
 - [x] retained 24.02.25
 - [x] retained 16.03.25
+- [x] retained 27.04.25
