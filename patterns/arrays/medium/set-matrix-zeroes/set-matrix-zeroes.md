@@ -6,7 +6,7 @@ You must update the matrix *in-place*.
 
 **Follow up:** Could you solve it using `O(1)` space?
 
-## Example 1:
+## Example 1
 
 ![image](ex1.png)
 
@@ -22,7 +22,7 @@ Output: [
 ]
 ```
 
-## Example 2:
+## Example 2
 
 ![image](ex2.png)
 
@@ -40,7 +40,7 @@ Output: [
 ]
 ```
 
-## Example 3:
+## Example 3
 
 ![image](ex3.jpg)
 
@@ -58,7 +58,7 @@ Output: [
 ]
 ```
 
-## Example 4:
+## Example 4
 
 ![image](ex4.jpg)
 
@@ -78,10 +78,11 @@ Output: [
 
 ## Constrains
 
--  `1 <= matrix.length, matrix[0].length <= 100`
--  `-2^31 <= matrix[i][j] <= (2^31) - 1`
+- `1 <= matrix.length, matrix[0].length <= 100`
+- `-2^31 <= matrix[i][j] <= (2^31) - 1`
 
 ## Retention Tracking
 
 - [x] retained 20.02.25
 - [x] retained 09.03.25
+- [x] retained 27.04.25
