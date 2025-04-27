@@ -97,7 +97,6 @@ func IsAnagram(s, t string) bool {
 
 func LongestConsecutive(nums []int) int {
 	uniqueNums := make(map[int]bool)
-
 	for _, num := range nums {
 		uniqueNums[num] = true
 	}
