@@ -37,19 +37,36 @@
           - [x] add DocsFile interface to use Content
           - [x] add docFilePath and smallKebab methods to DocsBoilerplate => doesn't feel right
           - [x] create `eoDocs.go` entrypoint for manual testing => works
+        - [x] 27.04.25
+          - [x] understand eo implementation => not easy after a month
+            - next time read through the example code below
+            - go from EoDocsCreate object by object
+            - the boilerplate can save itself to provided Store and delete itself
+            - the store is implemented by the filesystem
+            - a common DocsFile interface is implemented by Boilerplate and Template so they can interact internally
+            - actual data is provided by DocsTemplateData and put into the Template by the Boilerplate
+          - [x] add `Delete(fs filesystem)` method to DocsBoilerplate
+          - [x] implement integration tests for Create and Delete
     - [x] chore: switch git setting repo to ssh
   - NEXT:
     - [ ] EO version
-      - [ ] CONTINUE HERE: read what you did on 22.04.25
-      - [ ] refactor docsFilePath and smallKebab
-      - [ ] add `Delete(fs filesystem)` method to DocsBoilerplate
+      - [ ] CONTINUE HERE: read what you did on 27.04.25, THEN: have something e2e and then refactor and try other implementations like from James Shore, Hexagonal Architecture, procedural etc.
+      - Whats left for E2E execution?
+        - [ ] refactor docsFilePath and smallKebab
+        - tests for Save and Delete using Nullable filesystem
+        - `Pattern` object (like App/Entrypoint) which centralize the creation of all the boilerplate for one pattern
+          - uses DocsBoilerplate
+          - uses CLI
+        - CLI: reads command and pattern from command line user input => separate package, no connection to DocsBoilerplate
+      - tests
       - [ ] can I use accessor functions w/o get? not sure tmpl.Execute accepts
     - [ ] clean up main
     - [ ] clarify what was this task: "exercise directory deletion => no test"
     - [ ] idea: create Generator struct with ?Process(request) and ?Execute() methods
 
 This is procedural thinking:
-- receive config info with: 
+
+- receive config info with:
   - where is template, where to save boilerplate
   - data for template parameters
 - load template from disk
@@ -57,19 +74,20 @@ This is procedural thinking:
 - store boilerplate to disk
 
 Is this living objects thinking?:
+
 - The boilerplate docs file stores itself
   - it wraps a template file
-   - which provides its content
-   - knows how to load itself
+    - which provides its content
+    - knows how to load itself
   - it wraps a config to know where to store itself
-  - it wraps data which is used to populate the template 
+  - it wraps data which is used to populate the template
 
 *Elegant Objects* inspired prototype:
 
 ```go
 type Filesystem interface {
-	Load(from string) (string, error)
-	Save(data, to string) error
+  Load(from string) (string, error)
+  Save(data, to string) error
 }
 
 filesystem := Filesystem()
