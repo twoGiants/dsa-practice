@@ -9,7 +9,7 @@ func EoDocsCreate() error {
 
 	docsBoilerplate := NewDocsBoilerplate(
 		config.To,
-		NewDocsTemplate(config, filesystem),
+		NewDocsTemplate(config.From, filesystem),
 		NewDocsTemplateData("Missing Number", "missing-number"),
 	)
 
@@ -25,7 +25,7 @@ func EoDocsDelete() error {
 
 	docsBoilerplate := NewDocsBoilerplate(
 		config.To,
-		NewDocsTemplate(config, filesystem),
+		NewDocsTemplate(config.From, filesystem),
 		NewDocsTemplateData("Missing Number", "missing-number"),
 	)
 
