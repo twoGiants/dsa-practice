@@ -15,3 +15,19 @@ func EoDocsCreate() error {
 
 	return docsBoilerplate.Save(filesystem)
 }
+
+func EoDocsDelete() error {
+	filesystem := NewFilesystem()
+	config := Config{
+		To:   "../../temp",
+		From: "../boilerplate/docs.gotmpl",
+	}
+
+	docsBoilerplate := NewDocsBoilerplate(
+		config,
+		NewDocsTemplate(config, filesystem),
+		NewDocsTemplateData("Missing Number", "missing-number"),
+	)
+
+	return docsBoilerplate.Delete(filesystem)
+}
