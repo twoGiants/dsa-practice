@@ -7,7 +7,7 @@ import (
 	"text/template"
 )
 
-type StorageLocation interface {
+type Store interface {
 	Load(from string) (string, error)
 	Save(data, to string) error
 	Delete(from string) error
@@ -42,7 +42,7 @@ func (dob *DocsBoilerplate) Content() (string, error) {
 	return result.String(), nil
 }
 
-func (dob *DocsBoilerplate) Save(sl StorageLocation) error {
+func (dob *DocsBoilerplate) Save(store Store) error {
 	fmt.Println("Hello")
 	data, err := dob.Content()
 	if err != nil {
@@ -51,11 +51,11 @@ func (dob *DocsBoilerplate) Save(sl StorageLocation) error {
 
 	fmt.Println(dob.docsFilePath())
 
-	return sl.Save(data, dob.docsFilePath())
+	return store.Save(data, dob.docsFilePath())
 }
 
-func (dob *DocsBoilerplate) Delete(sl StorageLocation) error {
-	return sl.Delete(dob.docsFilePath())
+func (dob *DocsBoilerplate) Delete(store Store) error {
+	return store.Delete(dob.docsFilePath())
 }
 
 func (dob *DocsBoilerplate) docsFilePath() string {

@@ -1,14 +1,14 @@
 package generator
 
 type DocsTemplate struct {
-	conf Config
-	sl   StorageLocation
+	conf  Config
+	store Store
 }
 
-func NewDocsTemplate(conf Config, sl StorageLocation) DocsTemplate {
-	return DocsTemplate{conf, sl}
+func NewDocsTemplate(c Config, store Store) DocsTemplate {
+	return DocsTemplate{c, store}
 }
 
 func (dt DocsTemplate) Content() (string, error) {
-	return dt.sl.Load(dt.conf.From)
+	return dt.store.Load(dt.conf.From)
 }
