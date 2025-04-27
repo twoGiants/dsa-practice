@@ -2,13 +2,13 @@ package generator
 
 type DocsTemplate struct {
 	conf Config
-	fs   Filesystem
+	sl   StorageLocation
 }
 
-func NewDocsTemplate(conf Config, fs Filesystem) DocsTemplate {
-	return DocsTemplate{conf, fs}
+func NewDocsTemplate(conf Config, sl StorageLocation) DocsTemplate {
+	return DocsTemplate{conf, sl}
 }
 
 func (dt DocsTemplate) Content() (string, error) {
-	return dt.fs.Load(dt.conf.From)
+	return dt.sl.Load(dt.conf.From)
 }

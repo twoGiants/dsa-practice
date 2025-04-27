@@ -42,7 +42,7 @@ func (dob *DocsBoilerplate) Content() (string, error) {
 	return result.String(), nil
 }
 
-func (dob *DocsBoilerplate) Save(fs Filesystem) error {
+func (dob *DocsBoilerplate) Save(sl StorageLocation) error {
 	fmt.Println("Hello")
 	data, err := dob.Content()
 	if err != nil {
@@ -51,7 +51,11 @@ func (dob *DocsBoilerplate) Save(fs Filesystem) error {
 
 	fmt.Println(dob.docsFilePath())
 
-	return fs.Save(data, dob.docsFilePath())
+	return sl.Save(data, dob.docsFilePath())
+}
+
+func (dob *DocsBoilerplate) Delete(sl StorageLocation) error {
+	return sl.Delete(dob.docsFilePath())
 }
 
 func (dob *DocsBoilerplate) docsFilePath() string {
