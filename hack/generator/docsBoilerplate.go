@@ -7,12 +7,10 @@ import (
 	"text/template"
 )
 
-type DocsTemplateData struct {
-	Title, SmallTitle string
-}
-
-func NewDocsTemplateData(t, s string) DocsTemplateData {
-	return DocsTemplateData{t, s}
+type StorageLocation interface {
+	Load(from string) (string, error)
+	Save(data, to string) error
+	Delete(from string) error
 }
 
 type DocsBoilerplate struct {
