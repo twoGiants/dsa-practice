@@ -1,10 +1,10 @@
 package generator
 
-func EoDocs() error {
+func EoDocsCreate() error {
 	filesystem := NewFilesystem()
 	config := Config{
-		To:   "temp",
-		From: "hack/boilerplate/docs.gotmpl",
+		To:   "../../temp",
+		From: "../boilerplate/docs.gotmpl",
 	}
 
 	docsBoilerplate := NewDocsBoilerplate(
