@@ -43,7 +43,6 @@ func (dob *DocsBoilerplate) Content() (string, error) {
 }
 
 func (dob *DocsBoilerplate) Save(store Store) error {
-	fmt.Println("Hello")
 	data, err := dob.Content()
 	if err != nil {
 		return err

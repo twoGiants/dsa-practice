@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -22,8 +21,6 @@ func (fsi FilesystemImpl) Load(from string) (string, error) {
 }
 
 func (fsi FilesystemImpl) Save(data, to string) error {
-	fmt.Println(data)
-	fmt.Println(to)
 	return os.WriteFile(to, []byte(data), 0600)
 }
 
