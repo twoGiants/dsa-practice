@@ -17,22 +17,41 @@ func Test_CreateAndDeleteDocsBoilerplateInTemp(t *testing.T) {
 	}
 }
 
-func Test_DocsTemplateDataHasSmallKebabCaseTitle_TwoWords(t *testing.T) {
-	expected := "missing-number"
-
-	actual := generator.NewDocsTemplateData("Missing Number")
-
-	if actual.SmallTitle != expected {
-		t.Errorf("expected %s, got % s", expected, actual.SmallTitle)
+func Test_DocsTemplateDataSmallKebabTitle(t *testing.T) {
+	var testCases = []struct {
+		name,
+		title,
+		expected string
+	}{
+		{
+			name:     "single word title",
+			title:    "Arrays",
+			expected: "arrays",
+		},
+		{
+			name:     "two words title",
+			title:    "Missing Number",
+			expected: "missing-number",
+		},
+		{
+			name:     "single word title with number",
+			title:    "1D",
+			expected: "1d",
+		},
+		{
+			name:     "two words with one number",
+			title:    "1D Transformer",
+			expected: "1d-transformer",
+		},
 	}
-}
 
-func Test_DocsTemplateDataHasSmallKebabCaseTitle_OneWord(t *testing.T) {
-	expected := "arrays"
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			actual := generator.NewDocsTemplateData(tc.title)
 
-	actual := generator.NewDocsTemplateData("Arrays")
-
-	if actual.SmallTitle != expected {
-		t.Errorf("expected %s, got % s", expected, actual.SmallTitle)
+			if actual.SmallTitle != tc.expected {
+				t.Errorf("expected %s, got % s", tc.expected, actual.SmallTitle)
+			}
+		})
 	}
 }
