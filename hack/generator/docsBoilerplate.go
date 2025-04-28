@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"fmt"
 	"path/filepath"
 	"strings"
 	"text/template"
@@ -52,8 +51,6 @@ func (dob *DocsBoilerplate) Save(store Store) error {
 		return err
 	}
 
-	fmt.Println(dob.docsFilePath())
-
 	return store.Save(data, dob.docsFilePath())
 }
 
@@ -62,15 +59,6 @@ func (dob *DocsBoilerplate) Delete(store Store) error {
 }
 
 func (dob *DocsBoilerplate) docsFilePath() string {
-	docsFileName := dob.smallKebab() + ".md"
+	docsFileName := dob.tmplData.SmallTitle + ".md"
 	return filepath.Join(dob.targetPath, docsFileName)
-}
-
-func (dob *DocsBoilerplate) smallKebab() string {
-	small := strings.ToLower(dob.tmplData.Title)
-
-	if len(strings.Split(small, " ")) > 1 {
-		small = strings.ReplaceAll(small, " ", "-")
-	}
-	return small
 }
