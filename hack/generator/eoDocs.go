@@ -1,9 +1,9 @@
 package generator
 
-func EoDocsCreate() error {
+func EoDocsCreate(targetPath string) error {
 	filesystem := NewFilesystem()
 	config := Config{
-		To:   "../../temp",
+		To:   targetPath,
 		From: "../boilerplate/docs.gotmpl",
 	}
 
@@ -16,10 +16,10 @@ func EoDocsCreate() error {
 	return docsBoilerplate.Save(filesystem)
 }
 
-func EoDocsDelete() error {
+func EoDocsDelete(targetPath string) error {
 	filesystem := NewFilesystem()
 	config := Config{
-		To:   "../../temp",
+		To:   targetPath,
 		From: "../boilerplate/docs.gotmpl",
 	}
 

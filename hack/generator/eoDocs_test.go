@@ -5,14 +5,14 @@ import (
 	"testing"
 )
 
-func Test_CreateDocsBoilerplateInTemp(t *testing.T) {
-	if err := generator.EoDocsCreate(); err != nil {
+func Test_CreateAndDeleteDocsBoilerplateInTemp(t *testing.T) {
+	targetPath := t.TempDir()
+
+	if err := generator.EoDocsCreate(targetPath); err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-}
 
-func Test_DeleteDocsBoilerplateFromTemp(t *testing.T) {
-	if err := generator.EoDocsDelete(); err != nil {
+	if err := generator.EoDocsDelete(targetPath); err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
 }
