@@ -12,7 +12,7 @@
       - [x] take three inputs: pattern, difficulty, title
     - [x] generate, then store
   - [x] execute from cmd i.e. get inputs from cli
-- [ ] refactoring
+- [x] refactoring
   - WHAT YOU DID:
     - [x] command line args parsing and validation
     - [x] e2e creation of a sample in a temp dir: `go run . create arrays easy "Missing Number"`
@@ -27,6 +27,8 @@
       - [x] extracted metadata
       - [x] added validating "decorator" metadata
       - [x] moved args parsing to main, removed args.go
+- [ ] Elegant Objects version
+  - WHAT YOU DID
     - [x] implementing new idea from Elegant Objects
       - [x] add `package generator` with `Boilerplate` struct and `StrValue` method so you can use it as: `docs := NewBoilerplate(tmpl, "Missing Number"); docs.StrValue()`
         - it represents a boilerplate file which knows how to generate itself => doesn't feel right
@@ -47,19 +49,26 @@
             - actual data is provided by DocsTemplateData and put into the Template by the Boilerplate
           - [x] add `Delete(fs filesystem)` method to DocsBoilerplate
           - [x] implement integration tests for Create and Delete
+        - [x] 28.04.15
+          - [x] fix ci test
+          - [x] refactor docsFilePath and smallKebab
+          - [x] CLI: reads command, pattern, difficulty and title from command line user input => separate package, no connection to DocsBoilerplate
+          - [x] filesystem creates directory chain if needed
+          - [x] create `Request` object which contains everything the Boilerplate needs
     - [x] chore: switch git setting repo to ssh
   - NEXT:
-    - [ ] EO version
-      - [ ] CONTINUE HERE: read what you did on 27.04.25, THEN: have something e2e and then refactor and try other implementations like from James Shore, Hexagonal Architecture, procedural etc.
-      - Whats left for E2E execution?
-        - [ ] refactor docsFilePath and smallKebab
-        - tests for Save and Delete using Nullable filesystem
-        - `Pattern` object (like App/Entrypoint) which centralize the creation of all the boilerplate for one pattern
-          - uses DocsBoilerplate
-          - uses CLI
-        - CLI: reads command and pattern from command line user input => separate package, no connection to DocsBoilerplate
-      - tests
-      - [ ] can I use accessor functions w/o get? not sure tmpl.Execute accepts
+    - [ ] CONTINUE HERE: read what you did on 27.04.25, THEN: have something e2e and then refactor and try other implementations like from James Shore, Hexagonal Architecture, procedural etc.
+    - Whats left for E2E execution?
+      - [ ] implement `*-solution.md` boilerplate generation
+      - [ ] generate both concurrently, use go go routines
+      - [ ] `Pattern` object (like App/Entrypoint) which centralize the creation of all the boilerplate for one pattern
+        - uses DocsBoilerplate
+        - uses CLI
+      - [ ] move filesystem to infrastructure
+      - [ ] create Nullable StubbedCli
+      - [ ] use polymorphism for Save/Delete
+      - [ ] tests for Save and Delete using Nullable filesystem
+    - [ ] can I use accessor functions w/o get? not sure tmpl.Execute accepts
     - [ ] clean up main
     - [ ] clarify what was this task: "exercise directory deletion => no test"
     - [ ] idea: create Generator struct with ?Process(request) and ?Execute() methods
