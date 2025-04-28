@@ -1,33 +1,22 @@
 package generator
 
-func EoDocsCreate(targetPath string) error {
-	filesystem := NewFilesystem()
-	config := Config{
-		To:   targetPath,
-		From: "../boilerplate/docs.gotmpl",
+func EoDocs(rootDir string, cli InputSource) error {
+	request, err := NewRequest(cli)
+	if err != nil {
+		return err
 	}
+	filesystem := NewFilesystem()
+	tmplSourcePath := "../boilerplate/docs.gotmpl"
 
 	docsBoilerplate := NewDocsBoilerplate(
-		config.To,
-		NewDocsTemplate(config.From, filesystem),
-		NewDocsTemplateData("Missing Number"),
+		request.TargetPath(rootDir),
+		NewDocsTemplate(tmplSourcePath, filesystem),
+		request.TemplateData(),
 	)
 
-	return docsBoilerplate.Save(filesystem)
-}
-
-func EoDocsDelete(targetPath string) error {
-	filesystem := NewFilesystem()
-	config := Config{
-		To:   targetPath,
-		From: "../boilerplate/docs.gotmpl",
+	if request.Create() {
+		return docsBoilerplate.Save(filesystem)
 	}
-
-	docsBoilerplate := NewDocsBoilerplate(
-		config.To,
-		NewDocsTemplate(config.From, filesystem),
-		NewDocsTemplateData("Missing Number"),
-	)
 
 	return docsBoilerplate.Delete(filesystem)
 }

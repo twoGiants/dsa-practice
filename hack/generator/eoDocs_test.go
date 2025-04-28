@@ -5,15 +5,38 @@ import (
 	"testing"
 )
 
-func Test_CreateAndDeleteDocsBoilerplateInTemp(t *testing.T) {
-	targetPath := t.TempDir()
+type CommandLineStub struct {
+	args []string
+}
 
-	if err := generator.EoDocsCreate(targetPath); err != nil {
-		t.Errorf("unexpected error: %v", err)
+func (c CommandLineStub) Args() []string {
+	return c.args
+}
+
+func Test_Integration_EoDocsBoilerplate(t *testing.T) {
+	var testCases = []struct {
+		name string
+		args []string
+	}{
+		{
+			"create docs boilerplate in temp directory",
+			[]string{"create", "arrays", "easy", "Missing Number"},
+		},
+		{
+			"delete docs boilerplate from temp directory",
+			[]string{"delete", "arrays", "easy", "Missing Number"},
+		},
 	}
 
-	if err := generator.EoDocsDelete(targetPath); err != nil {
-		t.Errorf("unexpected error: %v", err)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			rootDir := "../../temp"
+			stub := CommandLineStub{tc.args}
+
+			if err := generator.EoDocs(rootDir, stub); err != nil {
+				t.Errorf("unexpected error: %v", err)
+			}
+		})
 	}
 }
 
