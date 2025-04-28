@@ -10,7 +10,7 @@ func EoDocsCreate(targetPath string) error {
 	docsBoilerplate := NewDocsBoilerplate(
 		config.To,
 		NewDocsTemplate(config.From, filesystem),
-		NewDocsTemplateData("Missing Number", "missing-number"),
+		NewDocsTemplateData("Missing Number"),
 	)
 
 	return docsBoilerplate.Save(filesystem)
@@ -26,7 +26,7 @@ func EoDocsDelete(targetPath string) error {
 	docsBoilerplate := NewDocsBoilerplate(
 		config.To,
 		NewDocsTemplate(config.From, filesystem),
-		NewDocsTemplateData("Missing Number", "missing-number"),
+		NewDocsTemplateData("Missing Number"),
 	)
 
 	return docsBoilerplate.Delete(filesystem)

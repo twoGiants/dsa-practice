@@ -16,3 +16,23 @@ func Test_CreateAndDeleteDocsBoilerplateInTemp(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 }
+
+func Test_DocsTemplateDataHasSmallKebabCaseTitle_TwoWords(t *testing.T) {
+	expected := "missing-number"
+
+	actual := generator.NewDocsTemplateData("Missing Number")
+
+	if actual.SmallTitle != expected {
+		t.Errorf("expected %s, got % s", expected, actual.SmallTitle)
+	}
+}
+
+func Test_DocsTemplateDataHasSmallKebabCaseTitle_OneWord(t *testing.T) {
+	expected := "arrays"
+
+	actual := generator.NewDocsTemplateData("Arrays")
+
+	if actual.SmallTitle != expected {
+		t.Errorf("expected %s, got % s", expected, actual.SmallTitle)
+	}
+}

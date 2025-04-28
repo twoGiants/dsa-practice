@@ -19,7 +19,11 @@ type DocsBoilerplate struct {
 	tmplData   DocsTemplateData
 }
 
-func NewDocsBoilerplate(targetPath string, tmpl DocsFile, tmplData DocsTemplateData) *DocsBoilerplate {
+func NewDocsBoilerplate(
+	targetPath string,
+	tmpl DocsFile,
+	tmplData DocsTemplateData,
+) *DocsBoilerplate {
 	return &DocsBoilerplate{targetPath, tmpl, tmplData}
 }
 
