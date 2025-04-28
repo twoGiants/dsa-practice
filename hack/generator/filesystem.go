@@ -21,6 +21,10 @@ func (fsi FilesystemImpl) Load(from string) (string, error) {
 }
 
 func (fsi FilesystemImpl) Save(data, to string) error {
+	if err := os.MkdirAll(filepath.Dir(to), 0750); err != nil {
+		return err
+	}
+
 	return os.WriteFile(to, []byte(data), 0600)
 }
 
