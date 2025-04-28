@@ -14,13 +14,13 @@ type Store interface {
 }
 
 type DocsBoilerplate struct {
-	path     string
-	tmpl     DocsFile
-	tmplData DocsTemplateData
+	targetPath string
+	tmpl       DocsFile
+	tmplData   DocsTemplateData
 }
 
-func NewDocsBoilerplate(path string, tmpl DocsFile, tmplData DocsTemplateData) *DocsBoilerplate {
-	return &DocsBoilerplate{path, tmpl, tmplData}
+func NewDocsBoilerplate(targetPath string, tmpl DocsFile, tmplData DocsTemplateData) *DocsBoilerplate {
+	return &DocsBoilerplate{targetPath, tmpl, tmplData}
 }
 
 func (dob *DocsBoilerplate) Content() (string, error) {
@@ -60,7 +60,7 @@ func (dob *DocsBoilerplate) Delete(store Store) error {
 
 func (dob *DocsBoilerplate) docsFilePath() string {
 	docsFileName := dob.smallKebab() + ".md"
-	return filepath.Join(dob.path, docsFileName)
+	return filepath.Join(dob.targetPath, docsFileName)
 }
 
 func (dob *DocsBoilerplate) smallKebab() string {

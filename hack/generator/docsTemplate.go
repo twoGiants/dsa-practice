@@ -1,14 +1,14 @@
 package generator
 
 type DocsTemplate struct {
-	from  string
-	store Store
+	sourcePath string
+	store      Store
 }
 
-func NewDocsTemplate(path string, store Store) DocsTemplate {
-	return DocsTemplate{path, store}
+func NewDocsTemplate(sourcePath string, store Store) DocsTemplate {
+	return DocsTemplate{sourcePath, store}
 }
 
 func (dt DocsTemplate) Content() (string, error) {
-	return dt.store.Load(dt.from)
+	return dt.store.Load(dt.sourcePath)
 }
